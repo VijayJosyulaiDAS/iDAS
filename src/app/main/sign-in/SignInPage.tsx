@@ -4,7 +4,7 @@ import AvatarGroup from '@mui/material/AvatarGroup';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import CardContent from '@mui/material/CardContent';
@@ -15,6 +15,7 @@ import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import JwtLoginTab from './tabs/JwtSignInTab';
 import FirebaseSignInTab from './tabs/FirebaseSignInTab';
 import PingFedSignInTab from './tabs/PingFedSignInTab';
+import axios from "axios";
 
 const tabs = [
 	{
@@ -22,31 +23,30 @@ const tabs = [
 		title: 'PingFed',
 		logo: 'assets/images/png/ping.png',
 		logoClass: 'h-40 p-2 bg-transparent rounded-12'
-	},
-	{
-		id: 'jwt',
-		title: 'JWT',
-		logo: 'assets/images/logo/jwt.svg',
-		logoClass: 'h-40 p-4 bg-black rounded-12'
-	},
-	{
-		id: 'firebase',
-		title: 'Firebase',
-		logo: 'assets/images/logo/firebase.svg',
-		logoClass: 'h-40'
 	}
 ];
 
 /**
  * The sign in page.
  */
-function SignInPage() {
+ function SignInPage() {
 	const [selectedTabId, setSelectedTabId] = useState(tabs[0].id);
 
 	function handleSelectTab(id: string) {
 		setSelectedTabId(id);
 	}
 
+	const fetchData = async () =>{
+		const users = await axios.get(`/api/get_user`);
+		console.log(users);
+	
+	}
+
+	useEffect(() => {
+		fetchData()
+
+	}, [])
+	
 	return (
 		<div className="flex min-w-0 flex-1 flex-col items-center sm:flex-row sm:justify-center md:items-start md:justify-start">
 			<Paper className="h-full w-full px-16 py-8 ltr:border-r-1 rtl:border-l-1 sm:h-auto sm:w-auto sm:rounded-2xl sm:p-48 sm:shadow md:flex md:h-full md:w-1/2 md:items-center md:justify-end md:rounded-none md:p-64 md:shadow-none">
@@ -66,11 +66,10 @@ function SignInPage() {
 						severity="info"
 						className="mt-24 px-16 text-13 leading-relaxed"
 					>
-						You are browsing <b>React Demo Template</b>. Click on the "Sign in" button to access the Demo and
-						Documentation.
+						You are browsing <b>Intelligent Decision Automation System</b>. Click on the "Sign in" button to access the Dashboard.
 					</Alert>
 
-					<Tabs
+					<Tabs style={{display: 'none'}}
 						value={_.findIndex(tabs, { id: selectedTabId })}
 						variant="fullWidth"
 						className="w-full mt-24 mb-32"
@@ -169,7 +168,7 @@ function SignInPage() {
 				<div className="relative z-10 w-full max-w-2xl">
 					<div className="text-7xl font-bold leading-none text-gray-100">
 						<div>Welcome to</div>
-						<div>our community</div>
+						<div>IDAS</div>
 					</div>
 					<div className="mt-24 text-lg leading-6 tracking-tight text-gray-400">
 						Fuse helps developers to build organized and well coded dashboards full of beautiful and rich

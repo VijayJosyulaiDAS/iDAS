@@ -14,12 +14,26 @@ i18next.addResourceBundle('ar', 'navigation', ar);
 const navigationConfig: FuseNavItemType[] = [
 	{
 		id: 'example-component',
+		title: 'home',
+		translate: 'HOME',
+		type: 'item',
+		icon: 'heroicons-outline:home',
+		url: 'example'
+	},{
+		id: 'example-component2',
+		title: 'Example',
+		translate: 'RECOMMENDATIONS',
+		type: 'item',
+		icon: 'heroicons-outline:star',
+		url: '/apps/recommendation'
+	},{
+		id: 'example-component',
 		title: 'Example',
 		translate: 'EXAMPLE',
 		type: 'item',
 		icon: 'heroicons-outline:star',
 		url: 'example'
-	}
+	},
 ];
 
 export default navigationConfig;

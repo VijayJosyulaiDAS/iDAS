@@ -1,39 +1,42 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
-const morgan = require('morgan');
-const session = require('express-session');
-const passport = require('passport');
-const path = require('path');
-const flash = require('connect-flash');
-const cors = require('cors');
-const { config: c } = require('dotenv');
-
-
-const app = express()
+const log4js = require('log4js')
+    , express = require("express")
+    , bodyParser = require("body-parser")
+    , session = require('express-session')
+    , cookieSession = require('cookie-session')
+    , secretConf = require('./config/secret')
+    , cors = require("cors")
+    , db = require("./connection/sql_connection").sequelize
+    , app = express()
+    , modelInit = require("./models-init/init")
+    , swaggerUi = require('swagger-ui-express')
+    , swaggerJsdoc = require('./swagger_output.json')
+    , docSwag = require('./api-docs/swaggerOptions')
+    , compression = require('compression')
+    ,passport = require('passport')
+    ,flash = require('connect-flash')
     , dir = './build'
-    , indexDir = '/build/index.html' 
+    ,path = require('path')
+    , indexDir = '/build/index.html',
+    { config: c } = require('dotenv')
 
 
-const port = process.env.PORT || 3004; 
 
-let config = c({path: './env/dev.env'});
-console.log(config);
+// Use compression middleware
+app.use(compression());
 
-mongoose.connect("mongodb+srv://zafarTZ:78X2CPohNXu0ydsz@cluster0.xwhkwcr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {useNewUrlParser: true, useUnifiedTopology: true})
-let db = mongoose.connection;
-
-db.on('error', console.error.bind(console, 'connection error:'));
-
-db.once('open', function () {
-  console.log('Mongo Connected : ' + process.env.MONGO_DATABASE)
-});
-
-
+// Enable CORS for all router
 app.use(cors());
 
-app.use(morgan('combined'));
+// Parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Parse application/json
 app.use(bodyParser.json());
+
+modelInit.utils(db).then(r => console.log("Table initialize successfully"))
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerJsdoc));
+
 app.use(session({
   secret: 'tutorialsecret',
   cookie: {
@@ -42,18 +45,20 @@ app.use(session({
   saveUninitialized: true,
   resave: false,   
 }));
-app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
 require('./routers/ping-auth')(passport);
 require('./routers/routes')(app, passport);
+require('./router/routes')(app);
 
 
-app.get('/api/v1', (req, res) => {
-  res.send('ping pong')
-})
+// Define your router
+app.get('/', (req, res) => {
+  res.send('Hello, World!');
+});
 
 app.use(express.static(path.join(__dirname, dir)));
 
@@ -61,6 +66,8 @@ app.use((req, res) => {
     res.sendFile(path.join(__dirname + indexDir));
 });
 
-app.listen(port, () => {
-  console.log("server running on port " + port + "...");
+// Start the server
+const PORT = process.env.PORT || 3004;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });

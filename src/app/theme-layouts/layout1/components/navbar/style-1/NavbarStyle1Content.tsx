@@ -46,7 +46,7 @@ function NavbarStyle1Content(props: NavbarStyle1ContentProps) {
 		<Root className={clsx('flex h-full flex-auto flex-col overflow-hidden', className)}>
 			<div className="flex h-48 shrink-0 flex-row items-center px-20 md:h-72">
 				<div className="mx-4 flex flex-1">
-					<Logo />
+					{/*<Logo />*/}
 				</div>
 
 				<NavbarToggleButton className="h-40 w-40 p-0" />
@@ -63,7 +63,7 @@ function NavbarStyle1Content(props: NavbarStyle1ContentProps) {
 				<div className="flex-0 flex items-center justify-center py-48 opacity-10">
 					<img
 						className="w-full max-w-64"
-						src="assets/images/logo/logo.svg"
+						src="assets/images/png/PG-logo.png"
 						alt="footer logo"
 					/>
 				</div>
