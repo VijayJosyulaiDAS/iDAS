@@ -18,7 +18,7 @@ const navigationConfig: FuseNavItemType[] = [
 		translate: 'HOME',
 		type: 'item',
 		icon: 'heroicons-outline:home',
-		url: 'example'
+		url: 'home'
 	},{
 		id: 'example-component2',
 		title: 'Example',

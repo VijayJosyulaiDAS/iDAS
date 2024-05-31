@@ -17,19 +17,14 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
     '& .FusePageSimple-sidebarContent': {}
 }));
 
-function Example() {
+function Detail() {
     const { t } = useTranslation('examplePage');
 
     return (
         <Root
-            header={
-                <div className="p-24">
-                    <h4>{t('TITLE')}</h4>
-                </div>
-            }
             content={
                 <div className="p-24">
-                    <h4>Content</h4>
+                    <h4>Good Morning</h4>
                     <br />
                     <DemoContent />
                 </div>
@@ -38,4 +33,4 @@ function Example() {
     );
 }
 
-export default Example;
+export default Detail;

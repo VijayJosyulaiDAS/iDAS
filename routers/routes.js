@@ -112,7 +112,7 @@ module.exports = (app, passport) => {
         uid: profile.email,
         role: 'admin',
         data: {
-          displayName: profile?.FirstName + profile?.LastName,
+          displayName: profile?.FirstName+ ' ' +profile?.LastName,
           photoURL: profile?.FirstName[0],
           email: profile?.email,
           loginRedirectUrl: '/example', //   <----- change home route

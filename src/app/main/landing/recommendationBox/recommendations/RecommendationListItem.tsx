@@ -75,7 +75,6 @@ function RecommendationListItem(props) {
 							{recommendation.important && (
 								<span
 									className="mr-12 text-blue-500 dark:text-red-600"
-									size={16}
 								>
 									New
 								</span>

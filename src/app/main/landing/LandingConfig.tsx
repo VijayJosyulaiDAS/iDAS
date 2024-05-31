@@ -1,4 +1,5 @@
-import Example from "./detail/detail";
+import Detail from "./detail/detail";
+import Home from "./initialPage/home";
 
 
 const LandingConfig = {
@@ -7,8 +8,8 @@ const LandingConfig = {
     },
     routes: [
         {
-            path: 'detail',
-            element: <Example/>
+            path: 'home',
+            element: <Home/>
         }
     ]
 };

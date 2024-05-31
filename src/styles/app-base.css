@@ -19,6 +19,23 @@
      outline: none !important;
 }
 
+.line-clamp {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+}
+
+
+/*.cards-container .card:not(:hover) {*/
+/*    filter: blur(2px);*/
+/*}*/
+
+/*.card:hover {*/
+/*    filter: none*/
+/*}*/
+
+
 html {
     font-size: 62.5%;
     font-family: 'Inter var', Roboto, Helvetica Neue, Arial, sans-serif;

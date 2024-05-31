@@ -18,7 +18,7 @@ export const recommendationAppSlice = createSlice({
 			state.selectedMailIds = action.payload as string[];
 		},
 		selectAllMails: (state, action) => {
-			const mailList = action.payload as MailboxMail[];
+			const mailList = action.payload ;
 			state.selectedMailIds = mailList.map((mail) => mail.id);
 		},
 		deselectAllMails: (state) => {
