@@ -6,8 +6,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
 import {OutlinedInput} from "@mui/material";
 import {useAppDispatch, useAppSelector} from "app/store/hooks";
-import {useTranslation} from "react-i18next";
-import {useNavigate} from "react-router-dom";
+
 
 /**
  * Navigation data
