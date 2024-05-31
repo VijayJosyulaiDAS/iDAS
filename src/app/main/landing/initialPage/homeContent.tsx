@@ -8,19 +8,60 @@ function homeContent() {
 
     const user = useAppSelector(selectUser);
 
-
     const useCases = [
         {
             name: "Firm Zone Production Adjustments",
-            description: "Adjusting production levels in designated firm zones based on various triggers to optimize output and resource allocation."
+            status: "Open",
+            count: 34,
+            description: "Adjusting production levels in designated firm zones based on various triggers to optimize output and resource allocation.",
+            data: [
+                {
+                    id: '3.1',
+                    title: 'Demand Forecasting Summary',
+                    type: 'item',
+                },
+                {
+                    id: '3.2',
+                    title: 'Product Schedule',
+                    type: 'item',
+                }
+            ]
         },
         {
             name: "Supplier PO Amendments",
-            description: "Modifying purchase orders from suppliers to reflect changes in demand, supply chain disruptions, or updated agreements."
+            status: "Close",
+            count: 34,
+            description: "Modifying purchase orders from suppliers to reflect changes in demand, supply chain disruptions, or updated agreements.",
+            data: [
+                {
+                    id: '3.1',
+                    title: 'Supply and Demand Planner',
+                    type: 'item'
+                },
+                {
+                    id: '3.2',
+                    title: 'Demand Forecast',
+                    type: 'item',
+                }
+            ]
         },
         {
             name: "Realtime Supply Confirmation for Upsides",
-            description: "Providing real-time confirmation of supply availability to accommodate sudden increases in demand, ensuring supply chain responsiveness."
+            status: "Open",
+            count: 34,
+            description: "Providing real-time confirmation of supply availability to accommodate sudden increases in demand, ensuring supply chain responsiveness.",
+            data: [
+                {
+                    id: '3.1',
+                    title: 'Transportation Lanes',
+                    type: 'item',
+                },
+                {
+                    id: '3.2',
+                    title: 'Forecast Collaboration',
+                    type: 'item',
+                }
+            ]
         }
     ];
 
@@ -59,13 +100,13 @@ function homeContent() {
                             </div>
                             <div className="flex justify-between gap-10 flex-col">
                                 <div
-                                    className="text-md font-medium md:mr-24  md:ml-24  line-clamp-3">{useCase.description}</div>
+                                    className="text-md font-medium md:mr-24  md:ml-24  line-clamp-2">{useCase.description}</div>
                                 <Typography
                                     className="text-lg md:pr-24 md:pl-24 md:pb-24 font-medium flex flex-col pt-20 tracking-tight leading-6 truncate"
                                     color="text.secondary"
                                 >
-                                    <span className="truncate"></span><b className="px-8 text-blue-500">{String(34)}</b>
-                                    <span className="truncate"></span>Open<b className="px-8"></b>
+                                    <span className="truncate"></span><b className="px-8 text-blue-500">{String(`${useCase.count}`)}</b>
+                                    <span className="truncate"></span>{useCase.status}<b className="px-8"></b>
                                 </Typography>
                             </div>
                         </div>

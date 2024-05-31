@@ -8,10 +8,9 @@ import SignUpConfig from '../main/sign-up/SignUpConfig';
 import SignOutConfig from '../main/sign-out/SignOutConfig';
 import Error404Page from '../main/404/Error404Page';
 import ExampleConfig from '../main/example/ExampleConfig';
-import RecommendationAppConfig from "../main/landing/recommendationBox/RecommendationAppConfig";
 import LandingConfig from "../main/landing/LandingConfig";
 
-const routeConfigs: FuseRouteConfigsType = [ExampleConfig, SignOutConfig, SignInConfig, SignUpConfig, RecommendationAppConfig, LandingConfig];
+const routeConfigs: FuseRouteConfigsType = [ExampleConfig, SignOutConfig, SignInConfig, SignUpConfig, LandingConfig];
 
 /**
  * The routes of the application.

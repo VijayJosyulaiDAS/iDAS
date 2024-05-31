@@ -25,7 +25,7 @@ const navigationConfig: FuseNavItemType[] = [
 		translate: 'RECOMMENDATIONS',
 		type: 'item',
 		icon: 'heroicons-outline:star',
-		url: '/apps/recommendation'
+		url: '/apps/landing'
 	},{
 		id: 'example-component',
 		title: 'Example',
