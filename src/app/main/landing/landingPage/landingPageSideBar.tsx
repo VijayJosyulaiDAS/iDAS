@@ -21,13 +21,13 @@ const useCases = [
 		data: [
 			{
 				id: '3.1',
-				title: 'Demand Forecasting Summary',
+				title: 'Open Recommendations',
 				type: 'item',
 				url: ''
 			},
 			{
 				id: '3.2',
-				title: 'Product Schedule',
+				title: 'Close Recommendations',
 				type: 'item',
 			}
 		]
@@ -40,12 +40,12 @@ const useCases = [
 		data: [
 			{
 				id: '3.1',
-				title: 'Supply and Demand Planner',
+				title: 'Open Recommendations',
 				type: 'item'
 			},
 			{
 				id: '3.2',
-				title: 'Demand Forecast',
+				title: 'Close Recommendations',
 				type: 'item',
 			}
 		]
@@ -58,12 +58,12 @@ const useCases = [
 		data: [
 			{
 				id: '3.1',
-				title: 'Transportation Lanes',
+				title: 'Open Recommendations',
 				type: 'item',
 			},
 			{
 				id: '3.2',
-				title: 'Forecast Collaboration',
+				title: 'Close Recommendations',
 				type: 'item',
 			}
 		]
@@ -75,12 +75,8 @@ const convertToNavigationData = (useCases) => {
 	return useCases.map((useCase, index) => ({
 		id: (index + 1).toString(),
 		title: useCase.name,
-		type: 'group',
-		children: useCase.data.map(item => ({
-			id: item.id,
-			title:`${item.title} - ${useCase.count}`,
-			type: 'item'
-		}))
+		type: 'item',
+
 	}));
 };
 
@@ -103,30 +99,31 @@ function landingPageSideBar({ onItemClick }) {
 
 
 	return (
-		<div className="py-24 min-h-6xl">
-			<div className="mx-12 text-3xl font-bold tracking-tighter">
-				<OutlinedInput
-					className="flex flex-1 items-center px-16 rounded-full"
-					fullWidth
-					placeholder={'Search For Recommendations'}
-					value={searchText}
-					onChange={(ev: ChangeEvent<HTMLInputElement>) => dispatch(setSearchText(ev))}
-					startAdornment={
-						<InputAdornment position="start">
-							<FuseSvgIcon color="disabled">heroicons-solid:search</FuseSvgIcon>
-						</InputAdornment>
-					}
-					inputProps={{
-						'aria-label': 'Search'
-					}}
-					size="small"
-				/>
+		<div className="py-24 ">
+			<div className=" ml-24 text-3xl font-bold ">
+				Use Cases List
+				{/*<OutlinedInput*/}
+				{/*	className="flex flex-1 items-center px-16 rounded-full"*/}
+				{/*	fullWidth*/}
+				{/*	placeholder={'Search For Recommendations'}*/}
+				{/*	value={searchText}*/}
+				{/*	onChange={(ev: ChangeEvent<HTMLInputElement>) => dispatch(setSearchText(ev))}*/}
+				{/*	startAdornment={*/}
+				{/*		<InputAdornment position="start">*/}
+				{/*			<FuseSvgIcon color="disabled">heroicons-solid:search</FuseSvgIcon>*/}
+				{/*		</InputAdornment>*/}
+				{/*	}*/}
+				{/*	inputProps={{*/}
+				{/*		'aria-label': 'Search'*/}
+				{/*	}}*/}
+				{/*	size="small"*/}
+				{/*/>*/}
 			</div>
 
 			<FuseNavigation
 				navigation={navigationData}
 				onItemClick={handleItemClick}
-				className="px-0"
+				className="px-0 mt-32"
 			/>
 		</div>
 	);

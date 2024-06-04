@@ -4,6 +4,8 @@ import {Navigate} from "react-router-dom";
 import SelectRecommendationMessage from "./recommendationBox/SelectRecommendationMessage";
 import MailDetails from "./recommendationBox/recommendation/RecommendationDetails";
 import LandingPageContent from "./landingPage/landingPageContent";
+import RecommendationList from "./recommendationBox/recommendations/RecommendationList";
+import RecommendationDetail from "./recommendationPage/recommendationDetail";
 
 
 const LandingConfig = {
@@ -25,6 +27,9 @@ const LandingConfig = {
                     element: <LandingPageContent/>
                 }
             ]
+        },{
+        path: '/apps/recommendations',
+        element: <RecommendationDetail/>
         }
     ]
 };

@@ -6,6 +6,7 @@
     "dependencies": {
         "@ag-grid-community/core": "^31.3.2",
         "@ag-grid-community/react": "^31.3.2",
+        "@amcharts/amcharts4": "^4.10.38",
         "@emotion/cache": "11.11.0",
         "@emotion/react": "11.11.3",
         "@emotion/styled": "11.11.0",

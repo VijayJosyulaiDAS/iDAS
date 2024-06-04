@@ -15,27 +15,20 @@ const Root = styled(FusePageCarded)(() => ({
 }));
 
 /**
- * The CardedWithSidebarsContentScroll page.
+ * LandingPage.
  */
 function LandingPage() {
     const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('lg'));
 
     const [leftSidebarOpen, setLeftSidebarOpen] = useState(!isMobile);
-    const [rightSidebarOpen, setRightSidebarOpen] = useState(!isMobile);
     const [selectedItem, setSelectedItem] = useState(null);
 
-    // Define callback function to receive click events
     const handleSidebarItemClick = (item) => {
-        // Pass the clicked item data to LandingPageContent
-        // For example, you can set it to the state and pass the state to LandingPageContent
-        // Here, I'm just logging the item for demonstration
-        console.log("Clicked item:", item);
         setSelectedItem(item)
     };
 
     useEffect(() => {
         setLeftSidebarOpen(!isMobile);
-        setRightSidebarOpen(!isMobile);
     }, [isMobile]);
 
     return (
@@ -54,9 +47,6 @@ function LandingPage() {
             }}
             leftSidebarContent={<LandingPageSideBar onItemClick={handleSidebarItemClick} />}
             leftSidebarWidth={300}
-            rightSidebarOnClose={() => {
-                setRightSidebarOpen(false);
-            }}
             scroll="content"
         />
     );

@@ -40,9 +40,9 @@ export const themesConfig: FuseThemesType = {
 				contrastText: darkPaletteText.primary
 			},
 			secondary: {
-				light: '#818cf8',
-				main: '#4f46e5',
-				dark: '#3730a3',
+				light: '#2196F4',
+				main: '#2196F4',
+				dark: '#2196F4',
 				contrastText: darkPaletteText.primary
 			},
 			background: {
@@ -73,9 +73,9 @@ export const themesConfig: FuseThemesType = {
 				contrastText: darkPaletteText.primary
 			},
 			secondary: {
-				light: '#818cf8',
-				main: '#4f46e5',
-				dark: '#3730a3',
+				light: '#2196F4',
+				main: '#2196F4',
+				dark: '#2196F4',
 				contrastText: darkPaletteText.primary
 			},
 			background: {

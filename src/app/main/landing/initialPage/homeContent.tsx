@@ -2,11 +2,14 @@ import Typography from "@mui/material/Typography";
 import {useAppSelector} from "app/store/hooks";
 import {selectUser} from "../../../auth/user/store/userSlice";
 import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
+import {useNavigate} from "react-router-dom";
 
 
 function homeContent() {
 
     const user = useAppSelector(selectUser);
+
+    const navigate = useNavigate();
 
     const useCases = [
         {
@@ -65,6 +68,15 @@ function homeContent() {
         }
     ];
 
+    const handleClick = (event) =>{
+        navigate('/apps/landing')
+    }
+
+    const handleCardClick = (event) =>{
+        console.log(event)
+        navigate('/apps/landing')
+    }
+
 
     return (
         <div className='w-full h-full flex flex-col justify-between' style={{
@@ -84,12 +96,12 @@ function homeContent() {
             <div className='w-full '>
                 <div
                     className='flex font-bold ml-10 relative w-full justify-start items-end pb-20 pl-20 pr-20 gap-20'>
-                    <div className='flex gap-8 justify-center cursor-pointer hover:bg-transparent items-center'>{`Skills (${useCases.length})`}<FuseSvgIcon size={24} className='text-blue-500'>heroicons-outline:arrow-narrow-right</FuseSvgIcon>
+                    <div onClick={handleClick} className='flex gap-8 justify-center cursor-pointer hover:bg-transparent items-center'>{`Use Cases (${useCases.length})`}<FuseSvgIcon size={24} className='text-blue-500'>heroicons-outline:arrow-narrow-right</FuseSvgIcon>
                     </div>
                 </div>
                 <div className='flex w-full justify-start items-end pb-20 pl-20 pr-20 gap-20'>
                     {useCases.map((useCase, index) => (
-                        <div key={index}
+                        <div key={index} onClick={handleCardClick}
                              className="card hover:scale-105 hover:filter transition duration-300 ease-in-out hover relative cursor-pointer flex lg:flex-col md:flex-row sm:flex-row  shadow-2xl bg-white gap-10 lg:w-1/4 sm:w-2/4 md:w-2/4 rounded-2xl mb-32 m-6 overflow-hidden">
                             <div className="flex items-center text-blue-500 justify-between px-8 pt-12">
                                 <Typography

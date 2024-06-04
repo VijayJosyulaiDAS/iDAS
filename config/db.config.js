@@ -1,9 +1,9 @@
 module.exports = {
 
     "development": {
-        "username": 'SA',
-        "password": 'Adminxyz22#',
-        "database": 'idas_db',
+        "username": 'pgadmin',
+        "password": 'Idas1234',
+        "database": 'idasdb',
         "host": 'localhost',
         "dialect": "mssql",
         "define": {
