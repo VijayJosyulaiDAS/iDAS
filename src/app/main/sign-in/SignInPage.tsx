@@ -56,7 +56,6 @@ const tabs = [
 						src="assets/images/png/PG-logo.png"
 						alt="logo"
 					/>
-
 					<Typography className="mt-32 text-4xl font-extrabold leading-tight tracking-tight">
 						Sign in
 					</Typography>
