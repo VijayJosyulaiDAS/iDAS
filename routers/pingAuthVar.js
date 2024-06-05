@@ -1,14 +1,13 @@
 module.exports = {
 
   'pingAuth': {
-    authorizationURL: 'https://fedauth.pg.com/as/authorization.oauth2',
-    tokenURL: 'https://fedauth.pg.com/as/token.oauth2',
-    clientID: 'Predictive Maintenance Goa',
-    clientSecret: 'mVL3JilkIAPUuVmbQSRB7V84FmnfILOZ1LFzihzyFwDPmrIt72Ge3H0wtEHwEDqe',
-    // callbackURL: 'http://ina942p3f5-w10.clients.pg.com:3008/ping/oauth/callback',
-    // callbackURL: 'http://goa.pg.com:3008/ping/oauth/callback',
-    callbackURL: 'http://localhost:3004/ping/oauth/callback' //for debug ukp
-    // callbackURL: 'http://localhost:4200'
+    authorizationURL: "https://fedauthtst.pg.com/as/authorization.oauth2",
+    tokenURL:"https://fedauthtst.pg.com/as/token.oauth2",
+    clientID: "Hrsssolstice",
+    clientSecret: "n0f52xI9raIreYk9hf8RX4GmmmD9qnH4wtWAgMUAGSSV8A5MBaJmdYozvF8dYCLR",
+    // callbackURL: process.env.PING_CALLBACK_URL,
+    callbackURL: "http://localhost:3000/callback",
+    userInfoURL: "https://fedauthtst.pg.com/idp/userinfo.openid"
   }
 };
 

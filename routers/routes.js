@@ -80,7 +80,7 @@ module.exports = (app, passport) => {
     }));
   
   
-    app.get('/ping/oauth/callback', passport.authenticate('oauth2', {failureRedirect: '/sign-in'}), function (req, res) {
+    app.get('/callback', passport.authenticate('oauth2', {failureRedirect: '/sign-in'}), function (req, res) {
       console.log("user data", req.user);
       res.cookie("_ping_access_token", req.user.accessToken, { httpOnly: true });
       res.cookie("_ping_refresh_token", req.user.refreshToken, { httpOnly: true });
