@@ -187,10 +187,6 @@
         "poststart": "node --loader ts-node/esm ./src/node-scripts/fuse-react-message.ts",
         "audit": "npm audit --production"
     },
-    "engines": {
-        "node": ">=18.0.0",
-        "npm": ">=8.0.0"
-    },
     "browserslist": {
         "production": [
             ">0.2%",
