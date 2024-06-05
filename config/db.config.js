@@ -1,10 +1,10 @@
 module.exports = {
 
     "development": {
-        "username": 'pgadmin',
-        "password": 'Idas1234',
-        "database": 'idasdb',
-        "host": 'localhost',
+        "username": process.env.DB_USERNAME,
+        "password": process.env.DB_PASSWORD,
+        "database": process.env.DB_DATABASE,
+        "host": process.env.DB_HOST,
         "dialect": "mssql",
         "define": {
             "timestamps": true

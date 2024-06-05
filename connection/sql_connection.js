@@ -26,7 +26,7 @@ const sequelize = new Sequelize(config.database, config.username, config.passwor
 });
 
 sequelize.authenticate().then(function (err) {
-    if (err) console.log(`Unable to connect to the ${config.dialect} database:`, err);
+    if (err) console.log(`Unable to connect to the ${config.dialect} database:`, err, config.database, config.username, config.password);
     console.log(`${config.database}` + ' Connection has been established successfully.');
 });
 
