@@ -1,11 +1,12 @@
 import FuseNavigation from '@fuse/core/FuseNavigation';
 import { FuseNavItemType } from '@fuse/core/FuseNavigation/types/FuseNavItemType';
-import {ChangeEvent} from "react";
-import {selectSearchText, setSearchText} from "../recommendationBox/recommendationAppSlice";
+import {ChangeEvent, useEffect, useState} from "react";
 import InputAdornment from "@mui/material/InputAdornment";
 import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
 import {OutlinedInput} from "@mui/material";
 import {useAppDispatch, useAppSelector} from "app/store/hooks";
+import {useLocation} from "react-router-dom";
+import axios from "axios";
 
 
 /**
@@ -71,29 +72,40 @@ const useCases = [
 ];
 
 
-const convertToNavigationData = (useCases) => {
-	return useCases.map((useCase, index) => ({
-		id: (index + 1).toString(),
-		title: useCase.name,
-		type: 'item',
-
-	}));
-};
-
-const navigationData: FuseNavItemType[] = convertToNavigationData(useCases);
-
 
 /**
  * The LandingSidebar component.
  */
-function landingPageSideBar({ onItemClick }) {
-	const dispatch = useAppDispatch()
-	const searchText = useAppSelector(selectSearchText);
+function landingPageSideBar(props) {
 
+	const {data,onItemClick} = props
+	const [useCases, setUseCases] = useState([])
 
+	const fetchUseCases = async () => {
+		let response = await axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/get_useCases`)
+		setUseCases(response.data.data)
+	}
+
+	useEffect(() => {
+		if(data != null || data != undefined){
+			setUseCases(data)
+		}else{
+			fetchUseCases()
+		}
+	}, []);
+	const convertToNavigationData = (useCases) => {
+		return useCases.map((useCase, index) => ({
+			id: (useCase.id).toString(),
+			title: useCase.title,
+			type: 'item',
+		}));
+	};
+
+	const navigationData: FuseNavItemType[] = convertToNavigationData(useCases);
 
 	const handleItemClick = (item) => {
 		onItemClick(item);
+		console.log(item)
 	};
 
 

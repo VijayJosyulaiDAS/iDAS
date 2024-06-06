@@ -53,7 +53,7 @@ function PingFedSignInTab() {
 
 	useEffect(() => {		
 		const fetchData = async () => {
-			const response = await axios.post(`${import.meta.env.VITE_LOCAL_BASE_URL}/is_logged_in`);
+			const response = await axios.post(`/api/is_logged_in`);
 			const {data} = response;
 			if(!data.trigger){
 				console.log('please logged in')

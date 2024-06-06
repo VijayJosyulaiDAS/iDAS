@@ -1,6 +1,8 @@
 const util = require("../util");
 const user = require("../model/user/user.model")
 const { sequelize } = require('../connection/sql_connection');
+const {use_cases} = require("../model/use_cases/use_case.model");
+const {recommendations} = require("../model/recommendations/recommendations.model");
 
 
 let utils = async function (sequelize) {
@@ -8,11 +10,15 @@ let utils = async function (sequelize) {
         // ============Define table =====================//
 
         util.model.user =  sequelize.define("tbl_user", user.user, {freezeTableName : true})
+        util.model.use_cases =  sequelize.define("tbl_use_cases", use_cases, {freezeTableName : true})
+        util.model.recommendations =  sequelize.define("tbl_recommendations", recommendations, {freezeTableName : true})
 
 
         // =====Table Sync After Association =========//
 
         await util.model.user.sync()
+        await util.model.use_cases.sync()
+        await util.model.recommendations.sync()
 
         util.sequelize = await sequelize;
     }catch (e) {

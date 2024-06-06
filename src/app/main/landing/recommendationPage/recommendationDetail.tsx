@@ -1,8 +1,8 @@
 import { styled } from '@mui/material/styles';
 import FusePageCarded from '@fuse/core/FusePageCarded';
-import useThemeMediaQuery from '@fuse/hooks/useThemeMediaQuery';
 import RecommendationPageHeader from './recommendationHeader';
 import RecommendationPageContent from './recommendationContent';
+import {useEffect, useState} from "react";
 
 const Root = styled(FusePageCarded)(() => ({
     '& .FusePageCarded-header': {},

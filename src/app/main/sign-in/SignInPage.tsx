@@ -36,16 +36,16 @@ const tabs = [
 		setSelectedTabId(id);
 	}
 
-	const fetchData = async () =>{
-		const users = await axios.get(`/api/get_user`);
-		console.log(users);
-	
-	}
-
-	useEffect(() => {
-		fetchData()
-
-	}, [])
+	// const fetchData = async () =>{
+	// 	const users = await axios.get(`/api/get_user`);
+	// 	console.log(users);
+	//
+	// }
+	//
+	// useEffect(() => {
+	// 	fetchData()
+	//
+	// }, [])
 
 
 	return (

@@ -5,80 +5,23 @@ import "ag-grid-community/styles/ag-theme-quartz.css";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import {Box} from "@mui/system";
-import {Navigate, useNavigate} from 'react-router-dom';
+import {Navigate, useLocation, useNavigate} from 'react-router-dom';
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { motion } from 'framer-motion';
+import axios from "axios";
+import queryString from 'query-string';
 
 /**
  * LandingPage Content
  */
 function LandingPageContent(props) {
     const {selectedData} = props
-    console.log(selectedData)
     const paginationPageSizeSelector = [100, 200, 500, 1000];
-    const closeData = [
-        {
-            "Reporting Country": "IN",
-            "Category": "AIR",
-            "Brand": "AMBIPUR",
-            "Organization": "3",
-            "Customer Group": "MR",
-            "SFU Version": "00",
-            "APO Product": "80694717",
-            "Product Description": "AMBI GELFR 180GX12 LOVE.B LEGO AS 299",
-            "APO Location": "B114",
-            "Overall": -1.8
-        },
-        {
-            "Reporting Country": "IN",
-            "Category": "AIR",
-            "Brand": "AMBIPUR",
-            "Organization": "3",
-            "Customer Group": "DISTRIBUTOR",
-            "SFU Version": "00",
-            "APO Product": "80706025",
-            "Product Description": "AMBI LEGO AIR SPRAY 275GX6 LB",
-            "APO Location": "2579",
-            "Overall": 72.34
-        },
-        {
-            "Reporting Country": "IN",
-            "Category": "AIR",
-            "Brand": "AMBIPUR",
-            "Organization": "3",
-            "Customer Group": "ALL OTHERS",
-            "SFU Version": "00",
-            "APO Product": "80706025",
-            "Product Description": "AMBI LEGO AIR SPRAY 275GX6 LB",
-            "APO Location": "6531",
-            "Overall": 2867.335
-        },
-        {
-            "Reporting Country": "IN",
-            "Category": "AIR",
-            "Brand": "AMBIPUR",
-            "Organization": "3",
-            "Customer Group": "DISTRIBUTOR",
-            "SFU Version": "00",
-            "APO Product": "80706025",
-            "Product Description": "AMBI LEGO AIR SPRAY 275GX6 LB",
-            "APO Location": "6578",
-            "Overall": 48.611
-        },
-        {
-            "Reporting Country": "IN",
-            "Category": "AIR",
-            "Brand": "AMBIPUR",
-            "Organization": "3",
-            "Customer Group": "DISTRIBUTOR",
-            "SFU Version": "00",
-            "APO Product": "80706025",
-            "Product Description": "AMBI LEGO AIR SPRAY 275GX6 LB",
-            "APO Location": "6655",
-            "Overall": 65.647
-        }
-        ]
+    const [closeData, setCloseData] = useState([])
+    const[openCount, setOpenCount] = useState<number>(0);
+    const[closeCount, setCloseCount] = useState<number>(0);
+
     const openData =  [
         {
             "Reporting Country": "IN",
@@ -4657,40 +4600,58 @@ function LandingPageContent(props) {
         }
     ]
     const [rowData, setRowData] = useState([]);
+    const [filteredData, setFilterData] = useState([]);
     const navigate = useNavigate();
-
     const [tabValue, setTabValue] = useState(0);
-
     const [colDefs, setColDefs] = useState( [
-        { field: "Reporting Country", headerName: "Priority" , filter: true },
-        { field: "Category",  headerName: "Due Date", filter: true },
-        { field: "Brand", headerName: "Description" , filter: true},
-        { field: "Organization", headerName: "Source Location", filter: true },
-        { field: "Customer Group", headerName: "Material Code", filter: true },
-        { field: "SFU Version", headerName: "Revenue Impact(Proj.)", filter: true },
-        { field: "APO Product", headerName: "Unit Impact(Proj.)", filter: true },
-        { field: "Product Description", headerName: "Impact Coverage", filter: true },
-        { field: "APO Location", headerName: "Confidence Score", filter: true }
+        { field: "priority", headerName: "Priority" , filter: true },
+        { field: "due_date",  headerName: "Due Date", filter: true },
+        { field: "description", headerName: "Description" , filter: true},
+        { field: "source_location", headerName: "Source Location", filter: true },
+        { field: "material_code", headerName: "Material Code", filter: true },
+        { field: "revenue_impact", headerName: "Revenue Impact(Proj.)", filter: true },
+        { field: "unit_impact", headerName: "Unit Impact(Proj.)", filter: true },
+        { field: "impact_coverage", headerName: "Impact Coverage", filter: true },
+        { field: "confidence_score", headerName: "Confidence Score", filter: true }
     ]);
 
+
+    const fetchRecommendations = async () =>{
+        let response = await axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/get_recommendationByUseCase?id=${selectedData.id}`)
+        setRowData(response.data.data)
+        setOpenCount(response.data.open)
+        setCloseCount(response.data.close)
+        tabData(response.data.data)
+    }
+
     useEffect(() => {
-        if(tabValue == 0){
-            setRowData(openData)
-        }else{
-            setRowData(closeData)
+        if(selectedData !=  null || selectedData != undefined){
+            fetchRecommendations()
         }
+    }, [selectedData]);
+
+    const tabData = (data) =>{
+        if(tabValue == 0){
+            const filteredData = data.filter(item => item.status == 'Open');
+            setFilterData(filteredData)
+        }else{
+            const filteredData = data.filter(item => item.status == 'Close');
+            setFilterData(filteredData)
+        }
+    }
+
+    useEffect(() => {
+        tabData(rowData)
     }, [tabValue]);
 
     const handleRowClick = (params) => {
-        console.log(params)
-        navigate(`/apps/recommendations?data=${JSON.stringify(params.data)}`)
+        localStorage.setItem('recommendationData', JSON.stringify(params.data));
+        navigate(`/apps/recommendations`)
     };
 
     function handleChangeTab(event: React.SyntheticEvent, value: number) {
         setTabValue(value);
     }
-
-
 
     return (
         <div className="flex-auto w-full h-full p-24 sm:p-40">
@@ -4723,12 +4684,12 @@ function LandingPageContent(props) {
                             <Tab
                                 className="text-14 font-semibold min-h-40 min-w-64 mx-4 px-12"
                                 disableRipple
-                                label={`Open ${openData.length}`}
+                                label={`Open ${openCount}`}
                             />
                             <Tab
                                 className="text-14 font-semibold min-h-40 min-w-64 mx-4 px-12"
                                 disableRipple
-                                label={`Closed ${closeData.length}`}
+                                label={`Closed ${closeCount}`}
                             />
                         </Tabs>
                         {/*{tabValue === 0 && <HomeTab />}*/}
@@ -4736,7 +4697,7 @@ function LandingPageContent(props) {
                         {/*{tabValue === 2 && <TeamTab />}*/}
                     </div>
                     <AgGridReact
-                        rowData={rowData}
+                        rowData={filteredData}
                         pagination={true}
                         paginationPageSize={100}
                         paginationPageSizeSelector={paginationPageSizeSelector}

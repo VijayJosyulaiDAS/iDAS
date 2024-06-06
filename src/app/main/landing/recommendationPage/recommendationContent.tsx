@@ -1,5 +1,4 @@
-import React, {useEffect, useMemo, useState, useLayoutEffect, useRef} from 'react';
-import { AgGridReact } from 'ag-grid-react';
+import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import * as am4core from '@amcharts/amcharts4/core';
@@ -12,20 +11,63 @@ import {Box} from "@mui/system";
 import Button from "@mui/material/Button";
 import {useParams} from "react-router-dom";
 import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
+import TextField from "@mui/material/TextField";
+import {Controller, useFormContext} from "react-hook-form";
+import {InputLabel, TextareaAutosize} from "@mui/material";
+import DialogTitle from "@mui/material/DialogTitle";
+import IconButton from "@mui/material/IconButton";
+import {styled} from "@mui/material/styles";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import FormControl from "@mui/material/FormControl";
+import {Select} from "@mui/base";
 /**
  * RecommendationPage Content
  */
-function RecommendationPageContent() {
-    console.log(useParams())
+
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+    '& .MuiDialogContent-root': {
+        padding: theme.spacing(2),
+    },
+    '& .MuiDialogActions-root': {
+        padding: theme.spacing(1),
+    },
+}));
+
+function RecommendationPageContent(props) {
+    // const [recommendation, setRecommendation] = React.useState<any>(props.recommendation);
+    const savedData = localStorage.getItem('recommendationData');
+    const [recommendation, setData] = React.useState<any>(JSON.parse(savedData));
+    const [openDialog, setOpenDialog] = useState(true);
 
 
-    const cardData  = {
-        title: 'Transfer 199,597 units of 1004 to the L04 DC to fill projected backorders in 2024-06-16',
-        date: 'May20, 2024',
-        description: "Area's demand is forecast is projecting a backlog of 199,597 units vs the current consensus plan for 2024-06-16 in L04 DC. Based on available inventory in the L02 DC, we are able to cover" +
-            "100% of this unmet demand. This is expected to drive $429k in additional revenue, with a cost of $15,968"
+    function formatDateString(dateString) {
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) {
+            throw new Error('Invalid date string');
+        }
+        const year = date.getFullYear();
+        const month = date.toLocaleString('default', { month: 'long' });
+        const day = date.getDate();
+        return `${month} ${day}, ${year}`;
     }
 
+    const cardData  = {
+        title: recommendation.description,
+        date: formatDateString(recommendation.due_date),
+        description: "The Demand Forecast is predicting an <increase/decrease> in Demand of <Demand Increase/Decrease Value> for the plan of <Time Frame> for the Material Code <Material Code>. Based on the available inventory of <Available Inventory Value> and a <Stock Transfer Time/Lead Time> " +
+            "of <Number> days, you should <place an order/amend PO number> with the Quantity <Quantity Value>"
+    }
+
+    function handleCloseDialog() {
+        setOpenDialog(false);
+    }
+
+    const handleSaveSelection = async (e) => {
+        e.preventDefault();
+        setOpenDialog(false)
+    }
 
     const chartRef = useRef<am4charts.XYChart | null>(null);
 
@@ -111,16 +153,20 @@ function RecommendationPageContent() {
         };
     }, []);
 
+    const handleClick = (event) => {
+        console.log(event.target.id);
+    };
 
 
 
     return (
         <div className="flex-auto p-24 flex w-full justify-between flex-row'">
-            <div className="w-2/5 flex" >
+            <div className="w-2/5 flex">
                 {/*<div className='m-5 flex w-full justify-between flex-row'>*/}
                 {/*<FuseSvgIcon size={24} className='text-blue-500'>heroicons-outline:arrow-narrow-right</FuseSvgIcon>*/}
                 <div
-                    className="card mt-20  w-full h-2/4 border relative cursor-pointer flex lg:flex-col md:flex-row sm:flex-row  shadow bg-white  rounded-2xl overflow-hidden">
+                    className=" mt-20 w-full max-h-auto border relative flex lg:flex-col md:flex-row sm:flex-row shadow bg-white rounded-2xl overflow-x-scroll"
+                    style={{height: "70%"}}>
                     <div className="flex w-full items-start flex-col  justify-start px-8 pt-12">
                         <Typography
                             className="px-16 text-sm font-medium text-blue-500 tracking-tight leading-6 truncate"
@@ -133,33 +179,62 @@ function RecommendationPageContent() {
                             {cardData.title}
                         </Typography>
                     </div>
-                    <div className="flex justify-between gap-10  w-full h-full flex-col">
+                    <div className="flex justify-between mt-20 w-full h-full flex-col">
                         <div
                             className="text-md font-medium md:mr-24 text-grey-700  md:ml-24 ">{cardData.description}
                         </div>
                         <div
-                            className="flex m-20 justify-center gap-32 items-center"
-                            color="text.secondary"
-                        >
-                                    <Button variant="outlined"  color='secondary'  size="small">Dismiss</Button>
-                                    <Button variant="outlined" color='secondary'   size="small">Modify</Button>
-                                    <Button variant="contained" color='secondary'   size="small">Accept</Button>
+                            className="flex m-20  justify-center gap-32 items-center"
+                            color="text.secondary">
+                            <Button id='dismiss' variant="outlined" color='secondary' onClick={handleClick}
+                                    size="small">Dismiss</Button>
+                            <Button id='modify' variant="outlined" color='secondary' onClick={handleClick}
+                                    size="small">Modify</Button>
+                            <Button id='accept' variant="contained" color='secondary' onClick={handleClick}
+                                    size="small">Accept</Button>
                         </div>
                     </div>
                 </div>
             </div>
             <div className='w-full h-full'>
-                {/*<AgGridReact*/}
-                {/*    rowData={rowData}*/}
-                {/*    pagination={true}*/}
-                {/*    paginationPageSize={100}*/}
-                {/*    filter={true}*/}
-                {/*    paginationPageSizeSelector={paginationPageSizeSelector}*/}
-                {/*    columnDefs={colDefs}*/}
-                {/*    onRowClicked={handleRowClick}*/}
-                {/*/>*/}
-
                 <div id="chartdiv" style={{width: "100%", height: "500px"}}/>
+
+                <div>
+                    {/* openDialog */}
+                    <BootstrapDialog open={openDialog} onClose={handleCloseDialog}
+                                     className="hidden sm:flex items-center justify-center text-white"
+                                     aria-labelledby="customized-dialog-title"
+                                     scroll="body" PaperProps={{
+                        sx: {minWidth: "28vw", maxWidth: "60vw"}
+                    }}>
+                        <DialogTitle sx={{m: 0, p: 2}} id="customized-dialog-title">
+                            Rejection Reason
+                        </DialogTitle>
+                        <form onSubmit={handleSaveSelection} className="flex flex-col">
+                            <DialogContent classes={{root: 'p-16 pb-0 sm:p-32 sm:pb-0'}} dividers>
+                                    <div className="flex flex-col justify-center items-center gap-4">
+                                    <FormControl fullWidth sx={{width: '100%', height: "20vh", display: "flex" , justifyContent: "center", alignItems: 'center'}}>
+                                        {/*<TextareaAutosize className='w-full border flex flex-auto rounded-2xl' aria-label="minimum height" minRows={3} placeholder="Minimum 3 rows" />*/}
+                                        <TextField
+                                            className='w-full h-full'
+                                            id="standard-multiline-static"
+                                            label="Description"
+                                            multiline
+                                            minRows={5}
+                                            defaultValue="Default Value"
+                                        />
+                                    </FormControl>
+                                </div>
+                            </DialogContent>
+                            <DialogActions className="flex sm:flex-row   sm:py-24 px-24">
+                                <Button color="primary" variant="outlined"
+                                        onClick={handleCloseDialog}>Close</Button>
+                                <Button type="submit" color="primary" variant="outlined"
+                                        className=" ml-8">Create</Button>
+                            </DialogActions>
+                        </form>
+                    </BootstrapDialog>
+                </div>
             </div>
         </div>
     );
