@@ -1,77 +1,7 @@
 import FuseNavigation from '@fuse/core/FuseNavigation';
 import { FuseNavItemType } from '@fuse/core/FuseNavigation/types/FuseNavItemType';
 import {ChangeEvent, useEffect, useState} from "react";
-import InputAdornment from "@mui/material/InputAdornment";
-import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
-import {OutlinedInput} from "@mui/material";
-import {useAppDispatch, useAppSelector} from "app/store/hooks";
-import {useLocation} from "react-router-dom";
 import axios from "axios";
-
-
-/**
- * Navigation data
- */
-
-const useCases = [
-	{
-		name: "Firm Zone Production Adjustments",
-		status: "Open",
-		count: 34,
-		description: "Adjusting production levels in designated firm zones based on various triggers to optimize output and resource allocation.",
-		data: [
-			{
-				id: '3.1',
-				title: 'Open Recommendations',
-				type: 'item',
-				url: ''
-			},
-			{
-				id: '3.2',
-				title: 'Close Recommendations',
-				type: 'item',
-			}
-		]
-	},
-	{
-		name: "Supplier PO Amendments",
-		status: "Close",
-		count: 32,
-		description: "Modifying purchase orders from suppliers to reflect changes in demand, supply chain disruptions, or updated agreements.",
-		data: [
-			{
-				id: '3.1',
-				title: 'Open Recommendations',
-				type: 'item'
-			},
-			{
-				id: '3.2',
-				title: 'Close Recommendations',
-				type: 'item',
-			}
-		]
-	},
-	{
-		name: "Realtime Supply Confirmation for Upsides",
-		status: "Open",
-		count: 31,
-		description: "Providing real-time confirmation of supply availability to accommodate sudden increases in demand, ensuring supply chain responsiveness.",
-		data: [
-			{
-				id: '3.1',
-				title: 'Open Recommendations',
-				type: 'item',
-			},
-			{
-				id: '3.2',
-				title: 'Close Recommendations',
-				type: 'item',
-			}
-		]
-	}
-];
-
-
 
 /**
  * The LandingSidebar component.

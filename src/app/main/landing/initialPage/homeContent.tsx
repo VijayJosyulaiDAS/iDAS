@@ -13,10 +13,22 @@ function homeContent() {
 
     const [useCases, setUseCases] = useState([]);
     const[openCount, setOpenCount] = useState<number>(0);
+    const [greet, setGreet] = useState('');
+
+
+    const getGreet = () => {
+        const myDate = new Date();
+        const hrs = myDate.getHours();
+        if (hrs < 12)
+            setGreet('Good Morning')
+        else if (hrs >= 12 && hrs <= 17)
+            setGreet('Good Afternoon')
+        else if (hrs >= 17 && hrs <= 24)
+            setGreet('Good Evening')
+    }
 
     const fetchUseCases = async () => {
         let response = await axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/get_useCases`)
-        console.log(response.data)
         setUseCases(response.data.data)
         setOpenCount(response.data.open)
     }
@@ -24,6 +36,7 @@ function homeContent() {
     const navigate = useNavigate();
 
     useEffect(() => {
+        getGreet()
         fetchUseCases()
     }, []);
 
@@ -32,6 +45,7 @@ function homeContent() {
     }
 
     const handleCardClick = (event) =>{
+        console.log(event)
         navigate('/apps/landing', { state: useCases })
     }
 
@@ -46,7 +60,7 @@ function homeContent() {
             <div>
                 <Typography
                     className="text-2xl md:text-5xl font-semibold m-96 tracking-tight leading-7 flex flex-col justify-between gap-10 md:leading-snug truncate">
-                    <span>{`Good Morning,`}</span>
+                    <span>{`${greet},`}</span>
                     <span
                         className='text-4xl md:text-5xl font-bold tracking-tight leading-7 flex flex-col justify-between gap-10 md:leading-snug truncate'>{`${user.data.displayName}!`}</span>
                 </Typography>

@@ -6,6 +6,7 @@ import MailDetails from "./recommendationBox/recommendation/RecommendationDetail
 import LandingPageContent from "./landingPage/landingPageContent";
 import RecommendationList from "./recommendationBox/recommendations/RecommendationList";
 import RecommendationDetail from "./recommendationPage/recommendationDetail";
+import UpdateRecommendation from "./recommendationPage/modification/updateRecommendation";
 
 
 const LandingConfig = {
@@ -29,7 +30,18 @@ const LandingConfig = {
             ]
         },{
         path: '/apps/recommendations',
-        element: <RecommendationDetail/>
+        children: [
+            {
+                path: '',
+                element: <RecommendationDetail/>,
+            },{
+                path: '/apps/recommendations/:recommendationId',
+                element: <UpdateRecommendation/>,
+            },
+        ]
+        },{
+        path: '/apps/recommendations/update',
+        element: <UpdateRecommendation/>
         }
     ]
 };

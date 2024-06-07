@@ -44,6 +44,14 @@ module.exports.recommendations ={
         type:Sequelize.STRING,
         allowNull:false
     },
+    detail_desc:{
+        type:Sequelize.STRING,
+        allowNull:false
+    },
+    user_desc:{
+        type:Sequelize.STRING,
+        allowNull:false
+    },
     use_case_id:{
         type:Sequelize.STRING,
         allowNull:false

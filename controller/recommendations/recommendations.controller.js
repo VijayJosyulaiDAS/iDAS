@@ -31,25 +31,6 @@ let getRecommendationByUseCases = async (req, res) => {
         const closeCount = await sequelize.query(queryCloseCount, {
             type: sequelize.QueryTypes.SELECT
         })
-
-        // const data = await util.model.recommendations.findAll({
-        //     where: {
-        //         use_case_id:useCaseId}
-        // });
-        //
-        // const openCount =  await util.model.recommendations.count({
-        //     where: {
-        //         status: 'Open',
-        //         use_case_id: useCaseId
-        //     }
-        // });
-        //
-        // const closeCount =   await util.model.recommendations.count({
-        //     where: {
-        //         status: 'Close',
-        //         use_case_id: useCaseId
-        //     }
-        // });
         res.status(200).send({ successful: true, data: data, open: openCount[0].openCount,close: closeCount[0].closeCount });
     } catch (e) {
         res.status(500).send({successful: false, error: e});
@@ -69,12 +50,15 @@ let createRecommendations = async (req, res) => {
 
 let updateRecommendation = async (req, res) => {
     try {
-        let useCaseId = req.params.id;
-        await util.model.user.destroy({
+        let recommendationId = (req.query.id).toString();
+        let data = req.body
+        console.log(data)
+        await util.model.recommendations.update(data, {
             where: {
-                id: req.params.user_id
+                use_case_id: data.use_case_id,
+                id: recommendationId
             }
-        });
+        })
         res.status(200).send({successful: true, message: 'done'});
     } catch (e) {
         res.status(500).send({successful: false, error: e});

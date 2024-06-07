@@ -4,24 +4,19 @@ import "ag-grid-community/styles/ag-theme-quartz.css";
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import am4themes_animated from '@amcharts/amcharts4/themes/animated';
-
 am4core.useTheme(am4themes_animated);
 import Typography from "@mui/material/Typography";
-import {Box} from "@mui/system";
 import Button from "@mui/material/Button";
-import {useParams} from "react-router-dom";
-import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
+import {useNavigate, useParams} from "react-router-dom";
 import TextField from "@mui/material/TextField";
-import {Controller, useFormContext} from "react-hook-form";
-import {InputLabel, TextareaAutosize} from "@mui/material";
 import DialogTitle from "@mui/material/DialogTitle";
-import IconButton from "@mui/material/IconButton";
 import {styled} from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import FormControl from "@mui/material/FormControl";
-import {Select} from "@mui/base";
+import axios from "axios";
+
 /**
  * RecommendationPage Content
  */
@@ -39,7 +34,11 @@ function RecommendationPageContent(props) {
     // const [recommendation, setRecommendation] = React.useState<any>(props.recommendation);
     const savedData = localStorage.getItem('recommendationData');
     const [recommendation, setData] = React.useState<any>(JSON.parse(savedData));
-    const [openDialog, setOpenDialog] = useState(true);
+    const [openDialog, setOpenDialog] = useState(false);
+    const [description, setDescription] = useState('')
+    const [action, setAction] = useState('')
+
+    const navigate = useNavigate()
 
 
     function formatDateString(dateString) {
@@ -64,9 +63,22 @@ function RecommendationPageContent(props) {
         setOpenDialog(false);
     }
 
+    const updateRecommendation = async (data) => {
+        let response = await axios.put(`${import.meta.env.VITE_LOCAL_BASE_URL}/update_recommendations?id=${recommendation.id}`, data);
+        console.log(response)
+    }
+
     const handleSaveSelection = async (e) => {
         e.preventDefault();
+        console.log(description)
+        let data = {
+            use_case_id: recommendation.use_case_id,
+            status: action,
+            user_desc: description
+        }
+        updateRecommendation(data)
         setOpenDialog(false)
+        navigate('/apps/landing')
     }
 
     const chartRef = useRef<am4charts.XYChart | null>(null);
@@ -155,6 +167,23 @@ function RecommendationPageContent(props) {
 
     const handleClick = (event) => {
         console.log(event.target.id);
+        if(event.target.id == 'dismiss'){
+            setOpenDialog(true)
+            setAction('Close')
+        }
+        if(event.target.id == 'accept'){
+            setAction('Close')
+            let data = {
+                use_case_id: recommendation.use_case_id,
+                status: 'Close'
+            }
+            updateRecommendation(data)
+            navigate('/apps/landing')
+        }
+        if(event.target.id == 'modify'){
+            console.log('modify')
+            navigate(`/apps/recommendations/${recommendation.id}`)
+        }
     };
 
 
@@ -162,8 +191,6 @@ function RecommendationPageContent(props) {
     return (
         <div className="flex-auto p-24 flex w-full justify-between flex-row'">
             <div className="w-2/5 flex">
-                {/*<div className='m-5 flex w-full justify-between flex-row'>*/}
-                {/*<FuseSvgIcon size={24} className='text-blue-500'>heroicons-outline:arrow-narrow-right</FuseSvgIcon>*/}
                 <div
                     className=" mt-20 w-full max-h-auto border relative flex lg:flex-col md:flex-row sm:flex-row shadow bg-white rounded-2xl overflow-x-scroll"
                     style={{height: "70%"}}>
@@ -214,14 +241,15 @@ function RecommendationPageContent(props) {
                             <DialogContent classes={{root: 'p-16 pb-0 sm:p-32 sm:pb-0'}} dividers>
                                     <div className="flex flex-col justify-center items-center gap-4">
                                     <FormControl fullWidth sx={{width: '100%', height: "20vh", display: "flex" , justifyContent: "center", alignItems: 'center'}}>
-                                        {/*<TextareaAutosize className='w-full border flex flex-auto rounded-2xl' aria-label="minimum height" minRows={3} placeholder="Minimum 3 rows" />*/}
                                         <TextField
                                             className='w-full h-full'
                                             id="standard-multiline-static"
                                             label="Description"
                                             multiline
-                                            minRows={5}
-                                            defaultValue="Default Value"
+                                            value={description}
+                                            onChange={(e) => setDescription(e.target.value)}
+                                            minRows={8}
+                                            placeholder='Please provide a valid description'
                                         />
                                     </FormControl>
                                 </div>
@@ -230,7 +258,7 @@ function RecommendationPageContent(props) {
                                 <Button color="primary" variant="outlined"
                                         onClick={handleCloseDialog}>Close</Button>
                                 <Button type="submit" color="primary" variant="outlined"
-                                        className=" ml-8">Create</Button>
+                                        className=" ml-8">Submit</Button>
                             </DialogActions>
                         </form>
                     </BootstrapDialog>
