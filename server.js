@@ -16,6 +16,8 @@ const log4js = require('log4js')
     ,path = require('path')
     , indexDir = '/build/index.html',
     { config: c } = require('dotenv')
+const morgan = require('morgan');
+
 
 
 
@@ -25,11 +27,17 @@ app.use(compression());
 // Enable CORS for all router
 app.use(cors());
 
+// Create a logger instance
+const log = log4js.getLogger('app');
+
 // Parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Parse application/json
 app.use(bodyParser.json());
+
+//api logger
+app.use(morgan('dev'));
 
 modelInit.utils(db).then(r => console.log("Table initialize successfully"))
 

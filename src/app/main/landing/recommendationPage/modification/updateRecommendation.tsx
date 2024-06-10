@@ -3,6 +3,7 @@ import FusePageCarded from '@fuse/core/FusePageCarded';
 import RecommendationPageHeader from './updateRecommendationHeader';
 import UpdateRecommendationContent from "./updateRecommendationContent";
 import {useParams} from "react-router-dom";
+import {useState} from "react";
 
 const Root = styled(FusePageCarded)(() => ({
     '& .FusePageCarded-header': {},
@@ -16,13 +17,14 @@ const Root = styled(FusePageCarded)(() => ({
  * UpdateRecommendationPage.
  */
 function UpdateRecommendation() {
+    const [selectedRow, setSelectedRow] = useState(null);
 
     return (
         <Root
             header={
-                <RecommendationPageHeader/>
+                <RecommendationPageHeader selectedData={selectedRow}/>
             }
-            content={<UpdateRecommendationContent />}
+            content={<UpdateRecommendationContent setSelectedRow={setSelectedRow}  />}
             scroll="content"
         />
     );

@@ -16,6 +16,10 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
+import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
+import FuseLoading from "@fuse/core/FuseLoading";
+import {AgGridReact} from "ag-grid-react";
+import TabPanel from "@mui/lab/TabPanel";
 
 /**
  * RecommendationPage Content
@@ -31,12 +35,19 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 function RecommendationPageContent(props) {
-    // const [recommendation, setRecommendation] = React.useState<any>(props.recommendation);
     const savedData = localStorage.getItem('recommendationData');
     const [recommendation, setData] = React.useState<any>(JSON.parse(savedData));
     const [openDialog, setOpenDialog] = useState(false);
     const [description, setDescription] = useState('')
     const [action, setAction] = useState('')
+    const [showChart,setShowChart] = useState(false)
+    const [rowData, setRowData] = useState([]);
+    const [colDefs, setColDefs] = useState([
+        { field: "index", headerName: "Index", filter: true },
+        { field: "route_cause", headerName: "Route Cause", filter: true },
+        { field: "description", headerName: "Description", filter: true }
+    ]);
+
 
     const navigate = useNavigate()
 
@@ -184,13 +195,17 @@ function RecommendationPageContent(props) {
             console.log('modify')
             navigate(`/apps/recommendations/${recommendation.id}`)
         }
+        if(event.target.id == 'details'){
+            console.log(event.target.id);
+            setShowChart(true)
+        }
     };
 
 
 
     return (
         <div className="flex-auto p-24 flex w-full justify-between flex-row'">
-            <div className="w-2/5 flex">
+            <div className="w-2/5 flex justify-between">
                 <div
                     className=" mt-20 w-full max-h-auto border relative flex lg:flex-col md:flex-row sm:flex-row shadow bg-white rounded-2xl overflow-x-scroll"
                     style={{height: "70%"}}>
@@ -219,15 +234,29 @@ function RecommendationPageContent(props) {
                                     size="small">Modify</Button>
                             <Button id='accept' variant="contained" color='secondary' onClick={handleClick}
                                     size="small">Accept</Button>
+                            <Button id='details' variant="outlined" color='secondary' onClick={handleClick}
+                                    size="small">Details<FuseSvgIcon onClick={handleClick} size={16}
+                                                                     className='text-blue-500 cursor-pointer'>heroicons-outline:chevron-right</FuseSvgIcon>
+                            </Button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div className='w-full h-full'>
-                <div id="chartdiv" style={{width: "100%", height: "500px"}}/>
-
+            <div className='w-full h-full flex gap-10 h-[500px]'>
+                {showChart ? (
+                    <div id="chartdiv" style={{width: "100%", height: "100%"}}/>
+                ) : (
+                    <div className='w-full h-full ag-theme-quartz'  style={{ height: 680 }} color='secondary' value="1">
+                        <AgGridReact
+                            rowData={rowData}
+                            pagination={true}
+                            paginationPageSize={100}
+                            rowSelection={"single"}
+                            columnDefs={colDefs}
+                        />
+                    </div>
+                )}
                 <div>
-                    {/* openDialog */}
                     <BootstrapDialog open={openDialog} onClose={handleCloseDialog}
                                      className="hidden sm:flex items-center justify-center text-white"
                                      aria-labelledby="customized-dialog-title"

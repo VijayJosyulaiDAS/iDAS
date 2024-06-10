@@ -4,10 +4,11 @@ import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
 import {useNavigate} from "react-router-dom";
 
 function RecommendationPageHeader() {
-
+    const savedData = localStorage.getItem('recommendationData');
+    const [recommendation, setData] = React.useState<any>(JSON.parse(savedData));
     const navigate = useNavigate();
     const handleClick = () => {
-        navigate('/apps/landing')
+        navigate(`/apps/landing/${recommendation.use_case_id}`)
     }
 
     return (

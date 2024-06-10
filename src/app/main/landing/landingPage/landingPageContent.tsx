@@ -5,7 +5,7 @@ import "ag-grid-community/styles/ag-theme-quartz.css";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import {Box} from "@mui/system";
-import {Navigate, useLocation, useNavigate} from 'react-router-dom';
+import {Navigate, useLocation, useNavigate, useParams} from 'react-router-dom';
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { motion } from 'framer-motion';
@@ -17,6 +17,7 @@ import FuseLoading from "@fuse/core/FuseLoading";
  */
 function LandingPageContent(props) {
     const {selectedData} = props
+    console.log(selectedData)
     const[openCount, setOpenCount] = useState<number>(0);
     const[closeCount, setCloseCount] = useState<number>(0);
     const [rowData, setRowData] = useState([]);
@@ -24,9 +25,23 @@ function LandingPageContent(props) {
     const [loading, setLoading] = useState(false); // State for loading
     const navigate = useNavigate();
     const [tabValue, setTabValue] = useState(0);
+    const [isUseCase1, setIsUseCase1] = useState(true);
+    const [isUseCase2, setIsUseCase2] = useState(true);
+    const [isUseCase3, setIsUseCase3] = useState(true);
 
-    const [colDefs, setColDefs] = useState([
+    const columns = [
         { field: "priority", headerName: "Priority", filter: true },
+        { field: "plant_code", headerName: "Plant Code", filter: true , hide: isUseCase1},
+        { field: "firm_zone_time", headerName: "Firm Zone Time", filter: true, hide: isUseCase1 },
+        { field: "total_adjustment", headerName: "Total Adjustment", filter: true, hide: isUseCase1 },
+        { field: "order_type", headerName: "Order Type", filter: true, hide: isUseCase2 },
+        { field: "volume", headerName: "Volume", filter: true, hide: isUseCase2 },
+        { field: "supplier", headerName: "Supplier", filter: true, hide: isUseCase2 },
+        { field: "lead_time", headerName: "Lead Time", filter: true, hide: isUseCase2 },
+        { field: "change_in_demand", headerName: "Change In Demand", filter: true, hide: isUseCase3 },
+        { field: "open_orders", headerName: "Open Orders", filter: true, hide: isUseCase3 },
+        { field: "in_transit_orders", headerName: "In Transit Orders", filter: true, hide: isUseCase3 },
+        { field: "createdAt", headerName: "Recommendation Date", filter: true},
         { field: "due_date", headerName: "Due Date", filter: true },
         { field: "description", headerName: "Description", filter: true },
         { field: "source_location", headerName: "Source Location", filter: true },
@@ -35,7 +50,9 @@ function LandingPageContent(props) {
         { field: "unit_impact", headerName: "Unit Impact(Proj.)", filter: true },
         { field: "impact_coverage", headerName: "Impact Coverage", filter: true },
         { field: "confidence_score", headerName: "Confidence Score", filter: true }
-    ]);
+    ]
+
+    const [colDefs, setColDefs] = useState([]);
 
     const fetchRecommendations = async () => {
         setLoading(true); // Start loading
@@ -54,6 +71,25 @@ function LandingPageContent(props) {
 
     useEffect(() => {
         if (selectedData != null || selectedData != undefined) {
+            console.log(selectedData.title)
+            if(selectedData.title == "Firm Zone Production Adjustments"){
+                setIsUseCase1(false)
+                setIsUseCase2(true)
+                setIsUseCase3(true)
+                setColDefs(columns)
+            }
+            if(selectedData.title == "Supplier PO Amendments"){
+                setIsUseCase2(false)
+                setIsUseCase1(true)
+                setIsUseCase3(true)
+                setColDefs(columns)
+            }
+            if(selectedData.title == "Realtime Supply Confirmation for Upsides"){
+                setIsUseCase3(false)
+                setIsUseCase1(true)
+                setIsUseCase2(true)
+                setColDefs(columns)
+            }
             fetchRecommendations();
         }
     }, [selectedData]);
@@ -119,19 +155,13 @@ function LandingPageContent(props) {
                     </div>
                     {loading ? (
                         <div className="flex justify-center items-center h-full">
-                            <FuseLoading className="loader">Loading...</FuseLoading>
+                            <FuseLoading></FuseLoading>
                         </div>
                     ) : (
                         <AgGridReact
                             rowData={filteredData}
                             pagination={true}
                             paginationPageSize={100}
-                            loading={loading}
-                            overlayLoadingTemplate={
-                                <div className="flex justify-center items-center h-full">
-                                    <FuseLoading className="loader">Loading...</FuseLoading>
-                                </div>
-                            }
                             columnDefs={colDefs}
                             onRowClicked={handleRowClick}
                         />

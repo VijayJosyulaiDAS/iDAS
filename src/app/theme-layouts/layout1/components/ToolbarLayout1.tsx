@@ -66,7 +66,7 @@ function ToolbarLayout1(props: ToolbarLayout1Props) {
 						)}
 
 						<Hidden lgDown>
-							<NavigationShortcuts />
+							{/*<NavigationShortcuts />*/}
 						</Hidden>
 					</div>
 

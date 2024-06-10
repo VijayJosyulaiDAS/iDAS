@@ -25,7 +25,7 @@ const LandingConfig = {
                     element: <LandingPage/>
                 },{
                     path: ':folderHandle',
-                    element: <LandingPageContent/>
+                    element: <LandingPage/>
                 }
             ]
         },{

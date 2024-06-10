@@ -12,6 +12,7 @@ import { useAuth } from 'src/app/auth/AuthRouteProvider';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
+
 /**
  * Form Validation Schema
  */
@@ -91,18 +92,21 @@ function PingFedSignInTab() {
 		<div className="flex justify-between items-center">
 			<div className="p2">
 				<form className="form-horizontal">
-					<div className="form-group row mb-0 mt-60">
+					<div className="form-group mb-10 row mb-0 ">
 						<div className="col-12 items-center flex justify-center">
-							<img src='assets/images/png/pingid_banner.png' alt={"banner"} />
+							<img src='assets/images/png/PingIdentity-Logo-KO-1024x380.png' alt={"banner"} />
 						</div>
-						<div className="col-12 text-center border border-2 border-red p-16 mx-auto">
-							<a className="btn btn-outline-danger"
+
+							<a className="btn btn-outline-danger w-full"
 							   href="api/ping/oauth2" type="submit"
-							   style={{textDecoration: 'none', color: 'red'}}
+							   style={{textDecoration: 'none'}}
 							>
-								Employee Login
+								<Button variant="contained"
+										color="secondary" className="col-12 w-full hover:scale-105 transition duration-300  text-center text-white border border-2  p-16 mx-auto">
+
+									Employee Login
+								</Button>
 							</a>
-						</div>
 					</div>
 				</form>
 			</div>

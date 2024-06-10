@@ -18,15 +18,16 @@ import {
     SizeColumnsToFitProvidedWidthStrategy
 } from "@ag-grid-community/core";
 
-function UpdateRecommendationContent() {
+function UpdateRecommendationContent({setSelectedRow}) {
     const [value, setValue] = React.useState('1');
     const {recommendationId} = useParams();
     const [loading, setLoading] = React.useState(true);
     const [rowData, setRowData] = useState([]);
-
     const [colDefs, setColDefs] = useState([
-        {  width:10,
-            checkboxSelection: true, },
+        {
+            width: 10,
+            checkboxSelection: true,
+        },
         { field: "recommendation_id", headerName: "Recommendation Id", filter: true },
         { field: "recommendation_desc", headerName: "Recommendation Description", filter: true },
         { field: "best_alternative",
@@ -74,15 +75,14 @@ function UpdateRecommendationContent() {
         navigate('/apps/recommendations')
     }
 
-    const handleRowClick = (params) => {
-        console.log(params.data)
+    const handleRowSelection = params => {
+        const selectedNodes = params.api.getSelectedNodes();
+        if (selectedNodes.length > 0) {
+            setSelectedRow(selectedNodes[0].data);
+        } else {
+            setSelectedRow(null);
+        }
     };
-
-    // const onSelectionChanged = useCallback(() => {
-    //     const selectedRows = gridRef.current!.api.getSelectedRows();
-    //     (document.querySelector("#selectedRows") as any).innerHTML =
-    //         selectedRows.length === 1 ? selectedRows[0].athlete : "";
-    // }, []);
 
     return (
         <Box sx={{ width: '100%', typography: 'body1' }}>
@@ -97,7 +97,7 @@ function UpdateRecommendationContent() {
                 </Box>
                 {loading ? (
                     <div className="flex justify-center items-center h-full">
-                        <FuseLoading className="loader">Loading...</FuseLoading>
+                        <FuseLoading></FuseLoading>
                     </div>
                 ) : (
                     <TabPanel className='w-full h-full ag-theme-quartz'  style={{ height: 680 }} color='secondary' value="1">
@@ -105,18 +105,10 @@ function UpdateRecommendationContent() {
                             rowData={rowData}
                             pagination={true}
                             paginationPageSize={100}
-                            loading={loading}
                             autoSizeStrategy={autoSizeStrategy}
                             rowSelection={"single"}
-                            checkboxSelection={true}
-                            suppressRowClickSelection={true}
-                            overlayLoadingTemplate={
-                                <div className="flex justify-center items-center h-full">
-                                    <FuseLoading className="loader">Loading...</FuseLoading>
-                                </div>
-                            }
                             columnDefs={colDefs}
-                            onRowClicked={handleRowClick}
+                            onSelectionChanged={handleRowSelection}
                         />
                      </TabPanel>
                 )}
