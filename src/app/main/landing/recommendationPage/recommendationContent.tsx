@@ -1,4 +1,4 @@
-import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useMemo, useRef, useState} from 'react';
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import * as am4core from '@amcharts/amcharts4/core';
@@ -20,6 +20,12 @@ import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
 import FuseLoading from "@fuse/core/FuseLoading";
 import {AgGridReact} from "ag-grid-react";
 import TabPanel from "@mui/lab/TabPanel";
+import {
+    SizeColumnsToContentStrategy,
+    SizeColumnsToFitGridStrategy,
+    SizeColumnsToFitProvidedWidthStrategy
+} from "@ag-grid-community/core";
+import Paper from "@mui/material/Paper";
 
 /**
  * RecommendationPage Content
@@ -40,17 +46,48 @@ function RecommendationPageContent(props) {
     const [openDialog, setOpenDialog] = useState(false);
     const [description, setDescription] = useState('')
     const [action, setAction] = useState('')
-    const [showChart,setShowChart] = useState(false)
-    const [rowData, setRowData] = useState([]);
-    const [colDefs, setColDefs] = useState([
-        { field: "index", headerName: "Index", filter: true },
+    let [showChart,setShowChart] = useState(false)
+    const [rowData, setRowData] = useState(
+        [
+            {
+                "id": "1",
+                "route_cause": "Safety Stock Level",
+                "description": "The minimum quantity of a product that must be kept in stock to prevent stock outs.",
+            }, {
+                "id": "2",
+                "route_cause": "Current Days Forward Coverage",
+                "description": "The number of days the current stock level can satisfy customer demand.",
+            }, {
+                "id": "3",
+                "route_cause": "Details of the FG",
+                "description": "Information about the finished goods.",
+            }, {
+                "id": "4",
+                "route_cause": "Demand Change of FG",
+                "description": "Variations in the demand for the finished goods.",
+            }, {
+                "id": "5",
+                "route_cause": "Input Raw Materials of FG",
+                "description": "Raw materials required to produce the finished goods.",
+            }
+        ]
+    );
+    let columns = [
+        {
+            field: "id",
+            headerName: "S.No.",
+            filter: false
+        },
         { field: "route_cause", headerName: "Route Cause", filter: true },
         { field: "description", headerName: "Description", filter: true }
-    ]);
+    ]
+    const [colDefs, setColDefs] = useState([]);
 
+    useEffect(() => {
+        setColDefs(columns)
+    }, [showChart]);
 
     const navigate = useNavigate()
-
 
     function formatDateString(dateString) {
         const date = new Date(dateString);
@@ -174,6 +211,17 @@ function RecommendationPageContent(props) {
         return () => {
             chart.dispose();
         };
+    }, [showChart]);
+
+    const autoSizeStrategy = useMemo<
+        | SizeColumnsToFitGridStrategy
+        | SizeColumnsToFitProvidedWidthStrategy
+        | SizeColumnsToContentStrategy
+    >(() => {
+        return {
+            type: "fitGridWidth",
+            defaultMinWidth: 100
+        };
     }, []);
 
     const handleClick = (event) => {
@@ -197,14 +245,19 @@ function RecommendationPageContent(props) {
         }
         if(event.target.id == 'details'){
             console.log(event.target.id);
-            setShowChart(true)
+            showChart = !showChart
+            setShowChart(showChart)
         }
+    };
+
+    const onGridReady = (params) => {
+        params.api.sizeColumnsToFit();
     };
 
 
 
     return (
-        <div className="flex-auto p-24 flex w-full justify-between flex-row'">
+        <div className="flex-auto p-24 flex w-full gap-10 justify-between flex-row'">
             <div className="w-2/5 flex justify-between">
                 <div
                     className=" mt-20 w-full max-h-auto border relative flex lg:flex-col md:flex-row sm:flex-row shadow bg-white rounded-2xl overflow-x-scroll"
@@ -235,23 +288,26 @@ function RecommendationPageContent(props) {
                             <Button id='accept' variant="contained" color='secondary' onClick={handleClick}
                                     size="small">Accept</Button>
                             <Button id='details' variant="outlined" color='secondary' onClick={handleClick}
-                                    size="small">Details<FuseSvgIcon onClick={handleClick} size={16}
+                                    size="small">Details<FuseSvgIcon size={16}
                                                                      className='text-blue-500 cursor-pointer'>heroicons-outline:chevron-right</FuseSvgIcon>
                             </Button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div className='w-full h-full flex gap-10 h-[500px]'>
-                {showChart ? (
-                    <div id="chartdiv" style={{width: "100%", height: "100%"}}/>
+            <div className='w-full mt-20 h-full flex gap-10 h-[500px]'>
+                {!showChart ? (
+                    <Paper className='w-full border p-10 h-full ag-theme-quartz'  style={{ height: 680 }} >
+                        <div className=' h-full ' id="chartdiv" style={{width: "100%", height: "100%"}}/>
+                    </Paper>
                 ) : (
-                    <div className='w-full h-full ag-theme-quartz'  style={{ height: 680 }} color='secondary' value="1">
+                    <div className='w-full h-full ag-theme-quartz'  style={{ height: 680 }} color='secondary'>
                         <AgGridReact
                             rowData={rowData}
                             pagination={true}
                             paginationPageSize={100}
                             rowSelection={"single"}
+                            onGridReady={onGridReady}
                             columnDefs={colDefs}
                         />
                     </div>
