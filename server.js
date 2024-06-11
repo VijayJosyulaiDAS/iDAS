@@ -61,10 +61,10 @@ require('./routers/routes')(app, passport);
 require('./router/routes')(app);
 
 
-// Define your router
-app.get('/', (req, res) => {
-  res.send('Hello, World!');
-});
+// // Define your router
+// app.get('/', (req, res) => {
+//   res.send('Hello, World!');
+// });
 
 app.use(express.static(path.join(__dirname, dir)));
 
