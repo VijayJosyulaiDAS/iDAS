@@ -8,7 +8,7 @@ import Box from '@mui/material/Box';
  */
 function FuseSplashScreen() {
 	return (
-		<div id="fuse-splash-screen">
+		<div >
 			<div className="logo">
 				<img
 					width="128"
