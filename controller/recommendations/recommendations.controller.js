@@ -23,11 +23,11 @@ let getRecommendationByUseCases = async (req, res) => {
         const data = await sequelize.query(query, {
             type: sequelize.QueryTypes.SELECT,
         });
-        const queryOpenCount = `SELECT COUNT(*) as openCount FROM [dbo].[tbl_recommendations] where status = 'Open' and use_case_id = '${useCaseId}'`
+        const queryOpenCount = `SELECT COUNT(*) as openCount FROM [dbo].[tbl_recommendations] where active = 1 and use_case_id = '${useCaseId}'`
         const openCount = await sequelize.query(queryOpenCount, {
             type: sequelize.QueryTypes.SELECT
         })
-        const queryCloseCount = `SELECT COUNT(*) as closeCount FROM [dbo].[tbl_recommendations] where status = 'Close' and use_case_id = '${useCaseId}'`
+        const queryCloseCount = `SELECT COUNT(*) as closeCount FROM [dbo].[tbl_recommendations] where active = 0 and use_case_id = '${useCaseId}'`
         const closeCount = await sequelize.query(queryCloseCount, {
             type: sequelize.QueryTypes.SELECT
         })

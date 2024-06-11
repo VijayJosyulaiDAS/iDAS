@@ -12,33 +12,69 @@ module.exports.recommendations ={
         type:Sequelize.STRING,
         allowNull:false,
     },
+    po_number:{
+        type:Sequelize.STRING,
+        allowNull:false,
+    },
+    demand_value:{
+        type:Sequelize.STRING,
+        allowNull:false,
+    },
+    demand_type:{
+        type:Sequelize.STRING,
+        allowNull:false,
+    },
+    time_frame:{
+        type:Sequelize.STRING,
+        allowNull:false,
+    },
+    available_inventory_value:{
+        type:Sequelize.STRING,
+        allowNull:false,
+    },
+    po_quantity_value:{
+        type:Sequelize.STRING,
+        allowNull:false,
+    },
+    active:{
+        type:Sequelize.BOOLEAN,
+        allowNull:false,
+    },
     description:{
         type:Sequelize.STRING,
         allowNull:false
     },
     material_code:{
         type:Sequelize.STRING,
-        allowNull:false
+        allowNull:true
     },
-    revenue_impact:{
+    plant_code:{
         type:Sequelize.STRING,
-        allowNull:false
+        allowNull:true
     },
-    unit_impact:{
-        type:Sequelize.STRING,
-        allowNull:false
+    firm_zone_time:{
+        type:Sequelize.DATE,
+        allowNull:true
     },
-    impact_coverage:{
+    total_adjustment:{
         type:Sequelize.STRING,
-        allowNull:false
+        allowNull:true
     },
-    confidence_score:{
+    order_type:{
         type:Sequelize.STRING,
-        allowNull:false
+        allowNull:true
     },
-    source_location:{
+    volume:{
         type:Sequelize.STRING,
-        allowNull:false
+        allowNull:true
+    },
+    supplier:{
+        type:Sequelize.STRING,
+        allowNull:true
+    },
+    lead_time:{
+        type:Sequelize.STRING,
+        allowNull:true
     },
     status:{
         type:Sequelize.STRING,
@@ -48,9 +84,29 @@ module.exports.recommendations ={
         type:Sequelize.STRING,
         allowNull:false
     },
-    user_desc:{
+    change_in_demand:{
+        type:Sequelize.STRING,
+        allowNull:true
+    },
+    source_location:{
         type:Sequelize.STRING,
         allowNull:false
+    },
+    open_orders:{
+        type:Sequelize.STRING,
+        allowNull:true
+    },
+    in_transit_orders:{
+        type:Sequelize.STRING,
+        allowNull:true
+    },
+    user_desc:{
+        type:Sequelize.STRING,
+        allowNull:true
+    },
+    recommendation_action:{
+        type:Sequelize.STRING,
+        allowNull:true
     },
     use_case_id:{
         type:Sequelize.STRING,

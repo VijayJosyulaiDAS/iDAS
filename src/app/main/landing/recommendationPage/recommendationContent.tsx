@@ -26,6 +26,7 @@ import {
     SizeColumnsToFitProvidedWidthStrategy
 } from "@ag-grid-community/core";
 import Paper from "@mui/material/Paper";
+import {boolean} from "zod";
 
 /**
  * RecommendationPage Content
@@ -43,10 +44,12 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 function RecommendationPageContent(props) {
     const savedData = localStorage.getItem('recommendationData');
     const [recommendation, setData] = React.useState<any>(JSON.parse(savedData));
+    console.log(recommendation.recommendation_action)
     const [openDialog, setOpenDialog] = useState(false);
     const [description, setDescription] = useState('')
-    const [action, setAction] = useState('')
+    const [action, setAction] = useState(true)
     let [showChart,setShowChart] = useState(false)
+    const [userAction, setUserAction] = useState('')
     const [rowData, setRowData] = useState(
         [
             {
@@ -103,8 +106,8 @@ function RecommendationPageContent(props) {
     const cardData  = {
         title: recommendation.description,
         date: formatDateString(recommendation.due_date),
-        description: "The Demand Forecast is predicting an <increase/decrease> in Demand of <Demand Increase/Decrease Value> for the plan of <Time Frame> for the Material Code <Material Code>. Based on the available inventory of <Available Inventory Value> and a <Stock Transfer Time/Lead Time> " +
-            "of <Number> days, you should <place an order/amend PO number> with the Quantity <Quantity Value>"
+        description: `The Demand Forecast is predicting an ${recommendation.demand_type} in Demand of ${recommendation.demand_value} for the plan of ${recommendation.time_frame} for the Material Code ${recommendation.material_code}. Based on the available inventory of ${recommendation.available_inventory_value} and a Lead Time 
+            of ${recommendation.lead_time} days, you should ${recommendation.po_number} with the Quantity ${recommendation.po_quantity_value}`
     }
 
     function handleCloseDialog() {
@@ -121,7 +124,8 @@ function RecommendationPageContent(props) {
         console.log(description)
         let data = {
             use_case_id: recommendation.use_case_id,
-            status: action,
+            active: action,
+            recommendation_action: 'Dismiss',
             user_desc: description
         }
         updateRecommendation(data)
@@ -228,13 +232,14 @@ function RecommendationPageContent(props) {
         console.log(event.target.id);
         if(event.target.id == 'dismiss'){
             setOpenDialog(true)
-            setAction('Close')
+            setAction(false)
         }
         if(event.target.id == 'accept'){
-            setAction('Close')
+            setAction(false)
             let data = {
                 use_case_id: recommendation.use_case_id,
-                status: 'Close'
+                recommendation_action: 'Accept',
+                active: false
             }
             updateRecommendation(data)
             navigate('/apps/landing')
@@ -261,7 +266,7 @@ function RecommendationPageContent(props) {
             <div className="w-2/5 flex justify-between">
                 <div
                     className=" mt-20 w-full max-h-auto border relative flex lg:flex-col md:flex-row sm:flex-row shadow bg-white rounded-2xl overflow-x-scroll"
-                    style={{height: "70%"}}>
+                    style={{height: "60%"}}>
                     <div className="flex w-full items-start flex-col  justify-start px-8 pt-12">
                         <Typography
                             className="px-16 text-sm font-medium text-blue-500 tracking-tight leading-6 truncate"
@@ -279,17 +284,60 @@ function RecommendationPageContent(props) {
                             className="text-md font-medium md:mr-24 text-grey-700  md:ml-24 ">{cardData.description}
                         </div>
                         <div
-                            className="flex m-20  justify-center gap-32 items-center"
-                            color="text.secondary">
-                            <Button id='dismiss' variant="outlined" color='secondary' onClick={handleClick}
-                                    size="small">Dismiss</Button>
-                            <Button id='modify' variant="outlined" color='secondary' onClick={handleClick}
-                                    size="small">Modify</Button>
-                            <Button id='accept' variant="contained" color='secondary' onClick={handleClick}
-                                    size="small">Accept</Button>
-                            <Button id='details' variant="outlined" color='secondary' onClick={handleClick}
-                                    size="small">Details<FuseSvgIcon size={16}
-                                                                     className='text-blue-500 cursor-pointer'>heroicons-outline:chevron-right</FuseSvgIcon>
+                            className="text-md font-medium md:mr-24 text-grey-700  md:ml-24 ">
+                            <Typography
+                                className=" text-lg font-medium text-black tracking-tight leading-6"
+                            >
+                                User Action: {recommendation.recommendation_action}
+                            </Typography>
+                            {recommendation.user_desc}
+                        </div>
+                        <div
+                            className="flex m-20 justify-center gap-32 items-center"
+                            color="text.secondary"
+                        >
+                            {recommendation.recommendation_action == null && (
+                                <>
+                                    <Button
+                                        id='dismiss'
+                                        variant="outlined"
+                                        color='secondary'
+                                        onClick={handleClick}
+                                        size="small"
+                                    >
+                                        Dismiss
+                                    </Button>
+                                    <Button
+                                        id='modify'
+                                        variant="outlined"
+                                        color='secondary'
+                                        onClick={handleClick}
+                                        size="small"
+                                    >
+                                        Modify
+                                    </Button>
+                                    <Button
+                                        id='accept'
+                                        variant="contained"
+                                        color='secondary'
+                                        onClick={handleClick}
+                                        size="small"
+                                    >
+                                        Accept
+                                    </Button>
+                                </>
+                            )}
+                            <Button
+                                id='details'
+                                variant="outlined"
+                                color='secondary'
+                                onClick={handleClick}
+                                size="small"
+                            >
+                                RCA
+                                <FuseSvgIcon size={16} className='text-blue-500 cursor-pointer'>
+                                    heroicons-outline:chevron-right
+                                </FuseSvgIcon>
                             </Button>
                         </div>
                     </div>
@@ -297,11 +345,11 @@ function RecommendationPageContent(props) {
             </div>
             <div className='w-full mt-20 h-full flex gap-10 h-[500px]'>
                 {!showChart ? (
-                    <Paper className='w-full border p-10 h-full ag-theme-quartz'  style={{ height: 680 }} >
+                    <Paper className='w-full border p-10 h-full ag-theme-quartz' style={{height: 680}}>
                         <div className=' h-full ' id="chartdiv" style={{width: "100%", height: "100%"}}/>
                     </Paper>
                 ) : (
-                    <div className='w-full h-full ag-theme-quartz'  style={{ height: 680 }} color='secondary'>
+                    <div className='w-full h-full ag-theme-quartz' style={{height: 680}} color='secondary'>
                         <AgGridReact
                             rowData={rowData}
                             pagination={true}

@@ -16,7 +16,19 @@ function landingPageSideBar(props) {
 	const fetchUseCases = async () => {
 		setLoading(true);
 		let response = await axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/get_useCases`)
-		setUseCases(response.data.data)
+		// Define the order
+		const order = ["Supplier PO Amendments" ,"Firm Zone Production Adjustments", ];
+
+		// Separate the items based on the order
+		const orderedItems = response.data.data.filter(item => order.includes(item.title));
+		const remainingItems = response.data.data.filter(item => !order.includes(item.title));
+
+		// Combine them in the desired order
+		const result = [
+			...orderedItems.sort((a, b) => order.indexOf(a.title) - order.indexOf(b.title)),
+			...remainingItems
+		];
+		setUseCases(result)
 		setLoading(false);
 	}
 
