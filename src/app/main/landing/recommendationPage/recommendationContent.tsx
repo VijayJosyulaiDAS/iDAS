@@ -217,17 +217,6 @@ function RecommendationPageContent(props) {
         };
     }, [showChart]);
 
-    const autoSizeStrategy = useMemo<
-        | SizeColumnsToFitGridStrategy
-        | SizeColumnsToFitProvidedWidthStrategy
-        | SizeColumnsToContentStrategy
-    >(() => {
-        return {
-            type: "fitGridWidth",
-            defaultMinWidth: 100
-        };
-    }, []);
-
     const handleClick = (event) => {
         console.log(event.target.id);
         if(event.target.id == 'dismiss'){
@@ -267,7 +256,7 @@ function RecommendationPageContent(props) {
                 <div
                     className=" mt-20 w-full max-h-auto border relative flex lg:flex-col md:flex-row sm:flex-row shadow bg-white rounded-2xl overflow-x-scroll"
                     style={{height: "60%"}}>
-                    <div className="flex w-full items-start flex-col  justify-start px-8 pt-12">
+                    <div className="flex w-full items-start flex-col  justify-start px-8 pt-32">
                         <Typography
                             className="px-16 text-sm font-medium text-blue-500 tracking-tight leading-6 truncate"
                         >
@@ -283,15 +272,18 @@ function RecommendationPageContent(props) {
                         <div
                             className="text-md font-medium md:mr-24 text-grey-700  md:ml-24 ">{cardData.description}
                         </div>
-                        <div
-                            className="text-md font-medium md:mr-24 text-grey-700  md:ml-24 ">
-                            <Typography
-                                className=" text-lg font-medium text-black tracking-tight leading-6"
-                            >
-                                User Action: {recommendation.recommendation_action}
-                            </Typography>
-                            {recommendation.user_desc}
-                        </div>
+                        {
+                            recommendation.recommendation_action != null &&
+                            <div
+                                className="text-md font-medium md:mr-24 text-grey-700  md:ml-24 ">
+                                <Typography
+                                    className=" text-lg font-medium text-black tracking-tight leading-6"
+                                >
+                                    User Action: {recommendation.recommendation_action}
+                                </Typography>
+                                {recommendation.user_desc}
+                            </div>
+                        }
                         <div
                             className="flex m-20 justify-center gap-32 items-center"
                             color="text.secondary"

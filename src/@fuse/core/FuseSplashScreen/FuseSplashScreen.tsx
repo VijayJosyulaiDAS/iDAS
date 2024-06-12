@@ -12,7 +12,7 @@ function FuseSplashScreen() {
 			<div className="logo">
 				<img
 					width="128"
-					src="assets/images/logo/logo2.png"
+					src="assets/images/png/PG-logo.png"
 					alt="logo"
 				/>
 			</div>

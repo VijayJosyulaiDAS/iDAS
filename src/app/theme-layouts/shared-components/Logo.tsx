@@ -23,7 +23,7 @@ function Logo() {
 		<Root className="flex items-center">
 			<img
 				className="logo-icon h-32 w-32"
-				src="assets/images/logo/logo.svg"
+				src="assets/images/png/PG-logo.png"
 				alt="logo"
 			/>
 			<div className="flex space-x-6 px-8 items-center">
