@@ -28,8 +28,8 @@ function UpdateRecommendationContent({setSelectedRow}) {
             width: 10,
             checkboxSelection: true,
         },
-        { field: "recommendation_id", headerName: "Recommendation Id", filter: true },
-        { field: "recommendation_desc", headerName: "Recommendation Description", filter: true },
+        { field: "id", headerName: "Recommendation Id", filter: true },
+        { field: "description", headerName: "Description", filter: true },
         { field: "best_alternative",
             headerName: "Best Alternative",
             filter: true,
@@ -40,9 +40,9 @@ function UpdateRecommendationContent({setSelectedRow}) {
                 return 'No';
             }
         },
-        { field: "source", headerName: "Source", filter: true },
-        { field: "original_qty", headerName: "Original Quantity", filter: true },
-        { field: "minimum_order_qty", headerName: "Minimum Order Quantity", filter: true }
+        { field: "source_location", headerName: "Source", filter: true },
+        { field: "po_original_qty", headerName: "Original Quantity", filter: true },
+        { field: "po_minimum_order_quantity", headerName: "Minimum Order Quantity", filter: true }
     ]);
     const navigate = useNavigate();
 

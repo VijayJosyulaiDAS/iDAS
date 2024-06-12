@@ -43,6 +43,7 @@ function homeContent() {
             ...orderedItems.sort((a, b) => order.indexOf(a.title) - order.indexOf(b.title)),
             ...remainingItems
         ];
+        console.log(result)
         setUseCases(result)
         setLoading(false)
         setOpenCount(response.data.open)
@@ -100,7 +101,7 @@ function homeContent() {
                     <div
                         className='flex font-bold ml-10 relative w-full justify-start items-end pb-20 pl-20 pr-20 gap-20'>
                         <div onClick={handleClick}
-                             className='flex gap-8 justify-center cursor-pointer hover:bg-transparent items-center'>{`Use Cases (${useCases.length})`}<FuseSvgIcon
+                             className='flex gap-8 justify-center cursor-pointer hover:bg-transparent items-center'>{`Skills (${useCases.length})`}<FuseSvgIcon
                             size={24} className='text-blue-500'>heroicons-outline:arrow-narrow-right</FuseSvgIcon>
                         </div>
                     </div>
@@ -126,7 +127,7 @@ function homeContent() {
                                             color="text.secondary"
                                         >
                                             <span className="truncate"></span><b
-                                            className="px-8 text-blue-500">{String(`${openCount}`)}</b>
+                                            className="px-8 text-blue-500">{String(`${useCase.OpenCount}`)}</b>
                                             <span className="truncate"></span>{'Open'}<b className="px-8"></b>
                                         </Typography>
                                     </div>

@@ -5,7 +5,7 @@ const {where} = require("sequelize");
 let getAlternativeRecommendations = async (req, res) => {
     try {
 
-        const query = `SELECT * FROM [dbo].[tbl_alternative_recommendations]`;
+        const query = `SELECT * FROM [dbo].[tbl_recommendations]`;
         const data = await sequelize.query(query, {
             type: sequelize.QueryTypes.SELECT,
         });
@@ -18,8 +18,8 @@ let getAlternativeRecommendations = async (req, res) => {
 
 let getRecommendationById = async (req, res) => {
     try {
-        let recommendationId = (req.query.id).toString();
-        const query = `SELECT * FROM [dbo].[tbl_alternative_recommendations] where recommendation_id = '${recommendationId}'`;
+        let idQuery = (req.query.id).toString();
+        const query = `SELECT * FROM [dbo].[tbl_recommendations] where id = '${idQuery}' or po_number = '${idQuery}' and best_alternative = 0`;
         const data = await sequelize.query(query, {
             type: sequelize.QueryTypes.SELECT,
         });

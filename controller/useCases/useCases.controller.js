@@ -8,18 +8,26 @@ let getUseCases = async (req, res) => {
         const data = await sequelize.query(query, {
             type: sequelize.QueryTypes.SELECT,
         });
-
-        const queryOpenCount = `SELECT COUNT(*) as openCount FROM [dbo].[tbl_recommendations] where active = 1`
-
-        const openCount = await sequelize.query(queryOpenCount, {
-            type: sequelize.QueryTypes.SELECT
-        })
-        const queryCloseCount = `SELECT COUNT(*) as closeCount FROM [dbo].[tbl_recommendations] where active = 0`
-
-        const closeCount = await sequelize.query(queryCloseCount, {
-            type: sequelize.QueryTypes.SELECT
-        })
-        res.status(200).send({ successful: true, data: data, open: openCount[0].openCount, close: closeCount[0].closeCount });
+        const titles =  data.map((item) => item.title);
+        const getCounts = async (useCaseId) => {
+            const queryOpenCount = `SELECT COUNT(*) as openCount FROM [dbo].[tbl_recommendations] WHERE active = 1 AND use_case_id = '${useCaseId}'`;
+            const openCount = await sequelize.query(queryOpenCount, {
+                type: sequelize.QueryTypes.SELECT
+            });
+            const queryCloseCount = `SELECT COUNT(*) as closeCount FROM [dbo].[tbl_recommendations] WHERE active = 0 AND use_case_id = '${useCaseId}'`;
+            const closeCount = await sequelize.query(queryCloseCount, {
+                type: sequelize.QueryTypes.SELECT
+            });
+            return { openCount: openCount[0].openCount, closeCount: closeCount[0].closeCount };
+        };
+        for (let useCase of data) {
+            if (titles.includes(useCase.title)) {
+                const counts = await getCounts(useCase.id);
+                useCase.OpenCount = counts.openCount;
+                useCase.CloseCount = counts.closeCount;
+            }
+        }
+        res.status(200).send({ successful: true, data: data});
     } catch (e) {
         res.status(500).send({ successful: false, error: e });
     }

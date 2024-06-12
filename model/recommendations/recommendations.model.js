@@ -112,6 +112,18 @@ module.exports.recommendations ={
         type:Sequelize.STRING,
         allowNull:false
     },
+    best_alternative:{
+        type:Sequelize.BOOLEAN,
+        allowNull:false
+    },
+    po_original_quantity:{
+        type:Sequelize.STRING,
+        allowNull:false
+    },
+    po_minimum_order_quantity:{
+        type:Sequelize.STRING,
+        allowNull:false
+    },
     due_date:{
         type:Sequelize.DATE,
         allowNull:false

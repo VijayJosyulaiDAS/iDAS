@@ -54,23 +54,23 @@ function RecommendationPageContent(props) {
         [
             {
                 "id": "1",
-                "route_cause": "Safety Stock Level",
+                "root_cause": "Safety Stock Level",
                 "description": "The minimum quantity of a product that must be kept in stock to prevent stock outs.",
             }, {
                 "id": "2",
-                "route_cause": "Current Days Forward Coverage",
+                "root_cause": "Current Days Forward Coverage",
                 "description": "The number of days the current stock level can satisfy customer demand.",
             }, {
                 "id": "3",
-                "route_cause": "Details of the FG",
+                "root_cause": "Details of the FG",
                 "description": "Information about the finished goods.",
             }, {
                 "id": "4",
-                "route_cause": "Demand Change of FG",
+                "root_cause": "Demand Change of FG",
                 "description": "Variations in the demand for the finished goods.",
             }, {
                 "id": "5",
-                "route_cause": "Input Raw Materials of FG",
+                "root_cause": "Input Raw Materials of FG",
                 "description": "Raw materials required to produce the finished goods.",
             }
         ]
@@ -81,7 +81,7 @@ function RecommendationPageContent(props) {
             headerName: "S.No.",
             filter: false
         },
-        { field: "route_cause", headerName: "Route Cause", filter: true },
+        { field: "root_cause", headerName: "Root Cause", filter: true },
         { field: "description", headerName: "Description", filter: true }
     ]
     const [colDefs, setColDefs] = useState([]);
@@ -139,20 +139,20 @@ function RecommendationPageContent(props) {
         let chart = am4core.create('chartdiv', am4charts.XYChart);
         chartRef.current = chart;
         chart.data = [
-            { "date": "2024-06-13", "currentPlan": 102497, "currentForecast": 100000, "acmeForecast": 100000, "projectedInventory": 100000 },
-            { "date": "2024-06-14", "currentPlan": 85461, "currentForecast": 50000, "acmeForecast": 110000, "projectedInventory": 0 },
-            { "date": "2024-06-15", "currentPlan": 91224, "currentForecast": 100000, "acmeForecast": 120000, "projectedInventory": 123000 },
-            { "date": "2024-06-16", "currentPlan": 95051, "currentForecast": 200000, "acmeForecast": 130000, "projectedInventory": 0 },
-            { "date": "2024-06-17", "currentPlan": 94021, "currentForecast": 250000, "acmeForecast": 140000, "projectedInventory": 0 },
-            { "date": "2024-06-18", "currentPlan": 94309, "currentForecast": 300000, "acmeForecast": 150000, "projectedInventory": -100000 },
-            { "date": "2024-06-19", "currentPlan": 96509, "currentForecast": 275000, "acmeForecast": 160000, "projectedInventory": -150000 },
-            { "date": "2024-06-20", "currentPlan": 89193, "currentForecast": 250000, "acmeForecast": 170000, "projectedInventory": -150000 },
-            { "date": "2024-06-21", "currentPlan": 103332, "currentForecast": 200000, "acmeForecast": 180000, "projectedInventory": -150000 },
-            { "date": "2024-06-22", "currentPlan": 93290, "currentForecast": 100000, "acmeForecast": 190000, "projectedInventory": -150000 },
-            { "date": "2024-06-23", "currentPlan": 88969, "currentForecast": 0, "acmeForecast": 200000, "projectedInventory": -50000 },
-            { "date": "2024-06-24", "currentPlan": 9574, "currentForecast": 0, "acmeForecast": 0, "projectedInventory": -50000 },
-            { "date": "2024-06-25", "currentPlan": 0, "currentForecast": 0, "acmeForecast": 0, "projectedInventory": 0 },
-            { "date": "2024-06-26", "currentPlan": 0, "currentForecast": 0, "acmeForecast": 0, "projectedInventory": 0 }
+            { "date": "2024-06-13", "currentPlan": 102497, "currentForecast": 100000, "projectedInventory": 100000, "safety": 50000 },
+            { "date": "2024-06-14", "currentPlan": 85461, "currentForecast": 50000, "projectedInventory": 0, "safety": 50000 },
+            { "date": "2024-06-15", "currentPlan": 91224, "currentForecast": 100000, "projectedInventory": 123000, "safety": 50000 },
+            { "date": "2024-06-16", "currentPlan": 95051, "currentForecast": 200000, "projectedInventory": 0, "safety": 50000 },
+            { "date": "2024-06-17", "currentPlan": 94021, "currentForecast": 250000, "projectedInventory": 0, "safety": 50000 },
+            { "date": "2024-06-18", "currentPlan": 94309, "currentForecast": 300000, "projectedInventory": -100000, "safety": 50000 },
+            { "date": "2024-06-19", "currentPlan": 96509, "currentForecast": 275000, "projectedInventory": -150000, "safety": 50000 },
+            { "date": "2024-06-20", "currentPlan": 89193, "currentForecast": 250000, "projectedInventory": -150000, "safety": 50000 },
+            { "date": "2024-06-21", "currentPlan": 103332, "currentForecast": 200000, "projectedInventory": -150000, "safety": 50000 },
+            { "date": "2024-06-22", "currentPlan": 93290, "currentForecast": 100000, "projectedInventory": -150000, "safety": 50000 },
+            { "date": "2024-06-23", "currentPlan": 88969, "currentForecast": 0, "projectedInventory": -50000, "safety": 50000 },
+            { "date": "2024-06-24", "currentPlan": 9574, "currentForecast": 0, "projectedInventory": -50000, "safety": 50000 },
+            { "date": "2024-06-25", "currentPlan": 0, "currentForecast": 0, "projectedInventory": 0, "safety": 50000 },
+            { "date": "2024-06-26", "currentPlan": 0, "currentForecast": 0, "projectedInventory": 0, "safety": 50000 }
         ];
 
         // Create date axis
@@ -162,21 +162,6 @@ function RecommendationPageContent(props) {
 
         // Create value axis
         let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-
-        // Create series for Acme Forecast
-        let acmeSeries = chart.series.push(new am4charts.LineSeries());
-        acmeSeries.name = "Acme Forecast";
-        acmeSeries.dataFields.valueY = "acmeForecast";
-        acmeSeries.dataFields.dateX = "date";
-        acmeSeries.strokeWidth = 2;
-        acmeSeries.tooltipText = "{name}\n[bold font-size: 20]{valueY}[/]";
-
-        // Add bullets (points) to Acme Forecast
-        let acmeBullet = acmeSeries.bullets.push(new am4charts.Bullet());
-        let acmeCircle = acmeBullet.createChild(am4core.Circle);
-        acmeCircle.radius = 5;
-        acmeCircle.fill = am4core.color("#fff");
-        acmeCircle.strokeWidth = 2;
 
         // Create series for Current Forecast
         let currentSeries = chart.series.push(new am4charts.LineSeries());
@@ -200,10 +185,14 @@ function RecommendationPageContent(props) {
         inventorySeries.dataFields.dateX = "date";
         inventorySeries.columns.template.tooltipText = "{name}\n[bold font-size: 20]{valueY}[/]";
         inventorySeries.columns.template.adapter.add("fill", function(fill, target) {
-            return target.dataItem.values.valueY?.value < 0 ? am4core.color("#FF9999") : am4core.color("lightblue");
+            return target.dataItem.values.valueY?.value < target.dataItem.dataContext.safety
+                ? am4core.color("#FF9999")
+                : am4core.color("lightblue");
         });
         inventorySeries.columns.template.adapter.add("stroke", function(stroke, target) {
-            return target.dataItem.values.valueY?.value < 0 ? am4core.color("#FF9999") : am4core.color("lightblue");
+            return target.dataItem.values.valueY?.value < target.dataItem.dataContext.safety
+                ? am4core.color("#FF9999")
+                : am4core.color("lightblue");
         });
 
         // Add legend
@@ -216,6 +205,8 @@ function RecommendationPageContent(props) {
             chart.dispose();
         };
     }, [showChart]);
+
+
 
     const handleClick = (event) => {
         console.log(event.target.id);
@@ -235,7 +226,8 @@ function RecommendationPageContent(props) {
         }
         if(event.target.id == 'modify'){
             console.log('modify')
-            navigate(`/apps/recommendations/${recommendation.id}`)
+            let data = recommendation.po_number ? recommendation.po_number : recommendation.id
+            navigate(`/apps/recommendations/${data}`)
         }
         if(event.target.id == 'details'){
             console.log(event.target.id);

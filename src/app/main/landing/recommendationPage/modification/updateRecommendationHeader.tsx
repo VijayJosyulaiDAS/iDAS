@@ -1,11 +1,30 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
+import axios from "axios";
+import {data} from "@tailwindcss/aspect-ratio";
 
 function RecommendationPageHeader(props) {
     const {selectedData} = props
     console.log(selectedData)
+
+
+    const updateRecommendation = async (data) => {
+        let response = await axios.put(`${import.meta.env.VITE_LOCAL_BASE_URL}/update_recommendations?id=${selectedData.id}`, data);
+        console.log(response)
+    }
+
+    const handleClick = () =>{
+        if(selectedData != null || selectedData != undefined){
+            let data = {
+                active: false,
+                use_case_id: selectedData.use_case_id,
+                best_recommendation: true
+            }
+            updateRecommendation(data)
+        }
+    }
 
     return (
         <div className="flex flex-col p-24 w-full sm:py-32 sm:px-40">
@@ -22,7 +41,7 @@ function RecommendationPageHeader(props) {
                         <div
                             className="flex flex-grow-0"
                         >
-                            <Button
+                            <Button onClick={handleClick}
                                 className=""
                                 variant="contained"
                                 color="secondary"
