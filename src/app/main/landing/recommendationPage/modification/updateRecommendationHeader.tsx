@@ -24,6 +24,7 @@ function RecommendationPageHeader(props) {
                 active: false,
                 use_case_id: selectedData.use_case_id,
                 recommendation_action: 'Modify',
+                user_desc: selectedData.description,
                 po_number: selectedData.po_number,
                 action_owner: user.data.email,
                 best_alternative: true

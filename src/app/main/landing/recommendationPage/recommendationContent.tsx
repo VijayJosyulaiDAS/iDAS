@@ -59,35 +59,54 @@ function RecommendationPageContent(props) {
     const [description, setDescription] = useState('')
     const [action, setAction] = useState(true)
     let [showChart,setShowChart] = useState(false)
+    let [fgBOM,setBOM] = useState(false)
+    let [dfc,setDFC] = useState(false)
     const [rowData, setRowData] = useState(
         [
             {
                 "id": "1",
-                "root_cause": "Safety Stock Level",
+                "root_cause": "Safety Stock",
                 "description": "The minimum quantity of a product that must be kept in stock to prevent stock outs.",
-            }, {
+                "root_cause_code": "SS001"
+            },
+            {
                 "id": "2",
-                "root_cause": "Current Days Forward Coverage",
+                "root_cause": "RM DFC",
                 "description": "The number of days the current stock level can satisfy customer demand.",
-            }, {
+                "root_cause_code": "RM002"
+            },
+            {
                 "id": "3",
-                "root_cause": "Details of the FG",
+                "root_cause": "FG Description",
                 "description": "Information about the finished goods.",
-            }, {
+                "root_cause_code": "FG003"
+            },
+            {
                 "id": "4",
-                "root_cause": "Demand Change of FG",
+                "root_cause": "FG Demand Variations",
                 "description": "Variations in the demand for the finished goods.",
-            }, {
+                "root_cause_code": "DV004"
+            },
+            {
                 "id": "5",
-                "root_cause": "Input Raw Materials of FG",
+                "root_cause": "FG BOM",
                 "description": "Raw materials required to produce the finished goods.",
+                "root_cause_code": "BOM005"
+            },
+            {
+                "id": "6",
+                "root_cause": "Production Version",
+                "description": "Production lines.",
+                "root_cause_code": "PV006"
             }
         ]
     );
+
+    const [selectedRow, setSelectedRow] = useState(null)
     let columns = [
         {
-            field: "id",
-            headerName: "S.No.",
+            field: "root_cause_code",
+            headerName: "Root Cause Code",
             filter: false
         },
         { field: "root_cause", headerName: "Root Cause", filter: true },
@@ -247,6 +266,22 @@ function RecommendationPageContent(props) {
         }
     };
 
+    const handleRowSelection = params => {
+        const selectedNodes = params.api.getSelectedNodes();
+        console.log(selectedNodes)
+        if (selectedNodes.length > 0) {
+            setSelectedRow(selectedNodes[0].data);
+            if(selectedNodes[0].data.root_cause == 'FG BOM'){
+                setBOM(true)
+            }
+            if(selectedNodes[0].data.root_cause == 'RM DFC'){
+                setDFC(true)
+            }
+        } else {
+            setSelectedRow(null);
+        }
+    };
+
     const onGridReady = (params) => {
         params.api.sizeColumnsToFit();
     };
@@ -278,12 +313,12 @@ function RecommendationPageContent(props) {
                             <div
                                 className="text-md font-medium md:mr-24 text-grey-700  md:ml-24 ">
                                 <Typography
-                                    className=" text-lg font-medium flex flex-col text-black tracking-tight leading-6"
+                                    className=" flex flex-col text-black tracking-tight leading-6"
                                 >
-                                    <span>Action by: {recommendation.action_owner}</span>
+                                    <span className='text-lg font-medium'>Action by: {recommendation.action_owner}</span>
                                     <span>User Action: {recommendation.recommendation_action}</span>
+                                    <span>User Description: {recommendation.user_desc}</span>
                                 </Typography>
-                                {recommendation.user_desc}
                             </div>
                         }
                         <div
@@ -321,18 +356,35 @@ function RecommendationPageContent(props) {
                                     </Button>
                                 </>
                             )}
-                            <Button
-                                id='details'
-                                variant="outlined"
-                                color='secondary'
-                                onClick={handleClick}
-                                size="small"
-                            >
-                                RCA
-                                <FuseSvgIcon size={16} className='text-blue-500 cursor-pointer'>
-                                    heroicons-outline:chevron-right
-                                </FuseSvgIcon>
-                            </Button>
+                            {
+                                !showChart ? (
+                                    <Button
+                                        id='details'
+                                        variant="outlined"
+                                        color='secondary'
+                                        onClick={handleClick}
+                                        size="small"
+                                    >
+                                        RCA
+                                        <FuseSvgIcon size={16} className='text-blue-500 cursor-pointer'>
+                                            heroicons-outline:chevron-right
+                                        </FuseSvgIcon>
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        id='details'
+                                        variant="outlined"
+                                        color='secondary'
+                                        onClick={handleClick}
+                                        size="small"
+                                    >
+                                        <FuseSvgIcon size={16} className='text-blue-500 cursor-pointer'>
+                                            heroicons-outline:chevron-left
+                                        </FuseSvgIcon>
+                                        Back
+                                    </Button>
+                                )
+                            }
                         </div>
                     </div>
                 </div>
@@ -351,6 +403,7 @@ function RecommendationPageContent(props) {
                             rowSelection={"single"}
                             onGridReady={onGridReady}
                             columnDefs={colDefs}
+                            onSelectionChanged={handleRowSelection}
                         />
                     </div>
                 )}

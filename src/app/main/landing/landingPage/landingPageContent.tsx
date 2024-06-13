@@ -69,7 +69,7 @@ function LandingPageContent(props) {
                     { field: "due_date", headerName: "Due Date", filter: true },
                     { field: "description", headerName: "Description", filter: true },
                     { field: "order_type", headerName: "Order Type", filter: true },
-                    { field: "volume", headerName: "Volume", filter: true },
+                    { field: "quantity", headerName: "Quantity", filter: true },
                     { field: "supplier", headerName: "Supplier", filter: true },
                     { field: "supplier_code", headerName: "Supplier Code", filter: true },
                     { field: "lead_time", headerName: "Lead Time", filter: true },
