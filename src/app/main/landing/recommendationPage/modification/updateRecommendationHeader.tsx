@@ -3,16 +3,19 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
 import axios from "axios";
-import {data} from "@tailwindcss/aspect-ratio";
+import {useAppSelector} from "app/store/hooks";
+import {selectUser} from "../../../../auth/user/store/userSlice";
+import {useNavigate} from "react-router-dom";
 
 function RecommendationPageHeader(props) {
     const {selectedData} = props
     console.log(selectedData)
-
+    const user = useAppSelector(selectUser);
+    const navigate = useNavigate()
 
     const updateRecommendation = async (data) => {
         let response = await axios.put(`${import.meta.env.VITE_LOCAL_BASE_URL}/update_recommendations?id=${selectedData.id}`, data);
-        console.log(response)
+        navigate(`/apps/landing/${data.use_case_id}`)
     }
 
     const handleClick = () =>{
@@ -20,7 +23,10 @@ function RecommendationPageHeader(props) {
             let data = {
                 active: false,
                 use_case_id: selectedData.use_case_id,
-                best_recommendation: true
+                recommendation_action: 'Modify',
+                po_number: selectedData.po_number,
+                action_owner: user.data.email,
+                best_alternative: true
             }
             updateRecommendation(data)
         }

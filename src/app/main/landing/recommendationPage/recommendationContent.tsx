@@ -27,10 +27,20 @@ import {
 } from "@ag-grid-community/core";
 import Paper from "@mui/material/Paper";
 import {boolean} from "zod";
+import {useAppSelector} from "app/store/hooks";
+import {selectUser} from "../../../auth/user/store/userSlice";
 
 /**
  * RecommendationPage Content
  */
+
+interface ChartDataItem {
+    date: string;
+    currentPlan: number;
+    currentForecast: number;
+    projectedInventory: number;
+    safety: number;
+}
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -44,12 +54,11 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 function RecommendationPageContent(props) {
     const savedData = localStorage.getItem('recommendationData');
     const [recommendation, setData] = React.useState<any>(JSON.parse(savedData));
-    console.log(recommendation.recommendation_action)
+    const user = useAppSelector(selectUser);
     const [openDialog, setOpenDialog] = useState(false);
     const [description, setDescription] = useState('')
     const [action, setAction] = useState(true)
     let [showChart,setShowChart] = useState(false)
-    const [userAction, setUserAction] = useState('')
     const [rowData, setRowData] = useState(
         [
             {
@@ -121,16 +130,16 @@ function RecommendationPageContent(props) {
 
     const handleSaveSelection = async (e) => {
         e.preventDefault();
-        console.log(description)
         let data = {
             use_case_id: recommendation.use_case_id,
             active: action,
+            action_owner: user.data.email,
             recommendation_action: 'Dismiss',
             user_desc: description
         }
         updateRecommendation(data)
         setOpenDialog(false)
-        navigate('/apps/landing')
+        navigate(`/apps/landing/${recommendation.id}`)
     }
 
     const chartRef = useRef<am4charts.XYChart | null>(null);
@@ -138,6 +147,8 @@ function RecommendationPageContent(props) {
     useLayoutEffect(() => {
         let chart = am4core.create('chartdiv', am4charts.XYChart);
         chartRef.current = chart;
+
+        // Specify the data type for chart data
         chart.data = [
             { "date": "2024-06-13", "currentPlan": 102497, "currentForecast": 100000, "projectedInventory": 100000, "safety": 50000 },
             { "date": "2024-06-14", "currentPlan": 85461, "currentForecast": 50000, "projectedInventory": 0, "safety": 50000 },
@@ -153,7 +164,7 @@ function RecommendationPageContent(props) {
             { "date": "2024-06-24", "currentPlan": 9574, "currentForecast": 0, "projectedInventory": -50000, "safety": 50000 },
             { "date": "2024-06-25", "currentPlan": 0, "currentForecast": 0, "projectedInventory": 0, "safety": 50000 },
             { "date": "2024-06-26", "currentPlan": 0, "currentForecast": 0, "projectedInventory": 0, "safety": 50000 }
-        ];
+        ] as ChartDataItem[];
 
         // Create date axis
         let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
@@ -185,12 +196,14 @@ function RecommendationPageContent(props) {
         inventorySeries.dataFields.dateX = "date";
         inventorySeries.columns.template.tooltipText = "{name}\n[bold font-size: 20]{valueY}[/]";
         inventorySeries.columns.template.adapter.add("fill", function(fill, target) {
-            return target.dataItem.values.valueY?.value < target.dataItem.dataContext.safety
+            const dataItem = target.dataItem.dataContext as ChartDataItem;
+            return target.dataItem.values.valueY?.value < dataItem.safety
                 ? am4core.color("#FF9999")
                 : am4core.color("lightblue");
         });
         inventorySeries.columns.template.adapter.add("stroke", function(stroke, target) {
-            return target.dataItem.values.valueY?.value < target.dataItem.dataContext.safety
+            const dataItem = target.dataItem.dataContext as ChartDataItem;
+            return target.dataItem.values.valueY?.value < dataItem.safety
                 ? am4core.color("#FF9999")
                 : am4core.color("lightblue");
         });
@@ -206,8 +219,6 @@ function RecommendationPageContent(props) {
         };
     }, [showChart]);
 
-
-
     const handleClick = (event) => {
         console.log(event.target.id);
         if(event.target.id == 'dismiss'){
@@ -219,13 +230,13 @@ function RecommendationPageContent(props) {
             let data = {
                 use_case_id: recommendation.use_case_id,
                 recommendation_action: 'Accept',
+                action_owner: user.data.email,
                 active: false
             }
             updateRecommendation(data)
-            navigate('/apps/landing')
+            navigate(`/apps/landing/${recommendation.id}`)
         }
         if(event.target.id == 'modify'){
-            console.log('modify')
             let data = recommendation.po_number ? recommendation.po_number : recommendation.id
             navigate(`/apps/recommendations/${data}`)
         }
@@ -239,8 +250,6 @@ function RecommendationPageContent(props) {
     const onGridReady = (params) => {
         params.api.sizeColumnsToFit();
     };
-
-
 
     return (
         <div className="flex-auto p-24 flex w-full gap-10 justify-between flex-row'">
@@ -269,9 +278,10 @@ function RecommendationPageContent(props) {
                             <div
                                 className="text-md font-medium md:mr-24 text-grey-700  md:ml-24 ">
                                 <Typography
-                                    className=" text-lg font-medium text-black tracking-tight leading-6"
+                                    className=" text-lg font-medium flex flex-col text-black tracking-tight leading-6"
                                 >
-                                    User Action: {recommendation.recommendation_action}
+                                    <span>Action by: {recommendation.action_owner}</span>
+                                    <span>User Action: {recommendation.recommendation_action}</span>
                                 </Typography>
                                 {recommendation.user_desc}
                             </div>

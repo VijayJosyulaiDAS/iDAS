@@ -21,6 +21,8 @@ import {
 function UpdateRecommendationContent({setSelectedRow}) {
     const [value, setValue] = React.useState('1');
     const {recommendationId} = useParams();
+    const savedData = localStorage.getItem('recommendationData');
+    const [recommendation, setData] = React.useState<any>(JSON.parse(savedData));
     const [loading, setLoading] = React.useState(true);
     const [rowData, setRowData] = useState([]);
     const [colDefs, setColDefs] = useState([
@@ -58,7 +60,7 @@ function UpdateRecommendationContent({setSelectedRow}) {
     }, []);
 
     const fetchAllRecommendations = async () =>{
-        let response = await axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/get_recommendationById?id=${recommendationId}`);
+        let response = await axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/get_recommendationById?id=${recommendationId}&&useCaseId=${recommendation.use_case_id}`);
         setLoading(false)
         setRowData(response.data.data)
     }

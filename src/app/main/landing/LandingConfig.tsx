@@ -11,7 +11,25 @@ import UpdateRecommendation from "./recommendationPage/modification/updateRecomm
 
 const LandingConfig = {
     settings: {
-        layout: {}
+        layout: {
+            config: {
+                navbar: {
+                    display: true
+                },
+                toolbar: {
+                    display: false
+                },
+                footer: {
+                    display: false
+                },
+                leftSidePanel: {
+                    display: false
+                },
+                rightSidePanel: {
+                    display: false
+                }
+            }
+        }
     },
     routes: [
         {

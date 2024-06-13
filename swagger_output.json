@@ -192,6 +192,9 @@
               "properties": {
                 "use_case_id": {
                   "example": "any"
+                },
+                "po_number": {
+                  "example": "any"
                 }
               }
             }
@@ -239,6 +242,11 @@
         "parameters": [
           {
             "name": "id",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "useCaseId",
             "in": "query",
             "type": "string"
           }

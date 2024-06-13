@@ -63,12 +63,15 @@ function LandingPageContent(props) {
             }
             if(selectedData.title == "Supplier PO Amendments"){
                setColDefs([
-                    { field: "priority", headerName: "Priority", filter: true },
+                   { field: "id", headerName: "ID", filter: true },
+                   { field: "po_number", headerName: "PO Number", filter: true },
+                   { field: "priority", headerName: "Priority", filter: true },
                     { field: "due_date", headerName: "Due Date", filter: true },
                     { field: "description", headerName: "Description", filter: true },
                     { field: "order_type", headerName: "Order Type", filter: true },
                     { field: "volume", headerName: "Volume", filter: true },
                     { field: "supplier", headerName: "Supplier", filter: true },
+                    { field: "supplier_code", headerName: "Supplier Code", filter: true },
                     { field: "lead_time", headerName: "Lead Time", filter: true },
                     { field: "createdAt", headerName: "Recommendation Date", filter: true}
                 ])

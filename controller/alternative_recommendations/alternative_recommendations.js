@@ -19,7 +19,9 @@ let getAlternativeRecommendations = async (req, res) => {
 let getRecommendationById = async (req, res) => {
     try {
         let idQuery = (req.query.id).toString();
-        const query = `SELECT * FROM [dbo].[tbl_recommendations] where id = '${idQuery}' or po_number = '${idQuery}' and best_alternative = 0`;
+        let useCase = (req.query.useCaseId).toString();
+        console.log(idQuery, useCase)
+        const query = `SELECT * FROM [dbo].[tbl_recommendations] where id = '${idQuery}' or po_number = '${idQuery}' and best_alternative = 0 and active = 1`;
         const data = await sequelize.query(query, {
             type: sequelize.QueryTypes.SELECT,
         });

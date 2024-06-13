@@ -19,15 +19,15 @@ let getRecommendations = async (req, res) => {
 let getRecommendationByUseCases = async (req, res) => {
     try {
         let useCaseId = (req.query.id).toString();
-        const query = `SELECT * FROM [dbo].[tbl_recommendations] where use_case_id = '${useCaseId}'`;
+        const query = `SELECT * FROM [dbo].[tbl_recommendations] where use_case_id = '${useCaseId}' and best_alternative = 1`;
         const data = await sequelize.query(query, {
             type: sequelize.QueryTypes.SELECT,
         });
-        const queryOpenCount = `SELECT COUNT(*) as openCount FROM [dbo].[tbl_recommendations] where active = 1 and use_case_id = '${useCaseId}'`
+        const queryOpenCount = `SELECT COUNT(*) as openCount FROM [dbo].[tbl_recommendations] where active = 1 and use_case_id = '${useCaseId}' and best_alternative = 1`
         const openCount = await sequelize.query(queryOpenCount, {
             type: sequelize.QueryTypes.SELECT
         })
-        const queryCloseCount = `SELECT COUNT(*) as closeCount FROM [dbo].[tbl_recommendations] where active = 0 and use_case_id = '${useCaseId}'`
+        const queryCloseCount = `SELECT COUNT(*) as closeCount FROM [dbo].[tbl_recommendations] where active = 0 and use_case_id = '${useCaseId}' and best_alternative = 1`
         const closeCount = await sequelize.query(queryCloseCount, {
             type: sequelize.QueryTypes.SELECT
         })
@@ -52,7 +52,21 @@ let updateRecommendation = async (req, res) => {
     try {
         let recommendationId = (req.query.id).toString();
         let data = req.body
-        console.log(data)
+        // Check if `data.best_alternative` is true
+        if (data?.best_alternative) {
+            let data2 = {
+                best_alternative: false,
+                active: false
+            }
+            // If true, update other recommendations where active is true and po_number matches req.query.id
+            await util.model.recommendations.update(data2, {
+                where: {
+                    best_alternative: true,
+                    use_case_id: data.use_case_id,
+                    po_number: data.po_number
+                }
+            });
+        }
         await util.model.recommendations.update(data, {
             where: {
                 use_case_id: data.use_case_id,

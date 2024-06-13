@@ -36,6 +36,10 @@ module.exports.recommendations ={
         type:Sequelize.STRING,
         allowNull:false,
     },
+    action_owner:{
+        type:Sequelize.STRING,
+        allowNull:false,
+    },
     active:{
         type:Sequelize.BOOLEAN,
         allowNull:false,
@@ -69,6 +73,10 @@ module.exports.recommendations ={
         allowNull:true
     },
     supplier:{
+        type:Sequelize.STRING,
+        allowNull:true
+    },
+    supplier_code:{
         type:Sequelize.STRING,
         allowNull:true
     },
