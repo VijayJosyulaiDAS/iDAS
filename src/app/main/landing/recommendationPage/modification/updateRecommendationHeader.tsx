@@ -34,7 +34,7 @@ function RecommendationPageHeader(props) {
     }
 
     return (
-        <div className="flex flex-col p-24 w-full sm:py-32 sm:px-40">
+        <div className="flex flex-col p-24 w-full sm:px-40">
             <div className="flex space-y-12 sm:space-y-0 flex-1 w-full items-center justify-between py-8 sm:py-16 px-16 md:px-24">
                 <Typography
                     component="h2"

@@ -30,7 +30,8 @@ function UpdateRecommendationContent({setSelectedRow}) {
             width: 10,
             checkboxSelection: true,
         },
-        { field: "id", headerName: "Recommendation Id", filter: true },
+        { field: "material_code", headerName: "Material Code", filter: true },
+        { field: "po_number", headerName: "PO Number", filter: true },
         { field: "description", headerName: "Description", filter: true },
         { field: "best_alternative",
             headerName: "Best Alternative",
@@ -42,9 +43,14 @@ function UpdateRecommendationContent({setSelectedRow}) {
                 return 'No';
             }
         },
-        { field: "source_location", headerName: "Source", filter: true },
-        { field: "po_original_qty", headerName: "Original Quantity", filter: true },
-        { field: "po_minimum_order_quantity", headerName: "Minimum Order Quantity", filter: true }
+        { field: "due_date", headerName: "Due Date", filter: true, cellRenderer: params => {
+                return params.value.split('T')[0];
+            } },
+        { field: "createdAt", headerName: "Recommendation Date", filter: true},
+        { field: "order_type", headerName: "Order Type", filter: true },
+        { field: "quantity", headerName: "Quantity", filter: true },
+        { field: "supplier_code", headerName: "Supplier Code", filter: true },
+        { field: "lead_time", headerName: "Lead Time", filter: true }
     ]);
     const navigate = useNavigate();
 
@@ -109,6 +115,7 @@ function UpdateRecommendationContent({setSelectedRow}) {
                             paginationPageSize={100}
                             autoSizeStrategy={autoSizeStrategy}
                             rowSelection={"single"}
+                            suppressMenuHide={true}
                             columnDefs={colDefs}
                             onSelectionChanged={handleRowSelection}
                         />

@@ -22,6 +22,11 @@ import Paper from "@mui/material/Paper";
 import {useAppSelector} from "app/store/hooks";
 import {selectUser} from "../../../auth/user/store/userSlice";
 import { PieChart } from '@mui/x-charts/PieChart';
+import {
+    SizeColumnsToContentStrategy,
+    SizeColumnsToFitGridStrategy,
+    SizeColumnsToFitProvidedWidthStrategy
+} from "@ag-grid-community/core";
 
 /**
  * RecommendationPage Content
@@ -124,11 +129,17 @@ function RecommendationPageContent(props) {
         return `${month} ${day}, ${year}`;
     }
 
+    const data = [
+        { id: 0, value: 10, label: 'series A' },
+        { id: 1, value: 15, label: 'series B' },
+        { id: 2, value: 20, label: 'series C' },
+    ];
+
     const cardData  = {
         title: recommendation.description,
         date: formatDateString(recommendation.due_date),
-        description: `The Demand Forecast is predicting an ${recommendation.demand_type} in Demand of ${recommendation.demand_value} for the plan of ${recommendation.time_frame} for the Material Code ${recommendation.material_code}. Based on the available inventory of ${recommendation.available_inventory_value} and a Lead Time 
-            of ${recommendation.lead_time} days, you should ${recommendation.po_number} with the Quantity ${recommendation.po_quantity_value}`
+        description: `The Demand Forecast is predicting an ${recommendation.demand_type} in Demand of ${recommendation.demand_value} for the Material Code ${recommendation.material_code}. Based on the available inventory of ${recommendation.available_inventory_value} and a Lead Time 
+            of ${recommendation.lead_time} days, you should ${recommendation.order_type} ${recommendation.po_number} with the Quantity ${recommendation.po_quantity_value}`
     }
 
     function handleCloseDialog() {
@@ -258,6 +269,16 @@ function RecommendationPageContent(props) {
             setShowChart(showChart)
         }
     };
+    const autoSizeStrategy = useMemo<
+        | SizeColumnsToFitGridStrategy
+        | SizeColumnsToFitProvidedWidthStrategy
+        | SizeColumnsToContentStrategy
+    >(() => {
+        return {
+            type: "fitGridWidth",
+            defaultMinWidth: 100
+        };
+    }, []);
 
     const handleRowSelection = params => {
         const selectedNodes = params.api.getSelectedNodes();
@@ -381,17 +402,20 @@ function RecommendationPageContent(props) {
                     </div>
                 </div>
             </div>
-            <div className='w-full mt-20 h-full flex gap-10 h-[500px]'>
-                {!showChart ? (
+            <div className='w-full mt-20 h-full flex flex-col gap-10 h-[500px]'>
+                {showChart && (
                     <Paper className='w-full border p-10 h-full ag-theme-quartz' style={{height: 680}}>
                         <div className=' h-full ' id="chartdiv" style={{width: "100%", height: "100%"}}/>
                     </Paper>
-                ) : (
+                )}
+                {!showChart && (
                     <div className='w-full h-full ag-theme-quartz' style={{height: 680}} color='secondary'>
                         <AgGridReact
                             rowData={rowData}
                             pagination={true}
+                            suppressMenuHide={true}
                             paginationPageSize={100}
+                            autoSizeStrategy={autoSizeStrategy}
                             rowSelection={"single"}
                             onGridReady={onGridReady}
                             columnDefs={colDefs}
@@ -400,21 +424,18 @@ function RecommendationPageContent(props) {
                     </div>
                 )}
                 {fgBOM && (
-                    <div className='custom-class'>
+                    <Paper className='custom-class w-full'>
                         <PieChart
                             series={[
                                 {
-                                    data: [
-                                        { id: 0, value: 10, label: 'series A' },
-                                        { id: 1, value: 15, label: 'series B' },
-                                        { id: 2, value: 20, label: 'series C' },
-                                    ],
+                                    data,
+                                    highlightScope: {faded: 'global', highlighted: 'item'},
+                                    faded: {innerRadius: 30, additionalRadius: -30, color: 'gray'},
                                 },
                             ]}
-                            width={400}
                             height={200}
                         />
-                    </div>
+                    </Paper>
                 )}
                 <div>
                     <BootstrapDialog open={openDialog} onClose={handleCloseDialog}

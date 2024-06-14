@@ -11,6 +11,11 @@ import Button from "@mui/material/Button";
 import { motion } from 'framer-motion';
 import axios from "axios";
 import FuseLoading from "@fuse/core/FuseLoading";
+import {
+    SizeColumnsToContentStrategy,
+    SizeColumnsToFitGridStrategy,
+    SizeColumnsToFitProvidedWidthStrategy
+} from "@ag-grid-community/core";
 
 /**
  * LandingPage Content
@@ -63,17 +68,20 @@ function LandingPageContent(props) {
             }
             if(selectedData.title == "Supplier PO Amendments"){
                setColDefs([
-                   { field: "id", headerName: "ID", filter: true },
+                   { field: "material_code", headerName: "Material Code", filter: true },
                    { field: "po_number", headerName: "PO Number", filter: true },
                    { field: "priority", headerName: "Priority", filter: true },
-                    { field: "due_date", headerName: "Due Date", filter: true },
-                    { field: "description", headerName: "Description", filter: true },
-                    { field: "order_type", headerName: "Order Type", filter: true },
-                    { field: "quantity", headerName: "Quantity", filter: true },
-                    { field: "supplier", headerName: "Supplier", filter: true },
-                    { field: "supplier_code", headerName: "Supplier Code", filter: true },
-                    { field: "lead_time", headerName: "Lead Time", filter: true },
-                    { field: "createdAt", headerName: "Recommendation Date", filter: true}
+                   { field: "due_date", headerName: "Due Date", filter: true, cellRenderer: params => {
+                           return params.value.split('T')[0];
+                       } },
+                   { field: "createdAt", headerName: "Recommendation Date", filter: true, cellRenderer: params => {
+                           return params.value.split('T')[0];
+                       } },
+                   { field: "description", headerName: "Description", filter: true },
+                   { field: "order_type", headerName: "Order Type", filter: true },
+                   { field: "quantity", headerName: "Quantity", filter: true },
+                   { field: "supplier_code", headerName: "Supplier Code", filter: true },
+                   { field: "lead_time", headerName: "Lead Time", filter: true }
                 ])
             }
             if(selectedData.title == "Realtime Supply Confirmation for Upsides"){
@@ -100,6 +108,17 @@ function LandingPageContent(props) {
             setFilterData(filteredData);
         }
     };
+
+    const autoSizeStrategy = useMemo<
+        | SizeColumnsToFitGridStrategy
+        | SizeColumnsToFitProvidedWidthStrategy
+        | SizeColumnsToContentStrategy
+    >(() => {
+        return {
+            type: "fitGridWidth",
+            defaultMinWidth: 100
+        };
+    }, []);
 
     useEffect(() => {
         tabData(rowData);
@@ -159,6 +178,8 @@ function LandingPageContent(props) {
                             rowData={filteredData}
                             pagination={true}
                             paginationPageSize={100}
+                            autoSizeStrategy={autoSizeStrategy}
+                            suppressMenuHide={true}
                             columnDefs={colDefs}
                             onRowClicked={handleRowClick}
                         />
