@@ -12,6 +12,14 @@ module.exports.use_cases ={
         type:Sequelize.STRING,
         allowNull:false,
     },
+    favorite:{
+        type:Sequelize.BOOLEAN,
+        allowNull:false,
+    },
+    last_used_time:{
+        type:Sequelize.DATE,
+        allowNull:false,
+    },
     description:{
         type:Sequelize.STRING,
         allowNull:false

@@ -7,29 +7,16 @@ import LandingPageContent from "./landingPage/landingPageContent";
 import RecommendationList from "./recommendationBox/recommendations/RecommendationList";
 import RecommendationDetail from "./recommendationPage/recommendationDetail";
 import UpdateRecommendation from "./recommendationPage/modification/updateRecommendation";
+import BomPage from "./source/bomPage/bomPage";
+import M1Page from "./source/m1Page/m1Page";
+import ProductionPage from "./source/productionPage/productionPage";
+import MrpPage from "./source/mrpPage/mrpPage";
+import PoPage from "./source/posPage/poPage";
 
 
 const LandingConfig = {
     settings: {
-        layout: {
-            config: {
-                navbar: {
-                    display: true
-                },
-                toolbar: {
-                    display: false
-                },
-                footer: {
-                    display: false
-                },
-                leftSidePanel: {
-                    display: false
-                },
-                rightSidePanel: {
-                    display: false
-                }
-            }
-        }
+        layout: {}
     },
     routes: [
         {
@@ -60,6 +47,25 @@ const LandingConfig = {
         },{
         path: '/apps/recommendations/update',
         element: <UpdateRecommendation/>
+        },{
+        path: '/apps/source/bom',
+        element: <BomPage/>
+        },
+        {
+        path: '/apps/source/m-1',
+        element: <M1Page/>
+        },
+        {
+        path: '/apps/source/production',
+        element: <ProductionPage/>
+        },
+        {
+        path: '/apps/source/mrp',
+        element: <MrpPage/>
+        },
+        {
+        path: '/apps/source/pos',
+        element: <PoPage/>
         }
     ]
 };

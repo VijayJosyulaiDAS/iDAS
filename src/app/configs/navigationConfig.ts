@@ -33,6 +33,46 @@ const navigationConfig: FuseNavItemType[] = [
 		type: 'item',
 		icon: 'heroicons-outline:star',
 		url: 'example'
+	},{
+		id: 'source',
+		title: 'Sources',
+		translate: 'DATA_SOURCES',
+		type: 'group',
+		icon: 'heroicons-outline:star',
+		subtitle: 'These data sources we are using',
+		children: [
+			{
+				id: 'source.bom',
+				title: 'BOM Data',
+				type: 'item',
+				icon: 'heroicons-outline:table',
+				url: '/apps/source/bom'
+			},{
+				id: 'source.m_1',
+				title: 'M-1 Data',
+				type: 'item',
+				icon: 'heroicons-outline:table',
+				url: '/apps/source/m-1'
+			},{
+				id: 'source.production',
+				title: 'Production Data',
+				type: 'item',
+				icon: 'heroicons-outline:table',
+				url: '/apps/source/production'
+			},{
+				id: 'source.mrp',
+				title: 'MRP Data',
+				type: 'item',
+				icon: 'heroicons-outline:table',
+				url: '/apps/source/mrp'
+			},{
+				id: 'source.pos',
+				title: "PO's Data",
+				type: 'item',
+				icon: 'heroicons-outline:table',
+				url: '/apps/source/pos'
+			},
+		]
 	},
 ];
 

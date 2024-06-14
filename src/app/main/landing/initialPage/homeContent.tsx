@@ -3,9 +3,16 @@ import {useAppSelector} from "app/store/hooks";
 import {selectUser} from "../../../auth/user/store/userSlice";
 import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
 import {useNavigate} from "react-router-dom";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import FuseLoading from "@fuse/core/FuseLoading";
+import Button from "@mui/material/Button";
+import Paper from "@mui/material/Paper";
+import List from "@mui/material/List";
+import ListItemText from "@mui/material/ListItemText";
+import ListItem from "@mui/material/ListItem";
+import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
+import IconButton from "@mui/material/IconButton";
 
 
 function homeContent() {
@@ -15,6 +22,21 @@ function homeContent() {
     const[openCount, setOpenCount] = useState<number>(0);
     const [greet, setGreet] = useState('');
     const [loading, setLoading] = useState(false);
+    const [selectedTab, setSelectedTab] = useState('favorites');
+    const [favorite, setFavorite] = useState([])
+    const [recent, setRecent] = useState([])
+
+    useEffect(() => {
+        const data = useCases.filter((item) => item.favorite)
+        setFavorite(data)
+        setRecent(useCases)
+    }, [selectedTab]);
+
+    const handleTabClick = (tab) => {
+        console.log(tab)
+        setSelectedTab(tab);
+    };
+
 
 
     const getGreet = () => {
@@ -43,7 +65,8 @@ function homeContent() {
             ...orderedItems.sort((a, b) => order.indexOf(a.title) - order.indexOf(b.title)),
             ...remainingItems
         ];
-        console.log(result)
+        const data = result.filter((item) => item.favorite)
+        setFavorite(data)
         setUseCases(result)
         setLoading(false)
         setOpenCount(response.data.open)
@@ -89,13 +112,89 @@ function homeContent() {
                     backgroundSize: "40%", // Adjust size here
                     opacity: 0.3 // Adjust opacity here
                 }}></div>
-                <div>
+                <div className='flex justify-between'>
                     <Typography
                         className="text-2xl md:text-5xl font-semibold m-96 tracking-tight leading-7 flex flex-col justify-between gap-10 md:leading-snug truncate">
                         <span>{`${greet},`}</span>
-                        <span
-                            className='text-4xl md:text-5xl font-bold tracking-tight leading-7 flex flex-col justify-between gap-10 md:leading-snug truncate'>{`${user.data.displayName}!`}</span>
+                        <span className='text-4xl md:text-5xl font-bold tracking-tight leading-7 flex flex-col justify-between gap-10 md:leading-snug truncate'>{`${user.data.displayName}!`}</span>
                     </Typography>
+                    <div className="m-12 w-1/4 flex lg:flex-col justify-center items-center md:flex-row sm:flex-row  overflow-x-scroll">
+                        <div className="relative flex w-full items-start justify-center gap-20 pt-32">
+                            <div
+                                className={`px-16 cursor-pointer rounded-2xl flex text-sm p-5 gap-10 font-medium text-blue-500 tracking-tight leading-6 truncate ${selectedTab === 'recents' ? 'bg-white' : ''}`}
+                                onClick={() => handleTabClick('recents')}>
+                                <FuseSvgIcon className="text-48" size={24}
+                                             color="action">material-twotone:history</FuseSvgIcon>
+                                <span>Recents</span>
+                            </div>
+                            <div
+                                className={`px-16 cursor-pointer rounded-2xl flex text-sm p-5 gap-10 font-medium text-blue-500 tracking-tight leading-6 truncate ${selectedTab === 'favorites' ? 'bg-white' : ''}`}
+                                onClick={() => handleTabClick('favorites')}>
+                                <FuseSvgIcon className="text-48" size={22}
+                                             color="action">heroicons-outline:star</FuseSvgIcon>
+                                <span>Favorites</span>
+                            </div>
+                        </div>
+                        <Paper className="m-20 w-3/4 max-h-auto relative flex justify-center items-start lg:flex-col md:flex-row sm:flex-row"
+                            style={{height: "70%"}}>
+                                <List className="py-0 mt-8 divide-y w-full">
+                                    {
+                                        selectedTab == 'recents' ? (
+                                            recent.map((item, index) => (
+                                                    <ListItem key={index} className="px-0 w-full">
+                                                        <ListItemText className='flex'
+                                                                      classes={{root: 'px-8', primary: 'font-medium'}}
+                                                                      primary={
+                                                                          <span className="flex items-center flex-auto ">
+                                                        <FuseSvgIcon
+                                                            size={20}
+                                                        >
+                                                            material-twotone:history
+                                                        </FuseSvgIcon>
+                                                        <div className="mx-6 text-md flex flex-row">
+                                                            {item.title}
+                                                        </div>
+										            </span>
+                                                                      }
+                                                        />
+                                                        <ListItemSecondaryAction>
+                                                            <IconButton aria-label="more" size="large">
+                                                                <FuseSvgIcon>heroicons-solid:chevron-right</FuseSvgIcon>
+                                                            </IconButton>
+                                                        </ListItemSecondaryAction>
+                                                    </ListItem>
+                                                ))
+
+                                        ) : (
+                                            favorite.map((item, index) => (
+                                                <ListItem key={index} className="px-0 w-full">
+                                                    <ListItemText className='flex'
+                                                                  classes={{root: 'px-8', primary: 'font-medium'}}
+                                                                  primary={
+                                                                      <span className="flex items-start flex-auto justify-start">
+                                                        <FuseSvgIcon
+                                                            size={20}
+                                                        >
+                                                            heroicons-solid:star
+                                                        </FuseSvgIcon>
+                                                        <div className="mx-6 text-md flex flex-row">
+                                                            {item.title}
+                                                        </div>
+										            </span>
+                                                                  }
+                                                    />
+                                                    <ListItemSecondaryAction>
+                                                        <IconButton aria-label="more" size="large">
+                                                            <FuseSvgIcon>heroicons-solid:chevron-right</FuseSvgIcon>
+                                                        </IconButton>
+                                                    </ListItemSecondaryAction>
+                                                </ListItem>
+                                            ))
+                                        )
+                                    }
+                                </List>
+                        </Paper>
+                    </div>
                 </div>
                 <div className='w-full'>
                     <div
@@ -122,20 +221,33 @@ function homeContent() {
                                     <div className="flex justify-between gap-10 flex-col">
                                         <div
                                             className="text-md font-medium md:mr-24  md:ml-24  line-clamp-2">{useCase.description}</div>
-                                        <Typography
-                                            className="text-lg md:pr-24 md:pl-24 md:pb-24 font-medium flex flex-col pt-20 tracking-tight leading-6 truncate"
+                                        <div
+                                            className="text-lg md:pr-24 md:pl-24 md:pb-24 font-medium flex flex-row justify-between pt-20 tracking-tight leading-6 truncate"
                                             color="text.secondary"
                                         >
-                                            <span className="truncate"></span><b
-                                            className="px-8 text-blue-500">{String(`${useCase.OpenCount}`)}</b>
-                                            <span className="truncate"></span>{'Open'}<b className="px-8"></b>
-                                        </Typography>
+                                            <span className="truncate flex flex-col">
+                                                <b className="px-8 text-blue-500">{String(`${useCase.OpenCount}`)}</b>
+                                                <span className="truncate"></span>{'Open'}<b className="px-8"></b>
+                                            </span>
+                                            {
+                                                useCase.favorite ? (
+                                                    <span className="truncate flex flex-col">
+                                                <FuseSvgIcon size={20}>heroicons-solid:star</FuseSvgIcon>
+                                            </span>
+                                                ) : (
+                                                    <span className="truncate flex flex-col">
+                                                <FuseSvgIcon size={20}>heroicons-outline:star</FuseSvgIcon>
+                                            </span>
+                                                )
+                                            }
+                                        </div>
                                     </div>
                                 </div>
                             ))
                         )
                         }
-                    </div>                </div>
+                    </div>
+                </div>
             </div>
 
         </div>

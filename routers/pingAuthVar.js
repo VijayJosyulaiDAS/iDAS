@@ -14,8 +14,8 @@ module.exports = {
     clientID: "iDAS",
     clientSecret: "WfjHwGhrK3J8nCPlTp7XTVUZKaAHKaQBN5fmMlnea87tHk4Tjrz0O9Qj9ExvNacG",
     // callbackURL: process.env.PING_CALLBACK_URL,
-    callbackURL: "http://localhost:3000/callback",
-    // callbackURL: "https://idaswebapp-webkj4-qa-web.azurewebsites.net/callback",
+    // callbackURL: "http://localhost:3000/callback",
+    callbackURL: "https://idaswebapp-webkj4-qa-web.azurewebsites.net/callback",
     userInfoURL: "https://fedauthtst.pg.com/idp/userinfo.openid"
   }
 };

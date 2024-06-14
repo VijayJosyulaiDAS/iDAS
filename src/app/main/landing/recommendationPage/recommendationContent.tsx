@@ -17,18 +17,11 @@ import DialogContent from "@mui/material/DialogContent";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
-import FuseLoading from "@fuse/core/FuseLoading";
 import {AgGridReact} from "ag-grid-react";
-import TabPanel from "@mui/lab/TabPanel";
-import {
-    SizeColumnsToContentStrategy,
-    SizeColumnsToFitGridStrategy,
-    SizeColumnsToFitProvidedWidthStrategy
-} from "@ag-grid-community/core";
 import Paper from "@mui/material/Paper";
-import {boolean} from "zod";
 import {useAppSelector} from "app/store/hooks";
 import {selectUser} from "../../../auth/user/store/userSlice";
+import { PieChart } from '@mui/x-charts/PieChart';
 
 /**
  * RecommendationPage Content
@@ -289,8 +282,7 @@ function RecommendationPageContent(props) {
     return (
         <div className="flex-auto p-24 flex w-full gap-10 justify-between flex-row'">
             <div className="w-2/5 flex justify-between">
-                <div
-                    className=" mt-20 w-full max-h-auto border relative flex lg:flex-col md:flex-row sm:flex-row shadow bg-white rounded-2xl overflow-x-scroll"
+                <div className=" mt-20 w-full max-h-auto border relative flex lg:flex-col md:flex-row sm:flex-row shadow bg-white rounded-2xl overflow-x-scroll"
                     style={{height: "60%"}}>
                     <div className="flex w-full items-start flex-col  justify-start px-8 pt-32">
                         <Typography
@@ -404,6 +396,23 @@ function RecommendationPageContent(props) {
                             onGridReady={onGridReady}
                             columnDefs={colDefs}
                             onSelectionChanged={handleRowSelection}
+                        />
+                    </div>
+                )}
+                {fgBOM && (
+                    <div className='custom-class'>
+                        <PieChart
+                            series={[
+                                {
+                                    data: [
+                                        { id: 0, value: 10, label: 'series A' },
+                                        { id: 1, value: 15, label: 'series B' },
+                                        { id: 2, value: 20, label: 'series C' },
+                                    ],
+                                },
+                            ]}
+                            width={400}
+                            height={200}
                         />
                     </div>
                 )}

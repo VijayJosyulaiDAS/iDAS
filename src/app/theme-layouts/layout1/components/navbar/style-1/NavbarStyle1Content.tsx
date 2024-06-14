@@ -1,7 +1,7 @@
 import FuseScrollbars from '@fuse/core/FuseScrollbars';
 import { styled } from '@mui/material/styles';
 import clsx from 'clsx';
-import { memo } from 'react';
+import {memo, useEffect, useState} from 'react';
 import Navigation from 'app/theme-layouts/shared-components/navigation/Navigation';
 import NavbarToggleButton from 'app/theme-layouts/shared-components/navbar/NavbarToggleButton';
 import Logo from '../../../../shared-components/Logo';
@@ -41,6 +41,27 @@ type NavbarStyle1ContentProps = {
  */
 function NavbarStyle1Content(props: NavbarStyle1ContentProps) {
 	const { className = '' } = props;
+	const [refreshTime, setRefreshTime] = useState('');
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			const now = new Date();
+			const formattedTime = formatDateTime(now);
+			setRefreshTime(formattedTime);
+		}, 1000);
+
+		return () => clearInterval(interval);
+	}, []);
+
+	const formatDateTime = (date) => {
+		const dd = String(date.getDate()).padStart(2, '0');
+		const mm = String(date.getMonth() + 1).padStart(2, '0');
+		const yyyy = date.getFullYear();
+		const hours = String(date.getHours()).padStart(2, '0');
+		const minutes = String(date.getMinutes()).padStart(2, '0');
+		const seconds = String(date.getSeconds()).padStart(2, '0');
+		return `${dd}-${mm}-${yyyy} | ${hours}:${minutes}:${seconds}`;
+	};
 
 	return (
 		<Root className={clsx('flex h-full flex-auto flex-col overflow-hidden', className)}>
@@ -60,12 +81,16 @@ function NavbarStyle1Content(props: NavbarStyle1ContentProps) {
 
 				<Navigation layout="vertical" />
 
-				<div className="flex-0 flex items-center justify-center py-48 opacity-10">
+				<div className="flex-0 flex items-center flex-col gap-10 justify-center py-48 opacity-60">
 					<img
 						className="w-full max-w-64"
 						src="assets/images/png/PG-logo.png"
 						alt="footer logo"
 					/>
+					<div
+						className="w-full flex items-center justify-center">
+						<span>Last Refresh: {refreshTime}</span>
+					</div>
 				</div>
 			</StyledContent>
 		</Root>
