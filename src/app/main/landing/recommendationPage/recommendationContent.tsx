@@ -21,7 +21,6 @@ import {AgGridReact} from "ag-grid-react";
 import Paper from "@mui/material/Paper";
 import {useAppSelector} from "app/store/hooks";
 import {selectUser} from "../../../auth/user/store/userSlice";
-import { PieChart } from '@mui/x-charts/PieChart';
 import {
     SizeColumnsToContentStrategy,
     SizeColumnsToFitGridStrategy,
@@ -56,9 +55,7 @@ function RecommendationPageContent(props) {
     const [openDialog, setOpenDialog] = useState(false);
     const [description, setDescription] = useState('')
     const [action, setAction] = useState(true)
-    let [showChart,setShowChart] = useState(false)
-    let [fgBOM,setBOM] = useState(false)
-    let [dfc,setDFC] = useState(false)
+    const [showChart,setShowChart] = useState(false)
     const [rowData, setRowData] = useState(
         [
             {
@@ -99,6 +96,7 @@ function RecommendationPageContent(props) {
             }
         ]
     );
+    const chartRef = useRef(null);
 
     const [selectedRow, setSelectedRow] = useState(null)
     let columns = [
@@ -130,9 +128,13 @@ function RecommendationPageContent(props) {
     }
 
     const data = [
-        { id: 0, value: 10, label: 'series A' },
-        { id: 1, value: 15, label: 'series B' },
-        { id: 2, value: 20, label: 'series C' },
+        { category: "Safety Stock", value: 35 },
+        { category: "RM DFC", value: 20 },
+        { category: "FG Description", value: 10 },
+        { category: "FG Demand Variations", value: 10 },
+        { category: "FG BOM", value: 10 },
+        { category: "Production Version", value: 10 },
+        { category: "Other", value: 5 }
     ];
 
     const cardData  = {
@@ -165,82 +167,116 @@ function RecommendationPageContent(props) {
         navigate(`/apps/landing/${recommendation.id}`)
     }
 
-    const chartRef = useRef<am4charts.XYChart | null>(null);
+    // const chartRef = useRef<am4charts.XYChart | null>(null);
 
     useLayoutEffect(() => {
-        let chart = am4core.create('chartdiv', am4charts.XYChart);
+        // let chart = am4core.create('chartdiv', am4charts.XYChart);
+        // chartRef.current = chart;
+        //
+        // // Specify the data type for chart data
+        // chart.data = [
+        //     { "date": "2024-06-13", "currentPlan": 102497, "currentForecast": 100000, "projectedInventory": 100000, "safety": 50000 },
+        //     { "date": "2024-06-14", "currentPlan": 85461, "currentForecast": 50000, "projectedInventory": 0, "safety": 50000 },
+        //     { "date": "2024-06-15", "currentPlan": 91224, "currentForecast": 100000, "projectedInventory": 123000, "safety": 50000 },
+        //     { "date": "2024-06-16", "currentPlan": 95051, "currentForecast": 200000, "projectedInventory": 0, "safety": 50000 },
+        //     { "date": "2024-06-17", "currentPlan": 94021, "currentForecast": 250000, "projectedInventory": 0, "safety": 50000 },
+        //     { "date": "2024-06-18", "currentPlan": 94309, "currentForecast": 300000, "projectedInventory": -100000, "safety": 50000 },
+        //     { "date": "2024-06-19", "currentPlan": 96509, "currentForecast": 275000, "projectedInventory": -150000, "safety": 50000 },
+        //     { "date": "2024-06-20", "currentPlan": 89193, "currentForecast": 250000, "projectedInventory": -150000, "safety": 50000 },
+        //     { "date": "2024-06-21", "currentPlan": 103332, "currentForecast": 200000, "projectedInventory": -150000, "safety": 50000 },
+        //     { "date": "2024-06-22", "currentPlan": 93290, "currentForecast": 100000, "projectedInventory": -150000, "safety": 50000 },
+        //     { "date": "2024-06-23", "currentPlan": 88969, "currentForecast": 0, "projectedInventory": -50000, "safety": 50000 },
+        //     { "date": "2024-06-24", "currentPlan": 9574, "currentForecast": 0, "projectedInventory": -50000, "safety": 50000 },
+        //     { "date": "2024-06-25", "currentPlan": 0, "currentForecast": 0, "projectedInventory": 0, "safety": 50000 },
+        //     { "date": "2024-06-26", "currentPlan": 0, "currentForecast": 0, "projectedInventory": 0, "safety": 50000 }
+        // ] as ChartDataItem[];
+        //
+        // // Create date axis
+        // let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+        // dateAxis.renderer.minGridDistance = 50;
+        // dateAxis.dateFormats.setKey("day", "dd-MMM");
+        //
+        // // Create value axis
+        // let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+        //
+        // // Create series for Current Forecast
+        // let currentSeries = chart.series.push(new am4charts.LineSeries());
+        // currentSeries.name = "Current Forecast";
+        // currentSeries.dataFields.valueY = "currentForecast";
+        // currentSeries.dataFields.dateX = "date";
+        // currentSeries.strokeWidth = 2;
+        // currentSeries.tooltipText = "{name}\n[bold font-size: 20]{valueY}[/]";
+        //
+        // // Add bullets (points) to Current Forecast
+        // let currentBullet = currentSeries.bullets.push(new am4charts.Bullet());
+        // let currentCircle = currentBullet.createChild(am4core.Circle);
+        // currentCircle.radius = 5;
+        // currentCircle.fill = am4core.color("#fff");
+        // currentCircle.strokeWidth = 2;
+        //
+        // // Create series for Projected Inventory
+        // let inventorySeries = chart.series.push(new am4charts.ColumnSeries());
+        // inventorySeries.name = "Projected Inventory";
+        // inventorySeries.dataFields.valueY = "projectedInventory";
+        // inventorySeries.dataFields.dateX = "date";
+        // inventorySeries.columns.template.tooltipText = "{name}\n[bold font-size: 20]{valueY}[/]";
+        // inventorySeries.columns.template.adapter.add("fill", function(fill, target) {
+        //     const dataItem = target.dataItem.dataContext as ChartDataItem;
+        //     return target.dataItem.values.valueY?.value < dataItem.safety
+        //         ? am4core.color("#FF9999")
+        //         : am4core.color("lightblue");
+        // });
+        // inventorySeries.columns.template.adapter.add("stroke", function(stroke, target) {
+        //     const dataItem = target.dataItem.dataContext as ChartDataItem;
+        //     return target.dataItem.values.valueY?.value < dataItem.safety
+        //         ? am4core.color("#FF9999")
+        //         : am4core.color("lightblue");
+        // });
+        //
+        // // Add legend
+        // chart.legend = new am4charts.Legend();
+        //
+        // // Add cursor
+        // chart.cursor = new am4charts.XYCursor();
+        //
+        // return () => {
+        //     chart.dispose();
+        // };
+
+        // For the Pie Chart
+        // Themes begin
+        am4core.useTheme(am4themes_animated);
+        // Themes end
+
+        // Create chart instance
+        let chart = am4core.create("chartdiv", am4charts.PieChart);
+
+        // Add data
+        chart.data = data;
+        chart.logo.dispose();
+
+
+        // Add and configure Series
+        let pieSeries = chart.series.push(new am4charts.PieSeries());
+        pieSeries.dataFields.value = "value";
+        pieSeries.dataFields.category = "category";
+        pieSeries.slices.template.stroke = am4core.color("#fff");
+        pieSeries.slices.template.strokeOpacity = 1;
+
+        // This creates initial animation
+        pieSeries.hiddenState.properties.opacity = 1;
+        pieSeries.hiddenState.properties.endAngle = -90;
+        pieSeries.hiddenState.properties.startAngle = -90;
+
+        chart.hiddenState.properties.radius = am4core.percent(0);
+
         chartRef.current = chart;
-
-        // Specify the data type for chart data
-        chart.data = [
-            { "date": "2024-06-13", "currentPlan": 102497, "currentForecast": 100000, "projectedInventory": 100000, "safety": 50000 },
-            { "date": "2024-06-14", "currentPlan": 85461, "currentForecast": 50000, "projectedInventory": 0, "safety": 50000 },
-            { "date": "2024-06-15", "currentPlan": 91224, "currentForecast": 100000, "projectedInventory": 123000, "safety": 50000 },
-            { "date": "2024-06-16", "currentPlan": 95051, "currentForecast": 200000, "projectedInventory": 0, "safety": 50000 },
-            { "date": "2024-06-17", "currentPlan": 94021, "currentForecast": 250000, "projectedInventory": 0, "safety": 50000 },
-            { "date": "2024-06-18", "currentPlan": 94309, "currentForecast": 300000, "projectedInventory": -100000, "safety": 50000 },
-            { "date": "2024-06-19", "currentPlan": 96509, "currentForecast": 275000, "projectedInventory": -150000, "safety": 50000 },
-            { "date": "2024-06-20", "currentPlan": 89193, "currentForecast": 250000, "projectedInventory": -150000, "safety": 50000 },
-            { "date": "2024-06-21", "currentPlan": 103332, "currentForecast": 200000, "projectedInventory": -150000, "safety": 50000 },
-            { "date": "2024-06-22", "currentPlan": 93290, "currentForecast": 100000, "projectedInventory": -150000, "safety": 50000 },
-            { "date": "2024-06-23", "currentPlan": 88969, "currentForecast": 0, "projectedInventory": -50000, "safety": 50000 },
-            { "date": "2024-06-24", "currentPlan": 9574, "currentForecast": 0, "projectedInventory": -50000, "safety": 50000 },
-            { "date": "2024-06-25", "currentPlan": 0, "currentForecast": 0, "projectedInventory": 0, "safety": 50000 },
-            { "date": "2024-06-26", "currentPlan": 0, "currentForecast": 0, "projectedInventory": 0, "safety": 50000 }
-        ] as ChartDataItem[];
-
-        // Create date axis
-        let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-        dateAxis.renderer.minGridDistance = 50;
-        dateAxis.dateFormats.setKey("day", "dd-MMM");
-
-        // Create value axis
-        let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
-
-        // Create series for Current Forecast
-        let currentSeries = chart.series.push(new am4charts.LineSeries());
-        currentSeries.name = "Current Forecast";
-        currentSeries.dataFields.valueY = "currentForecast";
-        currentSeries.dataFields.dateX = "date";
-        currentSeries.strokeWidth = 2;
-        currentSeries.tooltipText = "{name}\n[bold font-size: 20]{valueY}[/]";
-
-        // Add bullets (points) to Current Forecast
-        let currentBullet = currentSeries.bullets.push(new am4charts.Bullet());
-        let currentCircle = currentBullet.createChild(am4core.Circle);
-        currentCircle.radius = 5;
-        currentCircle.fill = am4core.color("#fff");
-        currentCircle.strokeWidth = 2;
-
-        // Create series for Projected Inventory
-        let inventorySeries = chart.series.push(new am4charts.ColumnSeries());
-        inventorySeries.name = "Projected Inventory";
-        inventorySeries.dataFields.valueY = "projectedInventory";
-        inventorySeries.dataFields.dateX = "date";
-        inventorySeries.columns.template.tooltipText = "{name}\n[bold font-size: 20]{valueY}[/]";
-        inventorySeries.columns.template.adapter.add("fill", function(fill, target) {
-            const dataItem = target.dataItem.dataContext as ChartDataItem;
-            return target.dataItem.values.valueY?.value < dataItem.safety
-                ? am4core.color("#FF9999")
-                : am4core.color("lightblue");
-        });
-        inventorySeries.columns.template.adapter.add("stroke", function(stroke, target) {
-            const dataItem = target.dataItem.dataContext as ChartDataItem;
-            return target.dataItem.values.valueY?.value < dataItem.safety
-                ? am4core.color("#FF9999")
-                : am4core.color("lightblue");
-        });
-
-        // Add legend
-        chart.legend = new am4charts.Legend();
-
-        // Add cursor
-        chart.cursor = new am4charts.XYCursor();
 
         return () => {
             chart.dispose();
         };
     }, [showChart]);
+
 
     const handleClick = (event) => {
         console.log(event.target.id);
@@ -265,8 +301,7 @@ function RecommendationPageContent(props) {
         }
         if(event.target.id == 'details'){
             console.log(event.target.id);
-            showChart = !showChart
-            setShowChart(showChart)
+            setShowChart(prevShowChart => !prevShowChart);
         }
     };
     const autoSizeStrategy = useMemo<
@@ -285,12 +320,6 @@ function RecommendationPageContent(props) {
         console.log(selectedNodes)
         if (selectedNodes.length > 0) {
             setSelectedRow(selectedNodes[0].data);
-            if(selectedNodes[0].data.root_cause == 'FG BOM'){
-                setBOM(true)
-            }
-            if(selectedNodes[0].data.root_cause == 'RM DFC'){
-                setDFC(true)
-            }
         } else {
             setSelectedRow(null);
         }
@@ -403,12 +432,15 @@ function RecommendationPageContent(props) {
                 </div>
             </div>
             <div className='w-full mt-20 h-full flex flex-col gap-10 h-[500px]'>
-                {showChart && (
-                    <Paper className='w-full border p-10 h-full ag-theme-quartz' style={{height: 680}}>
+                {!showChart && (
+                    <Paper className='w-full border p-10 h-full flex flex-col' style={{height: 680}}>
+                        <div className='text-lg font-medium tracking-tight leading-6'>
+                            Root Cause Analysis
+                        </div>
                         <div className=' h-full ' id="chartdiv" style={{width: "100%", height: "100%"}}/>
                     </Paper>
                 )}
-                {!showChart && (
+                {showChart && (
                     <div className='w-full h-full ag-theme-quartz' style={{height: 680}} color='secondary'>
                         <AgGridReact
                             rowData={rowData}
@@ -422,20 +454,6 @@ function RecommendationPageContent(props) {
                             onSelectionChanged={handleRowSelection}
                         />
                     </div>
-                )}
-                {fgBOM && (
-                    <Paper className='custom-class w-full'>
-                        <PieChart
-                            series={[
-                                {
-                                    data,
-                                    highlightScope: {faded: 'global', highlighted: 'item'},
-                                    faded: {innerRadius: 30, additionalRadius: -30, color: 'gray'},
-                                },
-                            ]}
-                            height={200}
-                        />
-                    </Paper>
                 )}
                 <div>
                     <BootstrapDialog open={openDialog} onClose={handleCloseDialog}

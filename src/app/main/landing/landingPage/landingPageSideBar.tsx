@@ -29,6 +29,7 @@ function landingPageSideBar(props) {
 			...remainingItems
 		];
 		setUseCases(result)
+		onItemClick(result[0])
 		setLoading(false);
 	}
 

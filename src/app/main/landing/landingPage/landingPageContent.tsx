@@ -24,8 +24,8 @@ function LandingPageContent(props) {
     const {selectedData} = props
     const[openCount, setOpenCount] = useState<number>(0);
     const[closeCount, setCloseCount] = useState<number>(0);
-    const [rowData, setRowData] = useState([]);
-    const [filteredData, setFilterData] = useState([]);
+    const [rowData, setRowData] = useState(null);
+    const [filteredData, setFilterData] = useState(null);
     const [loading, setLoading] = useState(false); // State for loading
     const navigate = useNavigate();
     const [tabValue, setTabValue] = useState(0);
@@ -101,24 +101,13 @@ function LandingPageContent(props) {
 
     const tabData = (data) => {
         if (tabValue == 0) {
-            const filteredData = data.filter(item => item.active);
+            const filteredData = data?.filter(item => item.active);
             setFilterData(filteredData);
         } else {
             const filteredData = data.filter(item => !item.active);
             setFilterData(filteredData);
         }
     };
-
-    const autoSizeStrategy = useMemo<
-        | SizeColumnsToFitGridStrategy
-        | SizeColumnsToFitProvidedWidthStrategy
-        | SizeColumnsToContentStrategy
-    >(() => {
-        return {
-            type: "fitGridWidth",
-            defaultMinWidth: 100
-        };
-    }, []);
 
     useEffect(() => {
         tabData(rowData);
@@ -169,42 +158,25 @@ function LandingPageContent(props) {
                             />
                         </Tabs>
                     </div>
-                    {loading ? (
-                        <div className="flex justify-center items-center h-full">
-                            <FuseLoading></FuseLoading>
-                        </div>
-                    ) : (
+                    {/*{loading ? (*/}
+                    {/*    <div className="flex justify-center items-center h-full">*/}
+                    {/*        <FuseLoading></FuseLoading>*/}
+                    {/*    </div>*/}
+                    {/*) : (*/}
                         <AgGridReact
                             rowData={filteredData}
                             pagination={true}
                             paginationPageSize={100}
-                            autoSizeStrategy={autoSizeStrategy}
                             suppressMenuHide={true}
                             columnDefs={colDefs}
                             onRowClicked={handleRowClick}
                         />
-                    )}
+                    {/*)}*/}
                 </div>
             ) : (
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1, transition: { delay: 0.1 } }}
-                    className="flex flex-col flex-1 items-center justify-center h-full"
-                >
-                    <Typography
-                        color="text.secondary"
-                        variant="h5"
-                    >
-                        There is no data!
-                    </Typography>
-                    <Button
-                        className="mt-24"
-                        variant="outlined"
-                        color="inherit"
-                    >
-                        Please Choose a use case
-                    </Button>
-                </motion.div>
+                <div className="flex justify-center items-center h-full">
+                    <FuseLoading></FuseLoading>
+                </div>
             )}
         </div>
     );

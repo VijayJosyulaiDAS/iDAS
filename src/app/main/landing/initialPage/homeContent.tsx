@@ -135,9 +135,10 @@ function homeContent() {
                                 <span>Favorites</span>
                             </div>
                         </div>
-                        <Paper className="m-20 w-3/4 max-h-auto relative flex justify-center items-start lg:flex-col md:flex-row sm:flex-row"
+                        <Paper className="m-20 w-3/4 max-h-auto relative flex justify-start items-start lg:flex-col md:flex-row sm:flex-row"
                             style={{height: "70%"}}>
                                 <List className="py-0 mt-8 divide-y w-full">
+
                                     {
                                         selectedTab == 'recents' ? (
                                             recent.map((item, index) => (
@@ -167,7 +168,7 @@ function homeContent() {
 
                                         ) : (
                                             favorite.map((item, index) => (
-                                                <ListItem key={index} className="px-0 w-full">
+                                                <ListItem key={index} className="px-0 w-full flex items-start justify-start">
                                                     <ListItemText className='flex'
                                                                   classes={{root: 'px-8', primary: 'font-medium'}}
                                                                   primary={
@@ -218,9 +219,8 @@ function homeContent() {
                                             {useCase.title}
                                         </Typography>
                                     </div>
+                                    <div className="text-md font-medium md:mr-24  md:ml-24  line-clamp-2">{useCase.description}</div>
                                     <div className="flex justify-between gap-10 flex-col">
-                                        <div
-                                            className="text-md font-medium md:mr-24  md:ml-24  line-clamp-2">{useCase.description}</div>
                                         <div
                                             className="text-lg md:pr-24 md:pl-24 md:pb-24 font-medium flex flex-row justify-between pt-20 tracking-tight leading-6 truncate"
                                             color="text.secondary"
@@ -232,7 +232,7 @@ function homeContent() {
                                             {
                                                 useCase.favorite ? (
                                                     <span className="truncate flex flex-col">
-                                                <FuseSvgIcon size={20}>heroicons-solid:star</FuseSvgIcon>
+                                                <FuseSvgIcon size={24}>heroicons-solid:star</FuseSvgIcon>
                                             </span>
                                                 ) : (
                                                     <span className="truncate flex flex-col">

@@ -20,7 +20,7 @@ const Root = styled(FusePageCarded)(() => ({
  * LandingPage.
  */
 function LandingPage() {
-    const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('lg'));
+    const isMobile = true
     const {folderHandle} = useParams()
 
     const [leftSidebarOpen, setLeftSidebarOpen] = useState(!isMobile);
