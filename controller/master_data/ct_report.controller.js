@@ -2,9 +2,9 @@ const { sequelize } = require('../../connection/sql_connection');
 const util = require('../../util');
 
 
-let getBomData = async (req, res) => {
+let ctReport_Data = async (req, res) => {
     try {
-        const query = `SELECT * FROM [dbo].[tbl_bom]`;
+        const query = `SELECT * FROM [dbo].[tbl_ct_report]`;
         const data = await sequelize.query(query, {
             type: sequelize.QueryTypes.SELECT,
         });
@@ -15,5 +15,5 @@ let getBomData = async (req, res) => {
 };
 
 module.exports = {
-    getBomData
+    ctReport_Data
 };

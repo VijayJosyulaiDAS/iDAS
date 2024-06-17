@@ -1,5 +1,6 @@
 const OAuth2Strategy = require('passport-ping-oauth2').Strategy;
 const configAuth = require('./pingAuthVar');
+const util = require("../util");
 
 module.exports = (passport) => {
   // serialize
@@ -26,10 +27,21 @@ module.exports = (passport) => {
     clientSecret: configAuth.pingAuth.clientSecret,
     callbackURL: configAuth.pingAuth.callbackURL
     }, 
-    function (accessToken, refreshToken, params, profile, done) {
+    async function (accessToken, refreshToken, params, profile, done) {
       console.log("accesstoken1", accessToken, "--2--", refreshToken, "--3--", params, "--4--", profile, "--5--", done)
-      return done(null, {accessToken: accessToken, refreshToken: refreshToken, params: params, profile: profile}
-        );
+      let data = {
+        name: profile?.FirstName + " " + profile?.LastName,
+        email: profile?.email,
+        role: 'admin',
+        business_unit_name: '',
+      }
+      let existingUser = await util.model.User.findOne({where: {email: profile?.email}})
+      if (existingUser) {
+        return done(null, {accessToken: accessToken, refreshToken: refreshToken, params: params, profile: profile})
+      }else{
+        await util.model.User.create(data)
+        return done(null, {accessToken: accessToken, refreshToken: refreshToken, params: params, profile: profile})
+      }
     }));
 }
 

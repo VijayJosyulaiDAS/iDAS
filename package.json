@@ -61,7 +61,6 @@
         "qs": "6.11.2",
         "query-string": "^9.0.0",
         "react": "18.2.0",
-        "react-toastify": "^10.0.5",
         "react-app-alias": "2.2.2",
         "react-autosuggest": "10.1.0",
         "react-dom": "18.2.0",
@@ -74,6 +73,7 @@
         "react-router-dom": "6.21.3",
         "react-swipeable": "7.0.1",
         "react-textarea-autosize": "^8.5.3",
+        "react-toastify": "^10.0.5",
         "redux-logger": "4.0.0",
         "reselect": "5.1.0",
         "sequelize": "^6.37.3",
@@ -86,6 +86,7 @@
         "tedious": "^18.2.0",
         "type-fest": "4.9.0",
         "web-vitals": "3.5.1",
+        "xlsx": "^0.18.5",
         "zod": "3.22.4"
     },
     "peerDependencies": {

@@ -105,6 +105,13 @@ const navigationConfig: FuseNavItemType[] = [
 						icon: 'heroicons-outline:table',
 						url: '/apps/source/yesterday_production'
 					},
+					{
+						id: 'source.ct_report',
+						title: "CT Report",
+						type: 'item',
+						icon: 'heroicons-outline:table',
+						url: '/apps/source/ct_report'
+					},
 				]
 			}
 		]
@@ -121,7 +128,7 @@ const navigationConfig: FuseNavItemType[] = [
 				title: 'User Data',
 				type: 'item',
 				icon: 'heroicons-outline:table',
-				url: '/apps/source/user'
+				url: '/apps/user_management'
 			}
 		]
 	},

@@ -15,6 +15,8 @@ import PoPage from "./source/posPage/poPage";
 import UpcomingProductionPage from "./source/upcomingProductionPage/upcomingProductionPage";
 import StockSummaryPage from "./source/stockSummaryPage/stockSummaryPage";
 import YesterdayProductionPage from "./source/yesterdayProductionPage/yesterdayProductionPage";
+import UserPage from "./userManagement/userPage";
+import Ct_ReportPage from "./source/ctReportPage/ct_ReportPage";
 
 
 const LandingConfig = {
@@ -81,6 +83,14 @@ const LandingConfig = {
         {
         path: '/apps/source/stock_summary',
         element: <StockSummaryPage/>
+        },
+        {
+        path: '/apps/source/ct_report',
+        element: <Ct_ReportPage/>
+        },
+        {
+        path: '/apps/user_management',
+        element: <UserPage/>
         }
     ]
 };

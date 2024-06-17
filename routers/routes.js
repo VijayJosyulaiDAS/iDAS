@@ -2,7 +2,7 @@ const Base64 =  require('crypto-js/enc-base64');
 const HmacSHA256 = require('crypto-js/hmac-sha256');
 const Utf8 = require('crypto-js/enc-utf8');
 const jwtDecode = require("jwt-decode");
-
+const util = require("../util");
 const jwtSecret = 'some-secret-code-goes-here';
 
 function base64url(source) {
@@ -106,22 +106,22 @@ module.exports = (app, passport) => {
       res.status(200).json({trigger: triggerValue, user: req.user})
     });
 
-    app.post('/api/auth/sign-in', (req, res) => {
-      let { profile } = req.user;
-      let token = generateJWTToken({ id: profile.email })
-      let { params } = req.user
-      let data = jwtDecode(params.access_token);
-      let user = {
-        uid: profile.email,
-        role: 'admin',
-        data: {
-          displayName: profile?.FirstName + " " + profile?.LastName,
-          photoURL: profile?.FirstName[0],
-          email: profile?.email,
-          loginRedirectUrl: '/example', //   <----- change home route
-         }
-      };
-      res.send({user: user, access_token: token})
+    app.post('/api/auth/sign-in', async (req, res) => {
+        let {profile} = req.user;
+        let token = generateJWTToken({id: profile.email})
+        let {params} = req.user
+        let data = jwtDecode(params.access_token);
+        let user = {
+            uid: profile.email,
+            role: 'admin',
+            data: {
+                displayName: profile?.FirstName + " " + profile?.LastName,
+                photoURL: profile?.FirstName[0],
+                email: profile?.email,
+                loginRedirectUrl: '/example', //   <----- change home route
+            }
+        };
+        res.send({user: user, access_token: token})
     });
 
     app.post('/api/auth/sign-out', (req, res) => {

@@ -24,7 +24,7 @@ function YesterdayProductionContent() {
 
     const fetchData = async () => {
         try {
-            let response = await axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/bom_data`);
+            let response = await axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/bodm_data`);
             setRowData(response.data.data);
         } catch (error) {
             console.error('Failed to fetch recommendations:', error);
