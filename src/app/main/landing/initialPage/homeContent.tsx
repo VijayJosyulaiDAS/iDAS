@@ -82,6 +82,10 @@ function homeContent() {
     const handleClick = (event) =>{
         navigate('/apps/landing')
     }
+    const handleChange = (data) =>{
+        console.log(data)
+
+    }
 
     const handleCardClick = (event) =>{
         console.log(event)
@@ -210,16 +214,19 @@ function homeContent() {
                             <FuseLoading></FuseLoading>
                         ) : (
                             useCases.map((useCase, index) => (
-                                <div key={index} onClick={() => handleCardClick(useCase)}
-                                     className="card hover:scale-105 hover:filter transition duration-300 ease-in-out hover relative cursor-pointer flex lg:flex-col md:flex-row sm:flex-row shadow-2xl bg-white gap-10 lg:w-1/4 sm:w-2/4 md:w-2/4 rounded-2xl mb-32 m-6 overflow-hidden">
-                                    <div className="flex items-center text-blue-500 justify-between px-8 pt-12">
-                                        <Typography
-                                            className="px-16 text-lg font-medium tracking-tight leading-6 truncate"
-                                        >
-                                            {useCase.title}
-                                        </Typography>
+                                <div key={index}
+                                     className="card hover:scale-105 hover:filter transition duration-300 ease-in-out hover relative flex lg:flex-col md:flex-row sm:flex-row shadow-2xl bg-white gap-10 lg:w-1/4 sm:w-2/4 md:w-2/4 rounded-2xl mb-32 m-6 overflow-hidden">
+                                    <div onClick={() => handleCardClick(useCase)} className="flex cursor-pointer  flex-col gap-10">
+                                        <div className="flex items-center text-blue-500 justify-between px-8 pt-12">
+                                            <Typography
+                                                className="px-16 text-lg font-medium tracking-tight leading-6 truncate"
+                                            >
+                                                {useCase.title}
+                                            </Typography>
+                                        </div>
+                                        <div
+                                            className="text-md font-medium md:mr-24  md:ml-24  line-clamp-2">{useCase.description}</div>
                                     </div>
-                                    <div className="text-md font-medium md:mr-24  md:ml-24  line-clamp-2">{useCase.description}</div>
                                     <div className="flex justify-between gap-10 flex-col">
                                         <div
                                             className="text-lg md:pr-24 md:pl-24 md:pb-24 font-medium flex flex-row justify-between pt-20 tracking-tight leading-6 truncate"
@@ -231,12 +238,12 @@ function homeContent() {
                                             </span>
                                             {
                                                 useCase.favorite ? (
-                                                    <span className="truncate flex flex-col">
-                                                <FuseSvgIcon size={24}>heroicons-solid:star</FuseSvgIcon>
+                                                    <span className="truncate flex flex-co hover:scale-110 cursor-pointerl" onClick={() => handleChange(useCase)} title="Remove from Favorites">
+                                                <FuseSvgIcon size={32}>heroicons-solid:star</FuseSvgIcon>
                                             </span>
                                                 ) : (
-                                                    <span className="truncate flex flex-col">
-                                                <FuseSvgIcon size={20}>heroicons-outline:star</FuseSvgIcon>
+                                                    <span className="truncate flex flex-col" onClick={() => handleChange(useCase)} title="Add to Favorites">
+                                                <FuseSvgIcon size={32}>heroicons-outline:star</FuseSvgIcon>
                                             </span>
                                                 )
                                             }

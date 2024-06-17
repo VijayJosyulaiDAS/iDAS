@@ -139,7 +139,7 @@ function RecommendationPageContent(props) {
 
     const cardData  = {
         title: recommendation.description,
-        date: formatDateString(recommendation.due_date),
+        date: formatDateString(recommendation.due_date ? recommendation.due_date : recommendation.createdAt),
         description: `The Demand Forecast is predicting an ${recommendation.demand_type} in Demand of ${recommendation.demand_value} for the Material Code ${recommendation.material_code}. Based on the available inventory of ${recommendation.available_inventory_value} and a Lead Time 
             of ${recommendation.lead_time} days, you should ${recommendation.order_type} ${recommendation.po_number} with the Quantity ${recommendation.po_quantity_value}`
     }
@@ -159,6 +159,8 @@ function RecommendationPageContent(props) {
             use_case_id: recommendation.use_case_id,
             active: action,
             action_owner: user.data.email,
+            po_number: recommendation.po_number,
+            best_alternative: recommendation.best_alternative,
             recommendation_action: 'Dismiss',
             user_desc: description
         }
@@ -290,6 +292,9 @@ function RecommendationPageContent(props) {
                 use_case_id: recommendation.use_case_id,
                 recommendation_action: 'Accept',
                 action_owner: user.data.email,
+                po_number: recommendation.po_number,
+                best_alternative: recommendation.best_alternative,
+                user_desc: description,
                 active: false
             }
             updateRecommendation(data)

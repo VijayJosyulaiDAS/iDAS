@@ -193,7 +193,16 @@
                 "use_case_id": {
                   "example": "any"
                 },
-                "po_number": {
+                "active": {
+                  "example": "any"
+                },
+                "action_owner": {
+                  "example": "any"
+                },
+                "recommendation_action": {
+                  "example": "any"
+                },
+                "user_desc": {
                   "example": "any"
                 }
               }

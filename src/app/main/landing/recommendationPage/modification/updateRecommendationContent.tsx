@@ -44,7 +44,7 @@ function UpdateRecommendationContent({setSelectedRow}) {
             }
         },
         { field: "due_date", headerName: "Due Date", filter: true, cellRenderer: params => {
-                return params.value.split('T')[0];
+                return params.value?.split('T')[0];
             } },
         { field: "createdAt", headerName: "Recommendation Date", filter: true},
         { field: "order_type", headerName: "Order Type", filter: true },
@@ -66,7 +66,7 @@ function UpdateRecommendationContent({setSelectedRow}) {
     }, []);
 
     const fetchAllRecommendations = async () =>{
-        let response = await axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/get_recommendationById?id=${recommendationId}&&useCaseId=${recommendation.use_case_id}`);
+        let response = await axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/get_recommendationById?id=${recommendation.material_code}&&useCaseId=${recommendation.use_case_id}`);
         setLoading(false)
         setRowData(response.data.data)
     }

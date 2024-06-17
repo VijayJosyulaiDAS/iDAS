@@ -72,10 +72,10 @@ function LandingPageContent(props) {
                    { field: "po_number", headerName: "PO Number", filter: true },
                    { field: "priority", headerName: "Priority", filter: true },
                    { field: "due_date", headerName: "Due Date", filter: true, cellRenderer: params => {
-                           return params.value.split('T')[0];
+                           return params.value?.split('T')[0];
                        } },
                    { field: "createdAt", headerName: "Recommendation Date", filter: true, cellRenderer: params => {
-                           return params.value.split('T')[0];
+                           return params.value?.split('T')[0];
                        } },
                    { field: "description", headerName: "Description", filter: true },
                    { field: "order_type", headerName: "Order Type", filter: true },
