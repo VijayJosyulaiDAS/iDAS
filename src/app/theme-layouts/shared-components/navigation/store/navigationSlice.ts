@@ -119,7 +119,7 @@ export const selectNavigation = createSelector(
 			return data?.map((item) => ({
 				hasPermission: Boolean(FuseUtils.hasPermission(item?.auth, userRole)),
 				...item,
-				...(item?.translate && item?.title ? { title: i18next.t(`navigation:${item?.translate}`) } : {}),
+				...(item?.translate && item?.title ?  { title: (`${item?.title}`) }  : {}),
 				...(item?.children ? { children: setAdditionalData(item?.children) } : {})
 			}));
 		}

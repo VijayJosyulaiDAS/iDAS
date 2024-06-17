@@ -128,13 +128,13 @@ function RecommendationPageContent(props) {
     }
 
     const data = [
-        { category: "Safety Stock", value: 35 },
-        { category: "RM DFC", value: 20 },
-        { category: "FG Description", value: 10 },
-        { category: "FG Demand Variations", value: 10 },
-        { category: "FG BOM", value: 10 },
-        { category: "Production Version", value: 10 },
-        { category: "Other", value: 5 }
+        { category: "Safety Stock", value: 15, description: 'The minimum quantity of a product that must be kept in stock to prevent stock outs.' },
+        { category: "RM DFC", value: 15, description: 'The number of days the current stock level can satisfy customer demand.' },
+        { category: "FG Description", value: 15, description: 'Information about the finished goods.' },
+        { category: "FG Demand Variations", value: 15, description: 'Variations in the demand for the finished goods.' },
+        { category: "FG BOM", value: 15, description: 'Raw materials required to produce the finished goods.' },
+        { category: "Production Version", value: 15, description: 'Production lines.' },
+        { category: "Other", value: 10, description: 'Others' }
     ];
 
     const cardData  = {
@@ -257,13 +257,19 @@ function RecommendationPageContent(props) {
         chart.data = data;
         chart.logo.dispose();
 
-
         // Add and configure Series
         let pieSeries = chart.series.push(new am4charts.PieSeries());
         pieSeries.dataFields.value = "value";
         pieSeries.dataFields.category = "category";
         pieSeries.slices.template.stroke = am4core.color("#fff");
         pieSeries.slices.template.strokeOpacity = 1;
+
+        // Configure tooltip
+        pieSeries.slices.template.tooltipText = "{description}";
+
+        // Add hover state
+        pieSeries.slices.template.states.getKey("hover").properties.scale = 1.1;
+        pieSeries.slices.template.states.getKey("hover").properties.shiftRadius = 0;
 
         // This creates initial animation
         pieSeries.hiddenState.properties.opacity = 1;
@@ -272,11 +278,14 @@ function RecommendationPageContent(props) {
 
         chart.hiddenState.properties.radius = am4core.percent(0);
 
+        // Dispose chart properly
         chartRef.current = chart;
 
+        // Clean up function
         return () => {
             chart.dispose();
         };
+
     }, [showChart]);
 
 
@@ -309,6 +318,7 @@ function RecommendationPageContent(props) {
             setShowChart(prevShowChart => !prevShowChart);
         }
     };
+
     const autoSizeStrategy = useMemo<
         | SizeColumnsToFitGridStrategy
         | SizeColumnsToFitProvidedWidthStrategy

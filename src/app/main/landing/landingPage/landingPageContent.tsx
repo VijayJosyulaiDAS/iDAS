@@ -6,16 +6,11 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import {Box} from "@mui/system";
 import {Navigate, useLocation, useNavigate, useParams} from 'react-router-dom';
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { motion } from 'framer-motion';
 import axios from "axios";
 import FuseLoading from "@fuse/core/FuseLoading";
-import {
-    SizeColumnsToContentStrategy,
-    SizeColumnsToFitGridStrategy,
-    SizeColumnsToFitProvidedWidthStrategy
-} from "@ag-grid-community/core";
+import {toast, ToastContainer} from "react-toastify";
+
 
 /**
  * LandingPage Content
@@ -43,11 +38,13 @@ function LandingPageContent(props) {
                 ...remainingItems
             ];
             setRowData(result);
+            toast.success('Data loaded successfully.', { autoClose: 1500 });
             setOpenCount(response.data.open);
             setCloseCount(response.data.close);
             tabData(response.data.data);
         } catch (error) {
             console.error('Failed to fetch recommendations:', error);
+            toast.error(`Something Went Wrong while fetching data.`, {autoClose: 1500})
         } finally {
             setLoading(false);
         }
@@ -124,6 +121,7 @@ function LandingPageContent(props) {
 
     return (
         <div className="flex-auto w-full h-full p-24 sm:p-40">
+            <ToastContainer style={{marginTop: '50px'}}/>
             {selectedData ? (
                 <div className="ag-theme-quartz" style={{ height: 680 }}>
                     <div className='m-5 flex w-full gap-80 justify-between flex-row'>

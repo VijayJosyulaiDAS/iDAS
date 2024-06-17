@@ -8,6 +8,7 @@ import {
     SizeColumnsToFitGridStrategy,
     SizeColumnsToFitProvidedWidthStrategy
 } from "@ag-grid-community/core";
+import {toast, ToastContainer} from "react-toastify";
 
 /**
  * M1Content
@@ -25,8 +26,10 @@ function ProductionContent() {
         try {
             let response = await axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/production_data`);
             setRowData(response.data.data);
+            // toast.success('Data loaded successfully.', { autoClose: 1500 });
         } catch (error) {
             console.error('Failed to fetch recommendations:', error);
+            toast.error(`Something Went Wrong while fetching data.`, {autoClose: 1500})
         }
     };
 
@@ -53,7 +56,8 @@ function ProductionContent() {
 
     return (
         <div className="flex-auto w-full h-full p-24 sm:p-40">
-                <div className="ag-theme-quartz" style={{ height: 680 }}>
+            <ToastContainer style={{marginTop: '50px'}}/>
+            <div className="ag-theme-quartz" style={{ height: 680 }}>
                     <AgGridReact
                         rowData={rowData}
                         pagination={true}

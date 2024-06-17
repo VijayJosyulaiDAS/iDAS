@@ -60,7 +60,7 @@ function LandingPage() {
                 setLeftSidebarOpen(false);
             }}
             leftSidebarContent={<LandingPageSideBar onItemClick={handleSidebarItemClick} />}
-            leftSidebarWidth={300}
+            leftSidebarWidth={320}
             scroll="content"
         />
     );

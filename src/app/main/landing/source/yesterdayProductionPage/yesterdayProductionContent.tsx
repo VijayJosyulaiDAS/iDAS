@@ -3,33 +3,31 @@ import { AgGridReact } from 'ag-grid-react';
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import axios from "axios";
-import {toast, ToastContainer} from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
 
 /**
  * BomContent
  */
-function BomContent() {
+function YesterdayProductionContent() {
     const [rowData, setRowData] = useState();
     const [colDefs, setColDefs] = useState([
-        { field: "id_of_product_material", headerName: "Product Material", filter: true },
-        { field: "bill_of_material", headerName: "Bill Of Material", filter: true },
-        { field: "bom_component", headerName: "BOM Component", filter: true },
-        { field: "base_unit_of_measure", headerName: "Base Unit Of Measure", filter: true },
+        { field: "material", headerName: "Material", filter: true },
+        { field: "material_description", headerName: "Material Description", filter: true },
+        { field: "plant", headerName: "Plant", filter: true },
+        { field: "valid_from", headerName: "Valid From", filter: true },
+        { field: "valid_to", headerName: "Valid to", filter: true },
+        { field: "confirmed_quantity", headerName: "Confirmed Quantity", filter: true },
+        { field: "component", headerName: "Component", filter: true},
+        { field: "material_description", headerName: "Material Description.1", filter: true},
         { field: "quantity", headerName: "Component quantity", filter: true},
-        { field: "component_scrap_in_percent", headerName: "Component Scrap (%)", filter: true},
-        { field: "insertion_date", headerName: "Insertion Date", filter: true},
+        { field: "component_unit", headerName: "Component unit", filter: true},
     ]);
 
     const fetchData = async () => {
         try {
             let response = await axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/bom_data`);
             setRowData(response.data.data);
-            toast.success('Data loaded successfully.', { autoClose: 1500 });
         } catch (error) {
-            toast.dismiss();
-            toast.error(`Something Went Wrong while fetching data.`, {autoClose: 1500})
-            console.error('Failed to fetch bom data:', error);
+            console.error('Failed to fetch recommendations:', error);
         }
     };
 
@@ -45,7 +43,6 @@ function BomContent() {
 
     return (
         <div className="flex-auto w-full h-full p-24 sm:p-40">
-            <ToastContainer style={{marginTop: '50px'}}/>
                 <div className="ag-theme-quartz" style={{ height: 680 }}>
                     <AgGridReact
                         rowData={rowData}
@@ -59,4 +56,4 @@ function BomContent() {
     );
 };
 
-export default BomContent;
+export default YesterdayProductionContent;

@@ -19,5 +19,9 @@ module.exports.user ={
     role:{
         type:Sequelize.STRING,
         allowNull:false
+    },
+    business_unit_name:{
+        type:Sequelize.STRING,
+        allowNull:false
     }
 }

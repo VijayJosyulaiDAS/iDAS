@@ -12,6 +12,9 @@ import M1Page from "./source/m1Page/m1Page";
 import ProductionPage from "./source/productionPage/productionPage";
 import MrpPage from "./source/mrpPage/mrpPage";
 import PoPage from "./source/posPage/poPage";
+import UpcomingProductionPage from "./source/upcomingProductionPage/upcomingProductionPage";
+import StockSummaryPage from "./source/stockSummaryPage/stockSummaryPage";
+import YesterdayProductionPage from "./source/yesterdayProductionPage/yesterdayProductionPage";
 
 
 const LandingConfig = {
@@ -66,6 +69,18 @@ const LandingConfig = {
         {
         path: '/apps/source/pos',
         element: <PoPage/>
+        },
+        {
+        path: '/apps/source/upcoming_production',
+        element: <UpcomingProductionPage/>
+        },
+        {
+        path: '/apps/source/yesterday_production',
+        element: <YesterdayProductionPage/>
+        },
+        {
+        path: '/apps/source/stock_summary',
+        element: <StockSummaryPage/>
         }
     ]
 };
