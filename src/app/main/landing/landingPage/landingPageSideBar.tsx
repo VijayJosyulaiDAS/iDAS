@@ -61,7 +61,7 @@ function landingPageSideBar(props) {
 	return (
 		<div className="py-24 ">
 			<div className=" ml-24 text-3xl font-bold ">
-				Use Cases List
+				Skills
 			</div>
 			{
 				loading ? (

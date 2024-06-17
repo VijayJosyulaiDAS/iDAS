@@ -10,11 +10,11 @@ let getUseCases = async (req, res) => {
         });
         const titles =  data.map((item) => item.title);
         const getCounts = async (useCaseId) => {
-            const queryOpenCount = `SELECT COUNT(*) as openCount FROM [dbo].[tbl_recommendations] WHERE active = 1 AND use_case_id = '${useCaseId}' and active = 1 and best_alternative = 1`;
+            const queryOpenCount = `SELECT COUNT(*) as openCount FROM [dbo].[orders_amendment] WHERE active = 1 AND use_case_id = '${useCaseId}' and best_alternative = 1`;
             const openCount = await sequelize.query(queryOpenCount, {
                 type: sequelize.QueryTypes.SELECT
             });
-            const queryCloseCount = `SELECT COUNT(*) as closeCount FROM [dbo].[tbl_recommendations] WHERE active = 0 AND use_case_id = '${useCaseId}'`;
+            const queryCloseCount = `SELECT COUNT(*) as closeCount FROM [dbo].[orders_amendment] WHERE active = 0 AND use_case_id = '${useCaseId}'`;
             const closeCount = await sequelize.query(queryCloseCount, {
                 type: sequelize.QueryTypes.SELECT
             });
