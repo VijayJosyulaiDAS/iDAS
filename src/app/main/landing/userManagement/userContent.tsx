@@ -19,7 +19,7 @@ function UserContent() {
         { field: "id", headerName: "User ID", filter: true },
         { field: "name", headerName: "Name", filter: true},
         { field: "email", headerName: "User Email", filter: true},
-        { field: "role", headerName: "Role", filter: true, cellEditor: 'agSelectCellEditor',
+        { field: "role", headerName: "Role", filter: true, editable: true, cellEditor: 'agSelectCellEditor',
             cellEditorParams: {
                 values: ['user', 'admin']
             }},

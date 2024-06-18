@@ -5,7 +5,7 @@ const authRoles = {
 	/**
 	 * The admin role grants access to users with the 'admin' role.
 	 */
-	admin: ['admin'],
+	admin: ['admin','user'],
 
 	/**
 	 * The staff role grants access to users with the 'admin' or 'staff' role.

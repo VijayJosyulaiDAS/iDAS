@@ -111,7 +111,7 @@ function AuthRouteProvider(props: AuthProviderProps) {
 
 			const user = UserModel({
 				uid: _user.uid,
-				role: ['admin'],
+				role: ['admin','user'],
 				data: {
 					displayName,
 					email: _user.email

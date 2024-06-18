@@ -90,6 +90,7 @@ const LandingConfig = {
         },
         {
         path: '/apps/user_management',
+        auth: ['admin'],
         element: <UserPage/>
         }
     ]
