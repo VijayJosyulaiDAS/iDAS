@@ -1,5 +1,6 @@
 const { sequelize } = require('../../connection/sql_connection');
 const util = require('../../util');
+const {where} = require("sequelize");
 
 
 let getUseCases = async (req, res) => {
@@ -42,8 +43,22 @@ let createUseCases = async (req, res) => {
         res.status(500).send({ successful: false, error: e });
     }
 };
+let updateUseCases = async (req, res) => {
+    try {
+        let data = req.body
+        await util.model.use_cases.update(data, {
+                where: {
+                    id: data.use_case_id
+                }
+            })
+        res.status(200).send({ successful: true, message: 'data inserted successfully' });
+    } catch (e) {
+        res.status(500).send({ successful: false, error: e });
+    }
+};
 
 module.exports = {
     getUseCases,
-    createUseCases
+    createUseCases,
+    updateUseCases
 };

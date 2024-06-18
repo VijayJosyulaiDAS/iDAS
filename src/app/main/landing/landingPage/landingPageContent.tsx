@@ -38,7 +38,6 @@ function LandingPageContent(props) {
                 ...remainingItems
             ];
             setRowData(result);
-            toast.success('Data loaded successfully.', { autoClose: 1500 });
             setOpenCount(response.data.open);
             setCloseCount(response.data.close);
             tabData(response.data.data);

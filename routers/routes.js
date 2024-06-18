@@ -3,6 +3,7 @@ const HmacSHA256 = require('crypto-js/hmac-sha256');
 const Utf8 = require('crypto-js/enc-utf8');
 const jwtDecode = require("jwt-decode");
 const util = require("../util");
+const {sequelize} = require("../connection/sql_connection");
 const jwtSecret = 'some-secret-code-goes-here';
 
 function base64url(source) {
@@ -35,7 +36,7 @@ function generateJWTToken(tokenPayload) {
 	// Define token payload
 	const payload = {
 		iat,
-		iss: 'abbas',
+		iss: 'sidd',
 		exp,
 		...tokenPayload
 	};
@@ -111,14 +112,18 @@ module.exports = (app, passport) => {
         let token = generateJWTToken({id: profile.email})
         let {params} = req.user
         let data = jwtDecode(params.access_token);
+        let existingUser = await sequelize.query(`SELECT * FROM [dbo].[tbl_user] where email = '${profile.email}'`, {
+            type: sequelize.QueryTypes.SELECT,
+        });
         let user = {
             uid: profile.email,
-            role: 'admin',
+            role: existingUser[0].role,
             data: {
                 displayName: profile?.FirstName + " " + profile?.LastName,
                 photoURL: profile?.FirstName[0],
+                business_unit_name: existingUser[0].business_unit_name,
                 email: profile?.email,
-                loginRedirectUrl: '/example', //   <----- change home route
+                loginRedirectUrl: '/home',
             }
         };
         res.send({user: user, access_token: token})

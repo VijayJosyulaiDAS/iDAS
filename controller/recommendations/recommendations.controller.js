@@ -115,7 +115,7 @@ let getRecommendationByUseCases = async (req, res) => {
             ELSE NULL 
         END AS description,
         CASE 
-            WHEN [amendment] = 'yes' THEN 'amend' 
+            WHEN [amendment] = 'yes' THEN 'Amend' 
             ELSE NULL 
         END AS order_type,
         [Maximum stock level] AS maximum_stock_level, 

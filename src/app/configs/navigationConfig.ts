@@ -77,13 +77,13 @@ const navigationConfig: FuseNavItemType[] = [
 						icon: 'heroicons-outline:table',
 						url: '/apps/source/mrp'
 					},
-					{
-						id: 'source.pos',
-						title: "PO's Data",
-						type: 'item',
-						icon: 'heroicons-outline:table',
-						url: '/apps/source/pos'
-					},
+					// {
+					// 	id: 'source.pos',
+					// 	title: "PO's Data",
+					// 	type: 'item',
+					// 	icon: 'heroicons-outline:table',
+					// 	url: '/apps/source/pos'
+					// },
 					{
 						id: 'source.upcoming_production',
 						title: "Upcoming Production",
@@ -120,14 +120,15 @@ const navigationConfig: FuseNavItemType[] = [
 		title: 'User Management',
 		translate: 'DATA_SOURCES',
 		type: 'group',
-		icon: 'heroicons-outline:document-text',
+		auth: ['admin'],
+		icon: 'heroicons-outline:user-group',
 		subtitle: 'Manage user roles and permission.',
 		children: [
 			{
 				id: 'user_management.user',
 				title: 'User Data',
 				type: 'item',
-				icon: 'heroicons-outline:table',
+				icon: 'heroicons-outline:user-group',
 				url: '/apps/user_management'
 			}
 		]

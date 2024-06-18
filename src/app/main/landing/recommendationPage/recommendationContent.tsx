@@ -140,7 +140,7 @@ function RecommendationPageContent(props) {
     const cardData  = {
         title: recommendation.description,
         date: formatDateString(recommendation.due_date ? recommendation.due_date : recommendation.createdAt),
-        description: `The Demand Forecast is predicting an ${recommendation.demand_type} in Demand of ${recommendation.demand_value} for the Material Code ${recommendation.material_code}. Based on the available inventory of ${recommendation.available_inventory_value} and a Lead Time 
+        description: `The Demand Forecast is predicting an ${recommendation.demand_type} in Demand of ${(recommendation.demand_value).toFixed(2)} for the Material Code ${recommendation.material_code}. Based on the available inventory of ${recommendation.available_inventory_value} and a Lead Time 
             of ${recommendation.lead_time} days, you should ${recommendation.order_type} ${recommendation.po_number} with the Quantity ${recommendation.po_quantity_value}`
     }
 
@@ -266,6 +266,11 @@ function RecommendationPageContent(props) {
 
         // Configure tooltip
         pieSeries.slices.template.tooltipText = "{description}";
+
+        pieSeries.labels.template.text = "{category}: {value}";
+        pieSeries.labels.template.adapter.add("text", function(text, target) {
+            return text.replace("%", "");
+        });
 
         // Add hover state
         pieSeries.slices.template.states.getKey("hover").properties.scale = 1.1;

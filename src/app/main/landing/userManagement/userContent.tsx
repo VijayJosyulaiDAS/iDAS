@@ -19,8 +19,14 @@ function UserContent() {
         { field: "id", headerName: "User ID", filter: true },
         { field: "name", headerName: "Name", filter: true},
         { field: "email", headerName: "User Email", filter: true},
-        { field: "role", headerName: "Role", filter: true},
-        { field: "business_unit_name", headerName: "Business Unit Name", filter: true}
+        { field: "role", headerName: "Role", filter: true, cellEditor: 'agSelectCellEditor',
+            cellEditorParams: {
+                values: ['user', 'admin']
+            }},
+        { field: "business_unit_name", headerName: "Business Unit Name", filter: true,  editable: true,  cellEditor: 'agSelectCellEditor',
+            cellEditorParams: {
+                values: ['Hair Care', 'Shave care', 'Feminine Care', 'Baby Care', 'Fabric Care', 'Health Care', 'Home Care', 'Oral Care', 'Shave Care', 'Skin & Personal Care', 'IT']
+            }}
     ]);
 
     const fetchData = async () => {
@@ -33,6 +39,12 @@ function UserContent() {
             console.error('Failed to fetch recommendations:', error);
         }
     };
+
+
+    const updateUser = async (data) => {
+        let response = await axios.put(`${import.meta.env.VITE_LOCAL_BASE_URL}/update_user`,data);
+        fetchData()
+    }
 
 
     useEffect(() => {
@@ -54,6 +66,23 @@ function UserContent() {
     const handleRowClick = (params) => {
     };
 
+    const handleCellValueChanged = (event) => {
+        const { oldValue, newValue, data, colDef, column } = event;
+        console.log('Old Value:', oldValue);
+        console.log('New Value:', newValue);
+        console.log('Data:', data);
+        console.log('Column:', colDef.field);
+        let obj = {
+            email: data.email,
+            business_unit_name: data.business_unit_name,
+            role: data.role
+        }
+        updateUser(obj).then(r => {
+            console.log(r)
+        })
+        fetchData();
+    };
+
 
     return (
         <div className="flex-auto w-full h-full p-24 sm:p-40">
@@ -66,6 +95,7 @@ function UserContent() {
                     autoSizeStrategy={autoSizeStrategy}
                     columnDefs={colDefs}
                     onRowClicked={handleRowClick}
+                    onCellValueChanged={handleCellValueChanged}
                 />
             </div>
         </div>

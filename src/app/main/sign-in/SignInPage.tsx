@@ -55,7 +55,7 @@ const tabs = [
 						severity="info"
 						className="mt-24 px-16 text-13 leading-relaxed"
 					>
-						You are browsing <b>Intelligent Decision Automation System</b>. Click on the "Employee Login" button to access the Dashboard.
+						You are browsing the <b>Intelligent Decision Automation System (iDAS)</b>. Click on the "Employee Login" button to access the Dashboard.
 					</Alert>
 
 					<Tabs style={{display: 'none'}}

@@ -29,13 +29,13 @@ module.exports = (passport) => {
     }, 
     async function (accessToken, refreshToken, params, profile, done) {
       console.log("accesstoken1", accessToken, "--2--", refreshToken, "--3--", params, "--4--", profile, "--5--", done)
+      let existingUser = await util.model.User.findOne({where: {email: profile?.email}})
       let data = {
         name: profile?.FirstName + " " + profile?.LastName,
         email: profile?.email,
-        role: 'admin',
-        business_unit_name: '',
+        role: existingUser.role,
+        business_unit_name: existingUser.business_unit_name,
       }
-      let existingUser = await util.model.User.findOne({where: {email: profile?.email}})
       if (existingUser) {
         return done(null, {accessToken: accessToken, refreshToken: refreshToken, params: params, profile: profile})
       }else{

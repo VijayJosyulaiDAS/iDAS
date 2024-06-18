@@ -22,7 +22,7 @@ function homeContent() {
     const[openCount, setOpenCount] = useState<number>(0);
     const [greet, setGreet] = useState('');
     const [loading, setLoading] = useState(false);
-    const [selectedTab, setSelectedTab] = useState('favorites');
+    const [selectedTab, setSelectedTab] = useState('recents');
     const [favorite, setFavorite] = useState([])
     const [recent, setRecent] = useState([])
 
@@ -55,7 +55,6 @@ function homeContent() {
         let response = await axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/get_useCases`)
         // Define the order
         const order = ["Supplier PO Amendments" ,"Firm Zone Production Adjustments"];
-
         // Separate the items based on the order
         const orderedItems = response.data.data.filter(item => order.includes(item.title));
         const remainingItems = response.data.data.filter(item => !order.includes(item.title));
@@ -68,6 +67,7 @@ function homeContent() {
         const data = result.filter((item) => item.favorite)
         setFavorite(data)
         setUseCases(result)
+        setRecent(result)
         setLoading(false)
         setOpenCount(response.data.open)
     }
@@ -82,13 +82,16 @@ function homeContent() {
     const handleClick = (event) =>{
         navigate('/apps/landing')
     }
-    const handleChange = (data) =>{
-        console.log(data)
-
+    const handleChange = async (data) => {
+        let obj = {
+            use_case_id: data.id,
+            favorite: !data.favorite,
+        }
+        await axios.put(`${import.meta.env.VITE_LOCAL_BASE_URL}/update_useCases`, obj)
+        fetchUseCases()
     }
 
     const handleCardClick = (event) =>{
-        console.log(event)
         navigate(`/apps/landing/${event.id}`, { state: useCases })
     }
 
@@ -113,14 +116,17 @@ function homeContent() {
                     backgroundImage: `url('assets/images/iDAS_Logo-removebg.png')`,
                     backgroundRepeat: "no-repeat",
                     backgroundPosition: "center",
-                    backgroundSize: "40%", // Adjust size here
-                    opacity: 0.3 // Adjust opacity here
+                    backgroundSize: "40%",
+                    opacity: 0.3
                 }}></div>
                 <div className='flex justify-between'>
                     <Typography
                         className="text-2xl md:text-5xl font-semibold m-96 tracking-tight leading-7 flex flex-col justify-between gap-10 md:leading-snug truncate">
                         <span>{`${greet},`}</span>
-                        <span className='text-4xl md:text-5xl font-bold tracking-tight leading-7 flex flex-col justify-between gap-10 md:leading-snug truncate'>{`${user.data.displayName}!`}</span>
+                        <span className=' flex flex-col justify-between gap-10 md:leading-snug truncate'>
+                            <span className='text-4xl md:text-5xl font-bold tracking-tight leading-7'>{`${user.data.displayName}!`}</span>
+                            <span>({user.data.business_unit_name})</span>
+                        </span>
                     </Typography>
                     <div className="m-12 w-1/4 flex lg:flex-col justify-center items-center md:flex-row sm:flex-row  overflow-x-scroll">
                         <div className="relative flex w-full items-start justify-center gap-20 pt-32">
@@ -139,65 +145,77 @@ function homeContent() {
                                 <span>Favorites</span>
                             </div>
                         </div>
-                        <Paper className="m-20 w-3/4 max-h-auto relative flex justify-start items-start lg:flex-col md:flex-row sm:flex-row"
+                        <Paper className="m-20 w-3/4 max-h-auto relative flex justify-start items-center lg:flex-col md:flex-row sm:flex-row"
                             style={{height: "70%"}}>
-                                <List className="py-0 mt-8 divide-y w-full">
-
-                                    {
-                                        selectedTab == 'recents' ? (
-                                            recent.map((item, index) => (
-                                                    <ListItem key={index} className="px-0 w-full">
+                            <List className="py-0 mt-8 divide-y w-full">
+                                {
+                                    loading ? (
+                                        <FuseLoading></FuseLoading>
+                                    ) : (
+                                        selectedTab === 'recents' ? (
+                                            recent.length > 0 ? (
+                                                recent.map((item, index) => (
+                                                    <ListItem key={index} className="px-0 w-full cursor-pointer" onClick={() => handleCardClick(item)}>
                                                         <ListItemText className='flex'
                                                                       classes={{root: 'px-8', primary: 'font-medium'}}
                                                                       primary={
                                                                           <span className="flex items-center flex-auto ">
-                                                        <FuseSvgIcon
-                                                            size={20}
-                                                        >
-                                                            material-twotone:history
-                                                        </FuseSvgIcon>
-                                                        <div className="mx-6 text-md flex flex-row">
-                                                            {item.title}
-                                                        </div>
-										            </span>
+                                              <FuseSvgIcon size={20}>
+                                                  material-twotone:history
+                                              </FuseSvgIcon>
+                                              <div className="mx-6 text-md flex flex-row">
+                                                  {item.title}
+                                              </div>
+                                          </span>
                                                                       }
                                                         />
                                                         <ListItemSecondaryAction>
-                                                            <IconButton aria-label="more" size="large">
+                                                            <IconButton aria-label="more" size="large" onClick={() => handleCardClick(item)}>
                                                                 <FuseSvgIcon>heroicons-solid:chevron-right</FuseSvgIcon>
                                                             </IconButton>
                                                         </ListItemSecondaryAction>
                                                     </ListItem>
                                                 ))
-
+                                            ) : (
+                                                <div className="px-8 py-4 text-center text-gray-500">
+                                                    No data found
+                                                </div>
+                                            )
                                         ) : (
-                                            favorite.map((item, index) => (
-                                                <ListItem key={index} className="px-0 w-full flex items-start justify-start">
-                                                    <ListItemText className='flex'
-                                                                  classes={{root: 'px-8', primary: 'font-medium'}}
-                                                                  primary={
-                                                                      <span className="flex items-start flex-auto justify-start">
-                                                        <FuseSvgIcon
-                                                            size={20}
-                                                        >
-                                                            heroicons-solid:star
-                                                        </FuseSvgIcon>
-                                                        <div className="mx-6 text-md flex flex-row">
-                                                            {item.title}
-                                                        </div>
-										            </span>
-                                                                  }
-                                                    />
-                                                    <ListItemSecondaryAction>
-                                                        <IconButton aria-label="more" size="large">
-                                                            <FuseSvgIcon>heroicons-solid:chevron-right</FuseSvgIcon>
-                                                        </IconButton>
-                                                    </ListItemSecondaryAction>
-                                                </ListItem>
-                                            ))
+                                            favorite.length > 0 ? (
+                                                favorite.map((item, index) => (
+                                                    <ListItem key={index} className="px-0 w-full flex items-start justify-start" onClick={() => handleCardClick(item)}>
+                                                        <ListItemText className='flex'
+                                                                      classes={{root: 'px-8', primary: 'font-medium'}}
+                                                                      primary={
+                                                                          <span className="flex items-start flex-auto justify-start">
+                                              <FuseSvgIcon size={20}>
+                                                  heroicons-solid:star
+                                              </FuseSvgIcon>
+                                              <div className="mx-6 text-md flex flex-row">
+                                                  {item.title}
+                                              </div>
+                                          </span>
+                                                                      }
+                                                        />
+                                                        <ListItemSecondaryAction>
+                                                            <IconButton aria-label="more" size="large" onClick={() => handleCardClick(item)}>
+                                                                <FuseSvgIcon>heroicons-solid:chevron-right</FuseSvgIcon>
+                                                            </IconButton>
+                                                        </ListItemSecondaryAction>
+                                                    </ListItem>
+                                                ))
+                                            ) : (
+                                                <div className="flex w-full h-full items-center justify-center text-gray-500">
+                                                    <div>No data found</div>
+                                                </div>
+                                            )
                                         )
-                                    }
-                                </List>
+                                    )
+                                }
+
+                            </List>
+
                         </Paper>
                     </div>
                 </div>
@@ -225,7 +243,7 @@ function homeContent() {
                                             </Typography>
                                         </div>
                                         <div
-                                            className="text-md font-medium md:mr-24  md:ml-24  line-clamp-2">{useCase.description}</div>
+                                            className="text-md font-medium md:mr-24  md:ml-24 line-clamp-2" title={useCase.description}>{useCase.description}</div>
                                     </div>
                                     <div className="flex justify-between gap-10 flex-col">
                                         <div

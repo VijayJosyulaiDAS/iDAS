@@ -10,6 +10,7 @@ export type User = {
 		displayName: string;
 		photoURL?: string;
 		email?: string;
+		business_unit_name?: string;
 		shortcuts?: string[];
 		settings?: Partial<FuseSettingsConfigType>;
 		loginRedirectUrl?: string; // The URL to redirect to after login.
