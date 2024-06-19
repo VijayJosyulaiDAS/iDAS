@@ -9,13 +9,9 @@ import { Layout1ConfigDefaultsType } from 'app/theme-layouts/layout1/Layout1Conf
 import NavbarToggleButton from 'app/theme-layouts/shared-components/navbar/NavbarToggleButton';
 import { selectFuseNavbar } from 'app/theme-layouts/shared-components/navbar/navbarSlice';
 import { useAppSelector } from 'app/store/hooks';
-import AdjustFontSize from '../../shared-components/AdjustFontSize';
+import NotificationPanelToggleButton from '../../../shared-components/notifications/NotificationPanelToggleButton';
 import FullScreenToggle from '../../shared-components/FullScreenToggle';
-import LanguageSwitcher from '../../shared-components/LanguageSwitcher';
-import NavigationShortcuts from '../../shared-components/navigation/NavigationShortcuts';
-import NavigationSearch from '../../shared-components/navigation/NavigationSearch';
 import UserMenu from '../../shared-components/UserMenu';
-import QuickPanelToggleButton from '../../shared-components/quickPanel/QuickPanelToggleButton';
 
 type ToolbarLayout1Props = {
 	className?: string;
@@ -71,6 +67,7 @@ function ToolbarLayout1(props: ToolbarLayout1Props) {
 					</div>
 
 					<div className="flex h-full items-center overflow-x-auto px-8">
+						<NotificationPanelToggleButton />
 						<FullScreenToggle />
 						<UserMenu />
 					</div>

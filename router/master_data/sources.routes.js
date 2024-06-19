@@ -14,13 +14,17 @@ const ctReport_Data = require("../../controller/master_data/ct_report.controller
 router.get('/bom_data', bom_data.getBomData)
 router.get('/m1_data', m1_data.getM1Data)
 router.get('/pos_data', pos_data.getPOsData)
-router.get('/mrp_data', mrp_data.getMRPData)
 router.get('/production_data', production_data.getProductionData)
 router.get('/ct_report', ctReport_Data.ctReport_Data)
 
 // ============stock summary data ========================
 router.get('/stock_summary', stock_summary.stock_summaryData)
 router.post('/create_stock_summary', stock_summary.create_stock_summary)
+
+// ==============Mrp data=====================
+router.get('/mrp_data', mrp_data.getMRPData)
+router.post('/create_mrp', mrp_data.mrpData)
+
 
 
 module.exports = router;

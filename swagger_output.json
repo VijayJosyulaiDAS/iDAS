@@ -355,19 +355,6 @@
         }
       }
     },
-    "/api/mrp_data": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
     "/api/production_data": {
       "get": {
         "description": "",
@@ -408,6 +395,32 @@
       }
     },
     "/api/create_stock_summary": {
+      "post": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/mrp_data": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/create_mrp": {
       "post": {
         "description": "",
         "responses": {

@@ -121,11 +121,11 @@ function homeContent() {
                 }}></div>
                 <div className='flex justify-between'>
                     <Typography
-                        className="text-2xl md:text-5xl font-semibold m-96 tracking-tight leading-7 flex flex-col justify-between gap-10 md:leading-snug truncate">
-                        <span>{`${greet},`}</span>
-                        <span className=' flex flex-col justify-between gap-10 md:leading-snug truncate'>
+                        className="font-semibold m-96 tracking-tight leading-7 flex flex-col justify-between gap-10 md:leading-snug truncate">
+                        <span className='text-2xl md:text-5xl '>{`${greet},`}</span>
+                        <span className='flex flex-col justify-between gap-10 md:leading-snug truncate'>
                             <span className='text-4xl md:text-5xl font-bold tracking-tight leading-7'>{`${user.data.displayName}!`}</span>
-                            <span>({user.data.business_unit_name})</span>
+                            <span className='text-3xl'>({user.data.business_unit_name})</span>
                         </span>
                     </Typography>
                     <div className="m-12 w-1/4 flex lg:flex-col justify-center items-center md:flex-row sm:flex-row  overflow-x-scroll">

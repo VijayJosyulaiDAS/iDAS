@@ -42,6 +42,10 @@ function BomContent() {
     const handleRowClick = (params) => {
     };
 
+    const onGridReady = (params) => {
+        params.api.sizeColumnsToFit();
+    };
+
 
     return (
         <div className="flex-auto w-full h-full p-24 sm:p-40">
@@ -52,6 +56,7 @@ function BomContent() {
                         pagination={true}
                         paginationPageSize={100}
                         columnDefs={colDefs}
+                        onGridReady={onGridReady}
                         onRowClicked={handleRowClick}
                     />
                 </div>

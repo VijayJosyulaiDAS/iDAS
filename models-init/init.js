@@ -5,6 +5,7 @@ const {use_cases} = require("../model/use_cases/use_case.model");
 const {recommendations} = require("../model/recommendations/recommendations.model");
 const {alternative_recommendations} = require("../model/alternative_recommendations/alternative_recommendations");
 const {stock_summary} = require("../model/master_data/stock_summary");
+const {mrp} = require("../model/master_data/mrp");
 
 
 let utils = async function (sequelize) {
@@ -16,6 +17,7 @@ let utils = async function (sequelize) {
         util.model.recommendations =  sequelize.define("tbl_recommendations", recommendations, {freezeTableName : true})
         util.model.alternative_recommendations =  sequelize.define("tbl_alternative_recommendations", alternative_recommendations, {freezeTableName : true})
         util.model.stock_summary =  sequelize.define("tbl_stock_summary", stock_summary, {freezeTableName : true})
+        util.model.mrp =  sequelize.define("tbl_mrp", mrp, {freezeTableName : true})
 
 
         // =====Table Sync After Association =========//
@@ -24,6 +26,7 @@ let utils = async function (sequelize) {
         await util.model.use_cases.sync()
         await util.model.recommendations.sync()
         await util.model.alternative_recommendations.sync()
+        await util.model.mrp.sync()
 
         // =====================Master Table=======================
         await util.model.stock_summary.sync({force: true})

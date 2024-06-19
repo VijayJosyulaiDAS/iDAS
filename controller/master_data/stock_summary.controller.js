@@ -15,6 +15,7 @@ let stock_summaryData = async (req, res) => {
         res.status(500).send({successful: false, error: e});
     }
 };
+
 let create_stock_summary = async (req, res) => {
     try {
         const read2 = reader.readFile("/home/sidd/Downloads/STOCK SUMMARY (BUOM).xlsx")

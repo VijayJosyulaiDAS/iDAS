@@ -117,11 +117,11 @@ module.exports = (app, passport) => {
         });
         let user = {
             uid: profile.email,
-            role: existingUser[0].role,
+            role: existingUser[0].role ? existingUser[0].role : 'user',
             data: {
                 displayName: profile?.FirstName + " " + profile?.LastName,
                 photoURL: profile?.FirstName[0],
-                business_unit_name: existingUser[0].business_unit_name,
+                business_unit_name: existingUser[0].business_unit_name ? existingUser[0].business_unit_name : '',
                 email: profile?.email,
                 loginRedirectUrl: '/home',
             }
