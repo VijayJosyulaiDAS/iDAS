@@ -33,7 +33,7 @@ module.exports = (passport) => {
       let data = {
         name: profile?.FirstName + " " + profile?.LastName,
         email: profile?.email,
-        role: existingUser?.role ? existingUser.role : 'user',
+        role: existingUser?.role ? existingUser?.role : 'user',
         business_unit_name: existingUser?.business_unit_name ? existingUser?.business_unit_name: '' ,
       }
       if (existingUser) {
