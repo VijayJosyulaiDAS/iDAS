@@ -11,32 +11,23 @@ import {
 import {toast, ToastContainer} from "react-toastify";
 
 /**
- * M1Content
+ * ProductionContent
  */
-function ProductionContent() {
+function ProductionContent({jsonData}) {
     const [rowData, setRowData] = useState();
     const [colDefs, setColDefs] = useState([
         { field: "apo_product", headerName: "APO Product", filter: true },
         { field: "produced", headerName: "Produced", filter: true},
         { field: "insertion_date", headerName: "Insertion Date", filter: true},
-        { field: "date", headerName: "Date", filter: true},
+        { field: "date", headerName: "Date", filter: true, cellRenderer: params => {
+                return params.value?.split('T')[0];
+            }},
     ]);
 
-    const fetchData = async () => {
-        try {
-            let response = await axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/production_data`);
-            setRowData(response.data.data);
-            // toast.success('Data loaded successfully.', { autoClose: 1500 });
-        } catch (error) {
-            console.error('Failed to fetch recommendations:', error);
-            toast.error(`Something Went Wrong while fetching data.`, {autoClose: 1500})
-        }
-    };
-
-
     useEffect(() => {
-        fetchData();
-    }, []);
+        setRowData(jsonData)
+    }, [jsonData]);
+
 
     const autoSizeStrategy = useMemo<
         | SizeColumnsToFitGridStrategy
@@ -62,6 +53,7 @@ function ProductionContent() {
                         rowData={rowData}
                         pagination={true}
                         paginationPageSize={100}
+                        suppressMenuHide={true}
                         autoSizeStrategy={autoSizeStrategy}
                         columnDefs={colDefs}
                         onRowClicked={handleRowClick}

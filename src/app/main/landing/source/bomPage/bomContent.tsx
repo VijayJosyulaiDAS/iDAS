@@ -25,10 +25,8 @@ function BomContent() {
         try {
             let response = await axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/bom_data`);
             setRowData(response.data.data);
-            toast.success('Data loaded successfully.', { autoClose: 1500 });
         } catch (error) {
-            toast.dismiss();
-            toast.error(`Something Went Wrong while fetching data.`, {autoClose: 1500})
+            toast.error(`Something Went Wrong while fetching data.`, {autoClose: 500})
             console.error('Failed to fetch bom data:', error);
         }
     };
@@ -56,6 +54,7 @@ function BomContent() {
                         pagination={true}
                         paginationPageSize={100}
                         columnDefs={colDefs}
+                        suppressMenuHide={true}
                         onGridReady={onGridReady}
                         onRowClicked={handleRowClick}
                     />

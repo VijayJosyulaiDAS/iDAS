@@ -13,15 +13,12 @@ function M1Content() {
     const [colDefs, setColDefs] = useState([
         { field: "reporting_country", headerName: "Reporting Country", filter: true },
         { field: "brand", headerName: "Brand", filter: true },
-        { field: "organization", headerName: "Organization", filter: true },
         { field: "customer_group", headerName: "Customer Group", filter: true },
-        { field: "sfu_version", headerName: "SFU Version", filter: true },
         { field: "apo_product", headerName: "APO Product", filter: true },
         { field: "product_description", headerName: "Product Description", filter: true},
-        { field: "overall", headerName: "Overall", filter: true},
-        { field: "plant_codes", headerName: "Plant Codes", filter: true},
-        { field: "distributors", headerName: "Distributors", filter: true},
-        { field: "source_dc", headerName: "Source DC", filter: true},
+        { field: "overall", headerName: "Overall (SU)", filter: true, cellRenderer: params => {
+                return (params.value).toFixed(2);
+            } },
         { field: "date", headerName: "Date", filter: true},
     ]);
 
@@ -55,6 +52,7 @@ function M1Content() {
                         pagination={true}
                         paginationPageSize={100}
                         columnDefs={colDefs}
+                        suppressMenuHide={true}
                         onRowClicked={handleRowClick}
                     />
                 </div>

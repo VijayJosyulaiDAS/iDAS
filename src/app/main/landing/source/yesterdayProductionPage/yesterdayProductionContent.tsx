@@ -5,36 +5,24 @@ import "ag-grid-community/styles/ag-theme-quartz.css";
 import axios from "axios";
 
 /**
- * BomContent
+ * YesterdayProductionContent
  */
-function YesterdayProductionContent() {
+function YesterdayProductionContent({jsonData}) {
     const [rowData, setRowData] = useState();
     const [colDefs, setColDefs] = useState([
-        { field: "material", headerName: "Material", filter: true },
-        { field: "material_description", headerName: "Material Description", filter: true },
         { field: "plant", headerName: "Plant", filter: true },
-        { field: "valid_from", headerName: "Valid From", filter: true },
-        { field: "valid_to", headerName: "Valid to", filter: true },
-        { field: "confirmed_quantity", headerName: "Confirmed Quantity", filter: true },
-        { field: "component", headerName: "Component", filter: true},
-        { field: "material_description", headerName: "Material Description.1", filter: true},
-        { field: "quantity", headerName: "Component quantity", filter: true},
-        { field: "component_unit", headerName: "Component unit", filter: true},
+        { field: "line_code", headerName: "Line Code", filter: true },
+        { field: "prod_id", headerName: "Prod id", filter: true },
+        { field: "prod_name", headerName: "Prod Name", filter: true },
+        { field: "plan_order_qty", headerName: "Plan Order Qty", filter: true },
+        { field: "confirmed_order_qty", headerName: "Confirmed Order Qty", filter: true },
+        { field: "plan_order_qty_boum", headerName: "Plan Order Qty (BOUM)", filter: true },
+        { field: "confirmed_order_qty_boum", headerName: "Confirmed Order Qty (BOUM)", filter: true },
     ]);
 
-    const fetchData = async () => {
-        try {
-            let response = await axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/bodm_data`);
-            setRowData(response.data.data);
-        } catch (error) {
-            console.error('Failed to fetch recommendations:', error);
-        }
-    };
-
-
     useEffect(() => {
-        fetchData();
-    }, []);
+        setRowData(jsonData)
+    }, [jsonData]);
 
 
     const handleRowClick = (params) => {
@@ -49,6 +37,7 @@ function YesterdayProductionContent() {
                         pagination={true}
                         paginationPageSize={100}
                         columnDefs={colDefs}
+                        suppressMenuHide={true}
                         onRowClicked={handleRowClick}
                     />
                 </div>

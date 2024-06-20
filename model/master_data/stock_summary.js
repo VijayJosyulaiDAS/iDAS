@@ -40,8 +40,12 @@ module.exports.stock_summary ={
         type:Sequelize.STRING,
         allowNull: true,
     },
-    sap_dfc:{
-        type:Sequelize.BOOLEAN,
+    sap_dfc_mrp_avail:{
+        type:Sequelize.STRING,
+        allowNull: true,
+    },
+    sap_dfc_plant_stock:{
+        type:Sequelize.STRING,
         allowNull: true,
     },
     iwl_status:{

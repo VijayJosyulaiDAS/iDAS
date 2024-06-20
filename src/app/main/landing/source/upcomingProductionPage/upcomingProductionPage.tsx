@@ -1,8 +1,9 @@
 import { styled } from '@mui/material/styles';
-import { useRef} from "react";
+import {useEffect, useRef, useState} from "react";
 import FusePageSimple from "@fuse/core/FusePageSimple";
 import UpcomingProductionHeader from "./upcomingProductionHeader";
 import UpcomingProductionContent from "./upcomingProductionContent";
+import axios from "axios";
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
     '& .FusePageSimple-header': {
@@ -18,14 +19,31 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
  */
 function UpcomingProductionPage() {
     const pageLayout = useRef(null);
+    const [uploaded, setUpload] = useState(false)
+    const [jsonData, setJsonData] = useState(null);    console.log(uploaded)
+
+    const handleUpload = (item) => {
+        setUpload(true)
+    };
+    const fetchData = async () => {
+        try {
+            let response = await axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/upcoming_production`);
+            setJsonData(response.data.data);
+        } catch (error) {
+            console.error('Failed to fetch recommendations:', error);
+        }
+    };
+    useEffect(() => {
+        fetchData();
+    }, [uploaded]);
 
     return (
         <Root
             header={
-                <UpcomingProductionHeader/>
+                <UpcomingProductionHeader onUpload={handleUpload} jsonData={jsonData}/>
             }
             ref={pageLayout}
-            content={<UpcomingProductionContent />}
+            content={<UpcomingProductionContent jsonData={jsonData}/>}
             scroll="content"
         />
     );

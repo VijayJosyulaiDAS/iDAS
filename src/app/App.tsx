@@ -12,6 +12,8 @@ import { useAppSelector } from 'app/store/hooks';
 import { useSelector } from 'react-redux';
 import withAppProviders from './withAppProviders';
 import { AuthRouteProvider } from './auth/AuthRouteProvider';
+import {toast, ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 // import axios from 'axios';
 /**

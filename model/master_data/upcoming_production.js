@@ -1,6 +1,6 @@
 const Sequelize = require("sequelize");
 
-module.exports.mrp ={
+module.exports.upcoming_production ={
     id:{
         type:Sequelize.UUID,
         defaultValue : Sequelize.UUIDV4,
@@ -12,64 +12,40 @@ module.exports.mrp ={
         type:Sequelize.STRING,
         allowNull: true,
     },
-    category:{
+    schedule_start_date_year:{
         type:Sequelize.STRING,
         allowNull: true,
     },
-    material_code:{
+    schedule_start_date_month:{
         type:Sequelize.STRING,
         allowNull: true,
     },
-    material_desc:{
+    schedule_start_date_day:{
         type:Sequelize.STRING,
         allowNull: true,
     },
-    mrp:{
+    line_code:{
         type:Sequelize.STRING,
         allowNull: true,
     },
-    mrp_type:{
+    prod_id:{
         type:Sequelize.STRING,
         allowNull: true,
     },
-    availability_check:{
+    prod_name:{
         type:Sequelize.STRING,
         allowNull: true,
     },
-    rounding_value:{
+    plan_order_qty:{
         type:Sequelize.STRING,
         allowNull: true,
     },
-    planned_delivery_time:{
+    plan_order_qty_boum:{
         type:Sequelize.STRING,
         allowNull: true,
     },
-    good_receipt_procc:{
+    order_num:{
         type:Sequelize.STRING,
         allowNull: true,
-    },
-    total_replenishment:{
-        type:Sequelize.STRING,
-        allowNull: true
-    },
-    safety_stock:{
-        type:Sequelize.STRING,
-        allowNull: true
-    },
-    safety_time:{
-        type:Sequelize.STRING,
-        allowNull: true
-    },
-    procurement_type:{
-        type:Sequelize.STRING,
-        allowNull: true
-    },
-    minimum_lot_size:{
-        type:Sequelize.STRING,
-        allowNull: true
-    },
-    base_unit_of_measure:{
-        type:Sequelize.STRING,
-        allowNull: true
     }
 }

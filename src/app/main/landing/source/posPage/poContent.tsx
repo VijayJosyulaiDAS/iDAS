@@ -13,7 +13,7 @@ import {toast, ToastContainer} from "react-toastify";
 /**
  * M1Content
  */
-function PoContent() {
+function PoContent({jsonData}) {
     const [rowData, setRowData] = useState();
     const [colDefs, setColDefs] = useState([
         { field: "Material", headerName: "Material", filter: true, width: 120  },
@@ -49,21 +49,9 @@ function PoContent() {
         { field: "insertion_date", headerName: "Insertion Date", filter: true, width: 120}
     ]);
 
-    const fetchData = async () => {
-        try {
-            let response = await axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/pos_data`);
-            setRowData(response.data.data);
-            // toast.success('Data loaded successfully.', { autoClose: 1500 });
-        } catch (error) {
-            toast.error(`Something Went Wrong while fetching data.`, {autoClose: 1500})
-            console.error('Failed to fetch recommendations:', error);
-        }
-    };
-
-
     useEffect(() => {
-        fetchData();
-    }, []);
+        setRowData(jsonData)
+    }, [jsonData]);
 
     const autoSizeStrategy = useMemo<
         | SizeColumnsToFitGridStrategy
@@ -90,6 +78,7 @@ function PoContent() {
                         pagination={true}
                         paginationPageSize={100}
                         columnDefs={colDefs}
+                        suppressMenuHide={true}
                         onRowClicked={handleRowClick}
                     />
                 </div>

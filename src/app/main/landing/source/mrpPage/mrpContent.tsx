@@ -13,32 +13,25 @@ import {toast, ToastContainer} from "react-toastify";
 /**
  * M1Content
  */
-function MrpContent() {
+function MrpContent({jsonData}) {
     const [rowData, setRowData] = useState();
     const [colDefs, setColDefs] = useState([
-        { field: "material", headerName: "Material", filter: true },
-        { field: "material_stock_level", headerName: "Material Stock Level", filter: true},
-        { field: "rounding_value", headerName: "Rounding Value", filter: true},
+        { field: "category", headerName: "Category", filter: true},
+        { field: "material_code", headerName: "Material Code", filter: true},
+        { field: "material_desc", headerName: "Material Desc", filter: true},
+        { field: "mrp", headerName: "MRP", filter: true},
+        { field: "safety_stock", headerName: "Safety Stock (UoM)", filter: true},
         { field: "minimum_lot_size", headerName: "Minimum Lot Size", filter: true},
-        { field: "maximum_lot_size", headerName: "Maximum Lot Size", filter: true},
-        { field: "insertion_date", headerName: "Insertion Date", filter: true},
+        { field: "base_unit_of_measure", headerName: "Base Unit Of Measure", filter: true},
+        { field: "plant", headerName: "Plant", filter: true },
+        { field: "availability_check", headerName: "Availability Check", filter: true},
+        { field: "rounding_value", headerName: "Rounding Value (UoM)", filter: true},
+        { field: "planned_delivery_time", headerName: "Planned Delivery Time", filter: true},
     ]);
 
-    const fetchData = async () => {
-        try {
-            let response = await axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/mrp_data`);
-            setRowData(response.data.data);
-            // toast.success('Data loaded successfully.', { autoClose: 1500 });
-        } catch (error) {
-            toast.error(`Something Went Wrong while fetching data.`, {autoClose: 1500})
-            console.error('Failed to fetch recommendations:', error);
-        }
-    };
-
-
     useEffect(() => {
-        fetchData();
-    }, []);
+        setRowData(jsonData)
+    }, [jsonData]);
 
     const autoSizeStrategy = useMemo<
         | SizeColumnsToFitGridStrategy
@@ -64,8 +57,8 @@ function MrpContent() {
                         rowData={rowData}
                         pagination={true}
                         paginationPageSize={100}
-                        autoSizeStrategy={autoSizeStrategy}
                         columnDefs={colDefs}
+                        suppressMenuHide={true}
                         onRowClicked={handleRowClick}
                     />
                 </div>

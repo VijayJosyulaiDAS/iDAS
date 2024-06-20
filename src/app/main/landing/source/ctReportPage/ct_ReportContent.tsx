@@ -85,6 +85,7 @@ function Ct_ReportContent() {
                         pagination={true}
                         paginationPageSize={100}
                         columnDefs={colDefs}
+                        suppressMenuHide={true}
                         onRowClicked={handleRowClick}
                     />
                 </div>

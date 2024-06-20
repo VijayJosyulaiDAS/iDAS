@@ -1,8 +1,9 @@
 import { styled } from '@mui/material/styles';
-import { useRef} from "react";
+import {useEffect, useRef, useState} from "react";
 import FusePageSimple from "@fuse/core/FusePageSimple";
 import YesterdayProductionHeader from "./yesterdayProductionHeader";
 import YesterdayProductionContent from "./yesterdayProductionContent";
+import axios from "axios";
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
     '& .FusePageSimple-header': {
@@ -18,14 +19,32 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
  */
 function YesterdayProductionPage() {
     const pageLayout = useRef(null);
+    const [uploaded, setUpload] = useState(false)
+    const [jsonData, setJsonData] = useState(null);
+    console.log(uploaded)
+
+    const handleUpload = (item) => {
+        setUpload(true)
+    };
+    const fetchData = async () => {
+        try {
+            let response = await axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/yesterday_production`);
+            setJsonData(response.data.data);
+        } catch (error) {
+            console.error('Failed to fetch yesterday production data:', error);
+        }
+    };
+    useEffect(() => {
+        fetchData();
+    }, [uploaded]);
 
     return (
         <Root
             header={
-                <YesterdayProductionHeader/>
+                <YesterdayProductionHeader onUpload={handleUpload} jsonData={jsonData}/>
             }
             ref={pageLayout}
-            content={<YesterdayProductionContent />}
+            content={<YesterdayProductionContent jsonData={jsonData}/>}
             scroll="content"
         />
     );

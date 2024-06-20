@@ -4,7 +4,7 @@ const util = require('../../util');
 
 let ctReport_Data = async (req, res) => {
     try {
-        const query = `SELECT * FROM [dbo].[tbl_ct_report]`;
+        const query = `SELECT TOP (200) * FROM [dbo].[tbl_ct_report]`;
         const data = await sequelize.query(query, {
             type: sequelize.QueryTypes.SELECT,
         });
