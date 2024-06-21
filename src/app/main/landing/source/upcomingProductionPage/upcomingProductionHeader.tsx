@@ -13,32 +13,15 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
-import {styled} from "@mui/material/styles";
-import FusePageSimple from "@fuse/core/FusePageSimple";
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
-
-const Root = styled(FusePageSimple)(({ theme }) => ({
-    '& .FusePageSimple-header': {
-        backgroundColor: theme.palette.background.paper,
-        borderBottomWidth: 1,
-        borderStyle: 'solid',
-        borderColor: theme.palette.divider,
-        margin: theme.spacing(0)
-    },
-    '& .FusePageSimple-content': {},
-    '& .FusePageSimple-sidebarHeader': {},
-    '& .FusePageSimple-sidebarContent': {}
-}));
-
-
 
 function UpcomingProductionHeader({onUpload, jsonData}) {
     const [loading, setLoading] = React.useState(false);
     const [isDownload, setIsDownloading] = React.useState(false);
     const [open3, setOpen3] = React.useState(false);
     const [updated, setUpdated] = React.useState(false);
-    const [file, setFile] = useState();
+    const [file, setFile] = useState<any>();
     const [selectedFile,setSelectedFile] = useState({name:''})
 
     const handleOpen3 = () => {

@@ -14,7 +14,7 @@ import {toast, ToastContainer} from "react-toastify";
  * UserContent
  */
 function UserContent() {
-    const [rowData, setRowData] = useState();
+    const [rowData, setRowData] = useState<any>();
     const [colDefs, setColDefs] = useState([
         { field: "id", headerName: "User ID", filter: true },
         { field: "name", headerName: "Name", filter: true},
@@ -35,6 +35,7 @@ function UserContent() {
             setRowData(response.data.data);
             // toast.success('Data loaded successfully.', { autoClose: 1500 });
         } catch (error) {
+            setRowData([])
             toast.error(`Something Went Wrong while fetching data.`, {autoClose: 1500})
             console.error('Failed to fetch recommendations:', error);
         }

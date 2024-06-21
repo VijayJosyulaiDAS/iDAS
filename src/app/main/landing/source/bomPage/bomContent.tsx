@@ -9,7 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 /**
  * BomContent
  */
-function BomContent() {
+function BomContent({jsonData}) {
     const [rowData, setRowData] = useState();
     const [colDefs, setColDefs] = useState([
         { field: "id_of_product_material", headerName: "Product Material", filter: true },
@@ -21,20 +21,9 @@ function BomContent() {
         { field: "insertion_date", headerName: "Insertion Date", filter: true},
     ]);
 
-    const fetchData = async () => {
-        try {
-            let response = await axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/bom_data`);
-            setRowData(response.data.data);
-        } catch (error) {
-            toast.error(`Something Went Wrong while fetching data.`, {autoClose: 500})
-            console.error('Failed to fetch bom data:', error);
-        }
-    };
-
-
     useEffect(() => {
-        fetchData();
-    }, []);
+        setRowData(jsonData)
+    }, [jsonData]);
 
 
     const handleRowClick = (params) => {

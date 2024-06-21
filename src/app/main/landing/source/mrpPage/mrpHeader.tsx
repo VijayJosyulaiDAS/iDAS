@@ -21,7 +21,7 @@ function MrpHeader({onUpload, jsonData}) {
     const [isDownload, setIsDownloading] = React.useState(false);
     const [open3, setOpen3] = React.useState(false);
     const [updated, setUpdated] = React.useState(false);
-    const [file, setFile] = useState();
+    const [file, setFile] = useState<any>();
     const [selectedFile,setSelectedFile] = useState({name:''})
 
     const handleOpen3 = () => {
@@ -135,7 +135,7 @@ function MrpHeader({onUpload, jsonData}) {
         const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
         const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
 
-        saveAs(blob, "mrp.xlsx");
+        saveAs(blob, "MRP.xlsx");
         setIsDownloading(false);
     }
 

@@ -4,6 +4,9 @@ import FusePageSimple from "@fuse/core/FusePageSimple";
 import YesterdayProductionHeader from "./yesterdayProductionHeader";
 import YesterdayProductionContent from "./yesterdayProductionContent";
 import axios from "axios";
+import {toast} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
     '& .FusePageSimple-header': {
@@ -31,6 +34,8 @@ function YesterdayProductionPage() {
             let response = await axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/yesterday_production`);
             setJsonData(response.data.data);
         } catch (error) {
+            setJsonData([])
+            toast.error(`Something Went Wrong while fetching data.`, {autoClose: 500})
             console.error('Failed to fetch yesterday production data:', error);
         }
     };

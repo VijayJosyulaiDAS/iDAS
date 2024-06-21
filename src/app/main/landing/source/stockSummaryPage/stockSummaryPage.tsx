@@ -4,6 +4,9 @@ import FusePageSimple from "@fuse/core/FusePageSimple";
 import StockSummaryHeader from "./stockSummaryHeader";
 import StockSummaryContent from "./stockSummaryContent";
 import axios from "axios";
+import {toast} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
     '& .FusePageSimple-header': {
@@ -30,7 +33,8 @@ function StockSummaryPage() {
             let response = await axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/stock_summary`);
             setJsonData(response.data.data);
         } catch (error) {
-            console.error('Failed to fetch stock summary:', error);
+            setJsonData([])
+            toast.error(`Something Went Wrong while fetching data.`, {autoClose: 500})
         }
     };
     useEffect(() => {

@@ -4,6 +4,8 @@ import MrpContent from "./mrpContent";
 import MrpHeader from "./mrpHeader";
 import FusePageSimple from "@fuse/core/FusePageSimple";
 import axios from "axios";
+import {toast} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
     '& .FusePageSimple-header': {
@@ -15,7 +17,7 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 }));
 
 /**
- * RecommendationDetailPage.
+ * MrpPage.
  */
 function MrpPage() {
     const pageLayout = useRef(null);
@@ -30,7 +32,8 @@ function MrpPage() {
             let response = await axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/mrp_data`);
             setJsonData(response.data.data);
         } catch (error) {
-            console.error('Failed to fetch mrp data:', error);
+            setJsonData([])
+            toast.error(`Something Went Wrong while fetching data.`, {autoClose: 500})
         }
     };
     useEffect(() => {

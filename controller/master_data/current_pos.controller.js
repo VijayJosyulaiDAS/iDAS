@@ -4,7 +4,7 @@ const util = require('../../util');
 
 let getPOsData = async (req, res) => {
     try {
-        const query = `SELECT TOP (200) * FROM [dbo].[current_pos]`;
+        const query = `SELECT * FROM [dbo].[current_pos]`;
         const data = await sequelize.query(query, {
             type: sequelize.QueryTypes.SELECT,
         });

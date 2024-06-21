@@ -13,7 +13,7 @@ import {toast, ToastContainer} from "react-toastify";
 /**
  * M1Content
  */
-function Ct_ReportContent() {
+function Ct_ReportContent({jsonData}) {
     const [rowData, setRowData] = useState();
     const [colDefs, setColDefs] = useState([
         { field: "category", headerName: "Category", filter: true, width: 210 },
@@ -44,21 +44,9 @@ function Ct_ReportContent() {
         { field: "report_date", headerName: "Report Date", filter: true}
     ]);
 
-    const fetchData = async () => {
-        try {
-            let response = await axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/ct_report`);
-            setRowData(response.data.data);
-            // toast.success('Data loaded successfully.', { autoClose: 1500 });
-        } catch (error) {
-            console.error('Failed to fetch recommendations:', error);
-            toast.error(`Something Went Wrong while fetching data.`, {autoClose: 1500})
-        }
-    };
-
-
     useEffect(() => {
-        fetchData();
-    }, []);
+       setRowData(jsonData)
+    }, [jsonData]);
 
     const autoSizeStrategy = useMemo<
         | SizeColumnsToFitGridStrategy

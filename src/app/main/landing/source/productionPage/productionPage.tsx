@@ -4,6 +4,8 @@ import ProductionContent from "./productionContent";
 import ProductionHeader from "./productionHeader";
 import FusePageSimple from "@fuse/core/FusePageSimple";
 import axios from "axios";
+import {toast} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
     '& .FusePageSimple-header': {
@@ -30,7 +32,8 @@ function ProductionPage() {
             let response = await axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/production_data`);
             setJsonData(response.data.data);
         } catch (error) {
-            console.error('Failed to fetch production data:', error);
+            setJsonData([])
+            toast.error(`Something Went Wrong while fetching data.`, {autoClose: 500})
         }
     };
     useEffect(() => {
