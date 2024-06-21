@@ -129,34 +129,13 @@ function BomHeader({onUpload, jsonData}) {
             'Insertion Date': item.insertion_date ? item.insertion_date.toString() : ''
         }));
 
-        // Chunk the data
-        const chunks = chunkArray(worksheetData, CHUNK_SIZE);
+        const worksheet = XLSX.utils.json_to_sheet(worksheetData);
         const workbook = XLSX.utils.book_new();
-
-        try {
-            // Process each chunk sequentially
-            for (let i = 0; i < chunks.length; i++) {
-                console.log(`Processing chunk ${i + 1} of ${chunks.length}`);
-                const chunkWorksheet = XLSX.utils.json_to_sheet(chunks[i]);
-                const sheetName = `Sheet${i + 1}`;
-                XLSX.utils.book_append_sheet(workbook, chunkWorksheet, sheetName);
-
-                // Optional: Free up memory for the processed chunk (browser-specific behavior)
-                chunks[i] = null; // Ensure the chunk can be garbage collected
-            }
-
-            // Convert workbook to array buffer
-            const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-
-            // Convert array buffer to Blob
-            const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
-
-            saveAs(blob, "BOM.xlsx");
-        } catch (error) {
-            console.error("Error during export:", error);
-        } finally {
-            setIsDownloading(false);
-        }
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
+        saveAs(blob, "BOM.xlsx");
+        setIsDownloading(false)
     };
 
     return (

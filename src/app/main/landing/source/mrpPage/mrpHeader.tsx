@@ -147,7 +147,7 @@ function MrpHeader({onUpload, jsonData}) {
                     animate={{x: 0, transition: {delay: 0.2}}}
                 >
                     <Typography className="text-24 md:text-32 font-extrabold tracking-tight leading-none">
-                        MRP Data
+                        Raw Material MRP
                     </Typography>
                 </motion.span>
                 <motion.span
@@ -189,7 +189,7 @@ function MrpHeader({onUpload, jsonData}) {
                         sx: {minWidth: '40vw', minHeight: '40vh'}
                     }}
                 >
-                    <DialogTitle className="bg-blue-500 text-white">Upload Upcoming Production</DialogTitle>
+                    <DialogTitle className="bg-blue-500 text-white">Upload Raw Material Data</DialogTitle>
                     <DialogContent className="mt-8 flex justify-center items-center">
                         <div>
                             <input type="file" onChange={handleFileChange} accept=".xlsx"

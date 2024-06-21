@@ -274,7 +274,6 @@ function homeContent() {
                     </div>
                 </div>
             </div>
-
         </div>
     );
 

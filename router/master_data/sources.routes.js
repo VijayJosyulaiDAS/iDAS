@@ -10,6 +10,8 @@ const stock_summary = require("../../controller/master_data/stock_summary.contro
 const ctReport_Data = require("../../controller/master_data/ct_report.controller");
 const upcoming_production = require("../../controller/master_data/upcoming_production.controller");
 const yesterday_production = require("../../controller/master_data/yesterday_production.controller");
+const packed_mrp = require("../../controller/master_data/packed_mrp.controller");
+const p3m = require("../../controller/master_data/p3m.controller");
 
 
 
@@ -26,6 +28,14 @@ router.post('/create_stock_summary', stock_summary.create_stock_summary)
 // ==============Mrp data=====================
 router.get('/mrp_data', mrp_data.getMRPData)
 router.post('/create_mrp', mrp_data.mrpData)
+
+// ==============Packed Mrp data=====================
+router.get('/packed_mrp_data', packed_mrp.get_packed_MRPData)
+router.post('/create_packed_mrp', packed_mrp.packed_mrpData)
+
+// ==============p3m data=====================
+router.get('/get_p3m', p3m.get_p3mData)
+router.post('/create_p3m', p3m.p3mData)
 
 // ==============upcoming production data=====================
 router.get('/upcoming_production', upcoming_production.get_upcoming_production)

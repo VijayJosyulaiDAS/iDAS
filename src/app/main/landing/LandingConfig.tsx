@@ -17,6 +17,8 @@ import StockSummaryPage from "./source/stockSummaryPage/stockSummaryPage";
 import YesterdayProductionPage from "./source/yesterdayProductionPage/yesterdayProductionPage";
 import UserPage from "./userManagement/userPage";
 import Ct_ReportPage from "./source/ctReportPage/ct_ReportPage";
+import Packed_mrpPage from "./source/packedMrpPage/packed_mrpPage";
+import P3mPage from "./source/p3mPage/p3mPage";
 
 
 const LandingConfig = {
@@ -87,6 +89,14 @@ const LandingConfig = {
         {
         path: '/apps/source/ct_report',
         element: <Ct_ReportPage/>
+        },
+        {
+        path: '/apps/source/packed_mrp',
+        element: <Packed_mrpPage/>
+        },
+        {
+        path: '/apps/source/p3m',
+        element: <P3mPage/>
         },
         {
         path: '/apps/user_management',

@@ -170,7 +170,7 @@ function M1Header({onUpload, jsonData}) {
                         sx: {minWidth: '40vw', minHeight: '40vh'}
                     }}
                 >
-                    <DialogTitle className="bg-blue-500 text-white">Upload Upcoming Production</DialogTitle>
+                    <DialogTitle className="bg-blue-500 text-white">Upload M-1 File</DialogTitle>
                     <DialogContent className="mt-8 flex justify-center items-center">
                         <div>
                             <input type="file" onChange={handleFileChange} accept=".xlsx"

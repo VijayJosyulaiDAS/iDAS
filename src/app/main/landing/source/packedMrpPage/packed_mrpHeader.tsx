@@ -16,7 +16,7 @@ import * as XLSX from "xlsx";
 import {saveAs} from "file-saver";
 
 
-function ProductionHeader({onUpload, jsonData}) {
+function Packed_mrpHeader({onUpload, jsonData}) {
     const [loading, setLoading] = React.useState(false);
     const [isDownload, setIsDownloading] = React.useState(false);
     const [open3, setOpen3] = React.useState(false);
@@ -63,7 +63,7 @@ function ProductionHeader({onUpload, jsonData}) {
         formData.append('file', file);
         try {
             setLoading(true)
-            await axios.post(`${import.meta.env.VITE_LOCAL_BASE_URL}/create_upcoming_production`, formData, {
+            await axios.post(`${import.meta.env.VITE_LOCAL_BASE_URL}/create_packed_mrp`, formData, {
             }).then((response) =>{
                 setUpdated(!updated)
                 if (response.status === 200) {
@@ -94,6 +94,7 @@ function ProductionHeader({onUpload, jsonData}) {
             })
         } catch (error) {
             setLoading(false)
+            console.error(error);
         }
     };
 
@@ -110,10 +111,22 @@ function ProductionHeader({onUpload, jsonData}) {
     const handleExport = () =>{
         setIsDownloading(true);
         const worksheetData = jsonData.map(item => ({
-            'APO Product': item.apo_product ? item.apo_product : '', // Example mapping, adjust as per your data structure
-            'Produced': item.produced ? item.produced : '',
-            'Insertion Date': item.insertion_date ? item.insertion_date.toString() : '',
-            Date: item.date ? item.date.toString() : ''
+            Plant: item.plant ? item.plant.toString() : '', // Example mapping, adjust as per your data structure
+            Category: item.category ? item.category.toString() : '',
+            'Material Desc': item.material_desc ? item.material_desc.toString() : '',
+            'Material Code': item.material_code ? item.material_code.toString() : '',
+            'MRP Controller': item.mrp ? item.mrp.toString() : '',
+            'MRP Type': item.mrp_type ? item.mrp_type.toString() : '',
+            'Availability Check': item.availability_check ? item.availability_check.toString() : '',
+            'Rounding Value': item.rounding_value ? item.rounding_value.toString() : '',
+            'Planned delivery tim': item.planned_delivery_time ? item.planned_delivery_time.toString() : '',
+            'Goods receipt procc': item.good_receipt_procc ? item.good_receipt_procc.toString() : '',
+            'Total replenishment': item.total_replenishment ? item.total_replenishment.toString() : '',
+            'Safety stock': item.safety_stock ? item.safety_stock.toString() : '',
+            'Safety Time': item.safety_time ? item.safety_time.toString() : '',
+            'Procurement Type': item.procurement_type ? item.procurement_type.toString() : '',
+            'Minimum Lot size': item.minimum_lot_size ? item.minimum_lot_size.toString() : '',
+            'Base unit of measure': item.base_unit_of_measure ? item.base_unit_of_measure.toString() : '',
         }));
 
         const worksheet = XLSX.utils.json_to_sheet(worksheetData);
@@ -122,7 +135,7 @@ function ProductionHeader({onUpload, jsonData}) {
         const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
         const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
 
-        saveAs(blob, "Production.xlsx");
+        saveAs(blob, "Packed_MRP.xlsx");
         setIsDownloading(false);
     }
 
@@ -134,7 +147,7 @@ function ProductionHeader({onUpload, jsonData}) {
                     animate={{x: 0, transition: {delay: 0.2}}}
                 >
                     <Typography className="text-24 md:text-32 font-extrabold tracking-tight leading-none">
-                        Production Data
+                        Packed Material MRP
                     </Typography>
                 </motion.span>
                 <motion.span
@@ -151,15 +164,15 @@ function ProductionHeader({onUpload, jsonData}) {
                         }
                         Download
                     </Button>
-                    {/*<Button variant="contained"*/}
-                    {/*        className="whitespace-nowrap mx-4 gap-10 bg-blue hover:bg-blue text-white hover:text-white"*/}
-                    {/*        onClick={handleOpen3} disabled={loading}>*/}
-                    {/*    {loading ?*/}
-                    {/*        <CircularProgress size={24} color="inherit"/> :*/}
-                    {/*        <FuseSvgIcon size={24} className="text-48 text-white">heroicons-outline:upload</FuseSvgIcon>*/}
-                    {/*    }*/}
-                    {/*    Upload File*/}
-                    {/*</Button>*/}
+                    <Button variant="contained"
+                            className="whitespace-nowrap mx-4 gap-10 bg-blue hover:bg-blue text-white hover:text-white"
+                            onClick={handleOpen3} disabled={loading}>
+                        {loading ?
+                            <CircularProgress size={24} color="inherit"/> :
+                            <FuseSvgIcon size={24} className="text-48 text-white">heroicons-outline:upload</FuseSvgIcon>
+                        }
+                        Upload File
+                    </Button>
                 </motion.span>
             </div>
             <div>
@@ -176,7 +189,7 @@ function ProductionHeader({onUpload, jsonData}) {
                         sx: {minWidth: '40vw', minHeight: '40vh'}
                     }}
                 >
-                    <DialogTitle className="bg-blue-500 text-white">Upload Production Data</DialogTitle>
+                    <DialogTitle className="bg-blue-500 text-white">Upload Packed MRP</DialogTitle>
                     <DialogContent className="mt-8 flex justify-center items-center">
                         <div>
                             <input type="file" onChange={handleFileChange} accept=".xlsx"
@@ -211,8 +224,7 @@ function ProductionHeader({onUpload, jsonData}) {
                 </Dialog>
             </div>
         </div>
-
     )
 }
 
-export default ProductionHeader;
+export default Packed_mrpHeader;

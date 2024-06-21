@@ -4,7 +4,7 @@ import IconButton from '@mui/material/IconButton';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Typography from '@mui/material/Typography';
 import { useSnackbar } from 'notistack';
-import { useEffect } from 'react';
+import {useEffect, useState} from 'react';
 import { useAppDispatch, useAppSelector } from 'app/store/hooks';
 import { useLocation } from 'react-router-dom';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
@@ -17,6 +17,8 @@ import {
 } from './notificationPanelSlice';
 import NotificationModel from './models/NotificationModel';
 import NotificationTemplate from './NotificationTemplate';
+import axios from "axios";
+import {toast} from "react-toastify";
 
 const StyledSwipeableDrawer = styled(SwipeableDrawer)(({ theme }) => ({
 	'& .MuiDrawer-paper': {
@@ -33,95 +35,33 @@ function NotificationPanel() {
 	const dispatch = useAppDispatch();
 	const state = useAppSelector(selectNotificationPanelState);
 
-	const notifications = [
-		{
-			"id": "493190c9-5b61-4912-afe5-78c21f1044d7",
-			"icon": "heroicons-solid:star",
-			"title": "Daily challenges",
-			"description": "Your submission has been accepted",
-			"time": "2022-05-09T10:32:42.703Z",
-			"read": false
-		},
-		{
-			"id": "6e3e97e5-effc-4fb7-b730-52a151f0b641",
-			"image": "assets/images/avatars/male-04.jpg",
-			"description": "<strong>Leo Gill</strong> added you to <em>Top Secret Project</em> group and assigned you as a <em>Project Manager</em>",
-			"time": "2022-05-09T10:07:42.703Z",
-			"read": true,
-			"link": "/dashboards/project",
-			"useRouter": true
-		},
-		{
-			"id": "b91ccb58-b06c-413b-b389-87010e03a120",
-			"icon": "heroicons-solid:mail",
-			"title": "Mailbox",
-			"description": "You have 15 unread mails across 3 mailboxes",
-			"time": "2022-05-09T07:57:42.703Z",
-			"read": false,
-			"link": "/apps/mailbox",
-			"useRouter": true
-		},
-		{
-			"id": "541416c9-84a7-408a-8d74-27a43c38d797",
-			"icon": "heroicons-solid:refresh",
-			"title": "Cron jobs",
-			"description": "Your <em>Docker container</em> is ready to publish",
-			"time": "2022-05-09T05:57:42.703Z",
-			"read": false,
-			"link": "/dashboards/project",
-			"useRouter": true
-		},
-		{
-			"id": "ef7b95a7-8e8b-4616-9619-130d9533add9",
-			"image": "assets/images/avatars/male-06.jpg",
-			"description": "<strong>Roger Murray</strong> accepted your friend request",
-			"time": "2022-05-09T03:57:42.703Z",
-			"read": true,
-			"link": "/dashboards/project",
-			"useRouter": true
-		},
-		{
-			"id": "eb8aa470-635e-461d-88e1-23d9ea2a5665",
-			"image": "assets/images/avatars/female-04.jpg",
-			"description": "<strong>Sophie Stone</strong> sent you a direct message",
-			"time": "2022-05-09T01:57:42.703Z",
-			"read": true,
-			"link": "/dashboards/project",
-			"useRouter": true
-		},
-		{
-			"id": "b85c2338-cc98-4140-bbf8-c226ce4e395e",
-			"icon": "heroicons-solid:mail",
-			"title": "Mailbox",
-			"description": "You have 3 new mails",
-			"time": "2022-05-08T10:57:42.703Z",
-			"read": true,
-			"link": "/apps/mailbox",
-			"useRouter": true
-		},
-		{
-			"id": "8f8e1bf9-4661-4939-9e43-390957b60f42",
-			"icon": "heroicons-solid:star",
-			"title": "Daily challenges",
-			"description": "Your submission has been accepted and you are ready to sign-up for the final assigment which will be ready in 2 days",
-			"time": "2022-05-06T10:57:42.703Z",
-			"read": true,
-			"link": "/dashboards/project",
-			"useRouter": true
-		},
-		{
-			"id": "30af917b-7a6a-45d1-822f-9e7ad7f8bf69",
-			"icon": "heroicons-solid:refresh",
-			"title": "Cron jobs",
-			"description": "Your Vagrant container is ready to download",
-			"time": "2022-05-05T10:57:42.703Z",
-			"read": true,
-			"link": "/apps/file-manager",
-			"useRouter": true
-		}
-	]
-
 	const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+	const [notifications, setRowData] = useState([]);
+
+
+	const fetchRecommendations = async () => {
+		try {
+			let response = await axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/get_recommendations`);
+			let data = response.data.data.map(item => ({
+					id: item.id.toString(),
+					title: item.description,
+					description: `The Demand Forecast is predicting an ${item.demand_type} in Demand of ${(item.demand_value).toFixed(2)} for the Material Code ${item.material_code}. Based on the available inventory of ${item.available_inventory_value} and a Lead Time 
+            of ${item.lead_time} days, you should ${item.order_type} ${item.po_number} with the Quantity ${item.po_quantity_value}`,
+					time: item["createdAt"],
+					read: true,
+					link: `/apps/landing/${item.use_case_id}`,
+					useRouter: true
+			}))
+			setRowData(data);
+		} catch (error) {
+			console.error('Failed to fetch recommendations:', error);
+			toast.error(`Something Went Wrong while fetching data.`, {autoClose: 1500})
+		}
+	};
+
+	useEffect(() => {
+		fetchRecommendations();
+	}, [location, dispatch]);
 
 	useEffect(() => {
 		if (state) {
@@ -134,10 +74,15 @@ function NotificationPanel() {
 	}
 
 	function handleDismiss(id: string) {
+		console.log('close')
 	}
 
 	function handleDismissAll() {
 	}
+
+	 const handleClick = (tab) => {
+		console.log(tab)
+	};
 
 	function demoNotification() {
 		const item = NotificationModel({ title: 'Great Job! this is awesome.' });
@@ -193,6 +138,7 @@ function NotificationPanel() {
 								key={item.id}
 								className="mb-16"
 								item={item}
+								onClick={() => handleClick(item)}
 								onClose={handleDismiss}
 							/>
 						))}
@@ -207,15 +153,6 @@ function NotificationPanel() {
 						</Typography>
 					</div>
 				)}
-				<div className="flex items-center justify-center py-16">
-					<Button
-						size="small"
-						variant="outlined"
-						onClick={demoNotification}
-					>
-						Create a notification example
-					</Button>
-				</div>
 			</FuseScrollbars>
 		</StyledSwipeableDrawer>
 	);

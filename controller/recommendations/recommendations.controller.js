@@ -5,7 +5,44 @@ const {where} = require("sequelize");
 let getRecommendations = async (req, res) => {
     try {
 
-        const query = `SELECT * FROM [dbo].[tbl_recommendations]`;
+        const query = `SELECT 
+        [Material] AS material_code, 
+        [id] AS id, 
+        [Quantity] AS quantity, 
+        [month_end_inv], 
+        [priority], 
+        [Quantity] AS po_quantity_value,
+        [Safety] AS safety, 
+        [LeadTime] AS lead_time, 
+        [description] AS description, 
+        [material_needed] AS demand_value, 
+        [inv_after_production], 
+        CASE 
+            WHEN [inv_after_production] < 0 THEN 'increase'
+            ELSE NULL
+        END AS demand_type,
+        [amendment],
+        CASE 
+            WHEN [amendment] = 'yes' THEN 'Amend' 
+            ELSE NULL 
+        END AS order_type,
+        [Maximum stock level] AS maximum_stock_level, 
+        [Rounding value] AS rounding_value, 
+        [Minimum Lot Size] AS minimum_lot_size, 
+        [Maximum Lot Size] AS maximum_lot_size, 
+        [su-factor] AS su_factor, 
+        [active],
+        [user_desc],
+        [recommendation_action],
+        [action_owner],
+        [status],
+        [use_case_id],
+        [best_alternative],
+        [createdAt],
+        [minimum_qty_order], 
+        [maximum_qty_order]
+    FROM 
+        [dbo].[orders_amendment] WHERE active = 1`;
         const data = await sequelize.query(query, {
             type: sequelize.QueryTypes.SELECT,
         });

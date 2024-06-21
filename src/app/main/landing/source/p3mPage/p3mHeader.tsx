@@ -16,7 +16,7 @@ import * as XLSX from "xlsx";
 import {saveAs} from "file-saver";
 
 
-function ProductionHeader({onUpload, jsonData}) {
+function P3mHeader({onUpload, jsonData}) {
     const [loading, setLoading] = React.useState(false);
     const [isDownload, setIsDownloading] = React.useState(false);
     const [open3, setOpen3] = React.useState(false);
@@ -63,7 +63,7 @@ function ProductionHeader({onUpload, jsonData}) {
         formData.append('file', file);
         try {
             setLoading(true)
-            await axios.post(`${import.meta.env.VITE_LOCAL_BASE_URL}/create_upcoming_production`, formData, {
+            await axios.post(`${import.meta.env.VITE_LOCAL_BASE_URL}/create_p3m`, formData, {
             }).then((response) =>{
                 setUpdated(!updated)
                 if (response.status === 200) {
@@ -110,10 +110,10 @@ function ProductionHeader({onUpload, jsonData}) {
     const handleExport = () =>{
         setIsDownloading(true);
         const worksheetData = jsonData.map(item => ({
-            'APO Product': item.apo_product ? item.apo_product : '', // Example mapping, adjust as per your data structure
-            'Produced': item.produced ? item.produced : '',
-            'Insertion Date': item.insertion_date ? item.insertion_date.toString() : '',
-            Date: item.date ? item.date.toString() : ''
+            'rm_code': item.rm_code ? item.rm_code : '', // Example mapping, adjust as per your data structure
+            'posting_date': item.posting_date ? item.posting_date : '',
+            'qty': item.qty ? item.qty.toString() : '',
+            'uom': item.uom ? item.uom.toString() : ''
         }));
 
         const worksheet = XLSX.utils.json_to_sheet(worksheetData);
@@ -122,7 +122,7 @@ function ProductionHeader({onUpload, jsonData}) {
         const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
         const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
 
-        saveAs(blob, "Production.xlsx");
+        saveAs(blob, "P3M.xlsx");
         setIsDownloading(false);
     }
 
@@ -134,7 +134,7 @@ function ProductionHeader({onUpload, jsonData}) {
                     animate={{x: 0, transition: {delay: 0.2}}}
                 >
                     <Typography className="text-24 md:text-32 font-extrabold tracking-tight leading-none">
-                        Production Data
+                        P3M Data
                     </Typography>
                 </motion.span>
                 <motion.span
@@ -151,15 +151,15 @@ function ProductionHeader({onUpload, jsonData}) {
                         }
                         Download
                     </Button>
-                    {/*<Button variant="contained"*/}
-                    {/*        className="whitespace-nowrap mx-4 gap-10 bg-blue hover:bg-blue text-white hover:text-white"*/}
-                    {/*        onClick={handleOpen3} disabled={loading}>*/}
-                    {/*    {loading ?*/}
-                    {/*        <CircularProgress size={24} color="inherit"/> :*/}
-                    {/*        <FuseSvgIcon size={24} className="text-48 text-white">heroicons-outline:upload</FuseSvgIcon>*/}
-                    {/*    }*/}
-                    {/*    Upload File*/}
-                    {/*</Button>*/}
+                    <Button variant="contained"
+                            className="whitespace-nowrap mx-4 gap-10 bg-blue hover:bg-blue text-white hover:text-white"
+                            onClick={handleOpen3} disabled={loading}>
+                        {loading ?
+                            <CircularProgress size={24} color="inherit"/> :
+                            <FuseSvgIcon size={24} className="text-48 text-white">heroicons-outline:upload</FuseSvgIcon>
+                        }
+                        Upload File
+                    </Button>
                 </motion.span>
             </div>
             <div>
@@ -176,7 +176,7 @@ function ProductionHeader({onUpload, jsonData}) {
                         sx: {minWidth: '40vw', minHeight: '40vh'}
                     }}
                 >
-                    <DialogTitle className="bg-blue-500 text-white">Upload Production Data</DialogTitle>
+                    <DialogTitle className="bg-blue-500 text-white">Upload P3M Data</DialogTitle>
                     <DialogContent className="mt-8 flex justify-center items-center">
                         <div>
                             <input type="file" onChange={handleFileChange} accept=".xlsx"
@@ -215,4 +215,4 @@ function ProductionHeader({onUpload, jsonData}) {
     )
 }
 
-export default ProductionHeader;
+export default P3mHeader;

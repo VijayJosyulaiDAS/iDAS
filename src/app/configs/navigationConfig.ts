@@ -72,10 +72,24 @@ const navigationConfig: FuseNavItemType[] = [
 					},
 					{
 						id: 'source.mrp',
-						title: 'MRP Data',
+						title: 'Raw Material MRP',
 						type: 'item',
 						icon: 'heroicons-outline:table',
 						url: '/apps/source/mrp'
+					},
+					{
+						id: 'source.pm_mrp',
+						title: 'Packed Material MRP',
+						type: 'item',
+						icon: 'heroicons-outline:table',
+						url: '/apps/source/packed_mrp'
+					},
+					{
+						id: 'source.p3m',
+						title: 'P3M',
+						type: 'item',
+						icon: 'heroicons-outline:table',
+						url: '/apps/source/p3m'
 					},
 					// {
 					// 	id: 'source.pos',
@@ -93,7 +107,7 @@ const navigationConfig: FuseNavItemType[] = [
 					},
 					{
 						id: 'source.stock _summary',
-						title: "Stock Summary",
+						title: "Inventory Data",
 						type: 'item',
 						icon: 'heroicons-outline:table',
 						url: '/apps/source/stock_summary'

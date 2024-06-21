@@ -8,9 +8,11 @@ import NavLinkAdapter from '@fuse/core/NavLinkAdapter';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import { MouseEvent } from 'react';
 import { NotificationModelType } from './models/NotificationModel';
+import {useNavigate} from "react-router-dom";
 
 type NotificationCardProps = {
 	item: NotificationModelType;
+	onClick: any
 	className?: string;
 	onClose: (T: string) => void;
 };
@@ -20,16 +22,22 @@ type NotificationCardProps = {
  */
 function NotificationCard(props: NotificationCardProps) {
 	const { item, className, onClose } = props;
-
+	// console.log(item)
 	const variant = item?.variant || '';
+	const navigate = useNavigate()
 
 	const handleClose = (ev: MouseEvent<HTMLButtonElement>) => {
 		ev.preventDefault();
 		ev.stopPropagation();
-
 		if (onClose) {
 			onClose(item?.id);
 		}
+	};
+
+	const handleClick = (params) => {
+		console.log(params)
+		localStorage.setItem('recommendationData', JSON.stringify(params));
+		navigate(`/apps/recommendations`);
 	};
 
 	return (
@@ -43,12 +51,10 @@ function NotificationCard(props: NotificationCardProps) {
 				className
 			)}
 			elevation={0}
-			component={item.useRouter ? NavLinkAdapter : 'div'}
-			to={item.link || ''}
-			role={item.link && 'button'}
 		>
 			{item.icon && !item.image && (
 				<Box
+					onClick={() => handleClick(item)}
 					sx={{ backgroundColor: 'background.default' }}
 					className="mr-12 flex h-32 w-32 shrink-0 items-center justify-center rounded-full"
 				>
@@ -69,7 +75,7 @@ function NotificationCard(props: NotificationCardProps) {
 				/>
 			)}
 
-			<div className="flex flex-auto flex-col">
+			<div className="flex flex-auto flex-col" onClick={() => handleClick(item)}>
 				{item.title && <Typography className="line-clamp-1 font-semibold">{item.title}</Typography>}
 
 				{item.description && (
