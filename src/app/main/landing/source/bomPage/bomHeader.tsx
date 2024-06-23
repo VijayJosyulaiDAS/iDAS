@@ -129,6 +129,7 @@ function BomHeader({onUpload, jsonData}) {
             'Insertion Date': item.insertion_date ? item.insertion_date.toString() : ''
         }));
 
+
         const worksheet = XLSX.utils.json_to_sheet(worksheetData);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");

@@ -12,7 +12,6 @@ import {useNavigate} from "react-router-dom";
 
 type NotificationCardProps = {
 	item: NotificationModelType;
-	onClick: any
 	className?: string;
 	onClose: (T: string) => void;
 };

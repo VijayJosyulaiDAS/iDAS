@@ -138,7 +138,6 @@ function NotificationPanel() {
 								key={item.id}
 								className="mb-16"
 								item={item}
-								onClick={() => handleClick(item)}
 								onClose={handleDismiss}
 							/>
 						))}
