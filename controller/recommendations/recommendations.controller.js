@@ -143,7 +143,7 @@ let getRecommendationByUseCases = async (req, res) => {
       ,[recommendation_action]
       ,[action_owner]
       ,[created_at]
-   FROM [dbo].[tbl_final_suggestions] WHERE active = 1`
+   FROM [dbo].[tbl_final_suggestions] WHERE use_case_id = '${useCaseId}' and best_alternative = 1`
 
         const data = await sequelize.query(query1, {
             type: sequelize.QueryTypes.SELECT,

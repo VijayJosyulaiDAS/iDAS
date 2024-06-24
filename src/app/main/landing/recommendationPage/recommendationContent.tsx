@@ -625,9 +625,9 @@ function RecommendationPageContent(props) {
                                                 label="Age"
                                                 onChange={handleChange}
                                             >
-                                                <MenuItem value={'Reason 1'}>Reason 1</MenuItem>
-                                                <MenuItem value={'Reason 2'}>Reason 2</MenuItem>
-                                                <MenuItem value={'Reason 3'}>Reason 3</MenuItem>
+                                                <MenuItem value={'Insufficient capacity at supplier end'}>Insufficient capacity at supplier end.</MenuItem>
+                                                <MenuItem value={'Lack of WHS Storage'}>Lack of WHS Storage.</MenuItem>
+                                                <MenuItem value={'Transit time greater than LT'}>Transit time greater than LT.</MenuItem>
                                                 <MenuItem value={'Others'}>Others</MenuItem>
                                             </Select>
                                         </FormControl>

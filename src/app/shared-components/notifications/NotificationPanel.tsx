@@ -44,7 +44,7 @@ function NotificationPanel() {
 			let response = await axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/get_recommendations`);
 			let data = response.data.data.map(item => ({
 					id: item.id,
-					title: item.description,
+					title: item.description == '' ? 'Amend the PO' : item.description,
 				description: `The Demand Forecast is predicting an ${item.demand_type} in Demand of ${(item.po_quantity_value).toFixed(2)} for the Material Code ${item.material_code}. Based on the available inventory of ${(item.available_inventory_value).toFixed(2)} and a Lead Time 
             of ${item.lead_time} days, you should ${item.order_type} ${parseInt(item.po_number) ? parseInt(item.po_number) : 'New PO'} with the Quantity ${item.po_quantity_value} ${item.uom}`,
 					time: item["createdAt"],

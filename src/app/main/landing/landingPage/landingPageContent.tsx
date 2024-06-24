@@ -10,6 +10,11 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 import FuseLoading from "@fuse/core/FuseLoading";
 import {toast, ToastContainer} from "react-toastify";
+import {
+    SizeColumnsToContentStrategy,
+    SizeColumnsToFitGridStrategy,
+    SizeColumnsToFitProvidedWidthStrategy
+} from "@ag-grid-community/core";
 
 
 /**
@@ -117,6 +122,18 @@ function LandingPageContent(props) {
         navigate(`/apps/recommendations`);
     };
 
+    const autoSizeStrategy = useMemo<
+        | SizeColumnsToFitGridStrategy
+        | SizeColumnsToFitProvidedWidthStrategy
+        | SizeColumnsToContentStrategy
+    >(() => {
+        return {
+            type: "fitGridWidth",
+            defaultMinWidth: 100
+        };
+    }, []);
+
+
     function handleChangeTab(event: React.SyntheticEvent, value: number) {
         setTabValue(value);
     }
@@ -168,8 +185,8 @@ function LandingPageContent(props) {
                             pagination={true}
                             paginationPageSize={100}
                             suppressMenuHide={true}
+                            autoSizeStrategy={autoSizeStrategy}
                             onGridReady={onGridReady}
-
                             columnDefs={colDefs}
                             onRowClicked={handleRowClick}
                         />
