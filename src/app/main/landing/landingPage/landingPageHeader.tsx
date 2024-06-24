@@ -32,7 +32,7 @@ function landingPageHeader(props: LandingPageHeaderProps) {
                     component="h2"
                     className="flex-1 text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate mx-10"
                 >
-                    Recommendations
+                    Recommended Decisions
                 </Typography>
                 {rightSidebarToggle && (
                     <div className="flex shrink-0 items-center">

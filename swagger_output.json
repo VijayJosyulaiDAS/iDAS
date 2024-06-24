@@ -156,6 +156,26 @@
         }
       }
     },
+    "/api/get_impactData": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/api/get_recommendationByUseCase": {
       "get": {
         "description": "",

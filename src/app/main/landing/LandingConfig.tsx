@@ -23,7 +23,13 @@ import P3mPage from "./source/p3mPage/p3mPage";
 
 const LandingConfig = {
     settings: {
-        layout: {}
+        layout: {
+            config:{
+                leftSidePanel: {
+                    display: true
+                },
+            }
+        }
     },
     routes: [
         {

@@ -43,7 +43,6 @@ function LandingPageContent(props) {
             tabData(response.data.data);
         } catch (error) {
             console.error('Failed to fetch recommendations:', error);
-            toast.error(`Something Went Wrong while fetching data.`, {autoClose: 1500})
         } finally {
             setLoading(false);
         }
@@ -65,18 +64,18 @@ function LandingPageContent(props) {
             if(selectedData.title == "Supplier PO Amendments"){
                setColDefs([
                    { field: "material_code", headerName: "Material Code", filter: true },
-                   { field: "po_number", headerName: "PO Number", filter: true },
-                   { field: "priority", headerName: "Priority", filter: true },
+                   { field: "po_number", headerName: "PO Number", filter: true, cellRenderer: params => {
+                       return parseInt(params.value) ? parseInt(params.value) : 'NEW PO'
+                       } },
                    { field: "due_date", headerName: "Due Date", filter: true, cellRenderer: params => {
                            return params.value?.split('T')[0];
                        } },
-                   { field: "createdAt", headerName: "Recommendation Date", filter: true, cellRenderer: params => {
+                   { field: "created_at", headerName: "Recommendation Date", filter: true, cellRenderer: params => {
                            return params.value?.split('T')[0];
                        } },
-                   { field: "description", headerName: "Description", filter: true },
                    { field: "order_type", headerName: "Order Type", filter: true },
                    { field: "quantity", headerName: "Quantity", filter: true },
-                   { field: "supplier_code", headerName: "Supplier Code", filter: true },
+                   { field: "supplier_code", headerName: "Supplier Code", filter: true, hide:true },
                    { field: "lead_time", headerName: "Lead Time", filter: true }
                 ])
             }
@@ -109,6 +108,10 @@ function LandingPageContent(props) {
         tabData(rowData);
     }, [tabValue]);
 
+    const onGridReady = (params) => {
+        params.api.sizeColumnsToFit();
+    };
+
     const handleRowClick = (params) => {
         localStorage.setItem('recommendationData', JSON.stringify(params.data));
         navigate(`/apps/recommendations`);
@@ -120,7 +123,7 @@ function LandingPageContent(props) {
 
     return (
         <div className="flex-auto w-full h-full p-24 sm:p-40">
-            <ToastContainer style={{marginTop: '50px'}}/>
+            {/*<ToastContainer style={{marginTop: '50px'}}/>*/}
             {selectedData ? (
                 <div className="ag-theme-quartz" style={{ height: 680 }}>
                     <div className='m-5 flex w-full gap-80 justify-between flex-row'>
@@ -165,6 +168,8 @@ function LandingPageContent(props) {
                             pagination={true}
                             paginationPageSize={100}
                             suppressMenuHide={true}
+                            onGridReady={onGridReady}
+
                             columnDefs={colDefs}
                             onRowClicked={handleRowClick}
                         />

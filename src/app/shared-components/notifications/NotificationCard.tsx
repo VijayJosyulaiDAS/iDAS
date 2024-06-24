@@ -6,9 +6,11 @@ import clsx from 'clsx';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import NavLinkAdapter from '@fuse/core/NavLinkAdapter';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
-import { MouseEvent } from 'react';
+import {MouseEvent, useEffect, useState} from 'react';
 import { NotificationModelType } from './models/NotificationModel';
 import {useNavigate} from "react-router-dom";
+import axios from "axios";
+import {toast} from "react-toastify";
 
 type NotificationCardProps = {
 	item: NotificationModelType;
@@ -21,9 +23,23 @@ type NotificationCardProps = {
  */
 function NotificationCard(props: NotificationCardProps) {
 	const { item, className, onClose } = props;
-	// console.log(item)
+	const [notification, setNotification] = useState([])
 	const variant = item?.variant || '';
 	const navigate = useNavigate()
+
+	const fetchRecommendations = async () => {
+		try {
+			let response = await axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/get_recommendations`);
+			setNotification(response.data.data)
+		} catch (error) {
+			console.error('Failed to fetch recommendations:', error);
+			toast.error(`Something Went Wrong while fetching data.`, {autoClose: 1500})
+		}
+	};
+
+	useEffect(() => {
+		fetchRecommendations();
+	}, [location]);
 
 	const handleClose = (ev: MouseEvent<HTMLButtonElement>) => {
 		ev.preventDefault();
@@ -34,15 +50,15 @@ function NotificationCard(props: NotificationCardProps) {
 	};
 
 	const handleClick = (params) => {
-		console.log(params)
-		localStorage.setItem('recommendationData', JSON.stringify(params));
+		let filtered = notification.find((item) => item.id == parseInt(params.id));
+		localStorage.setItem('recommendationData', JSON.stringify(filtered));
 		navigate(`/apps/recommendations`);
 	};
 
 	return (
 		<Card
 			className={clsx(
-				'relative flex min-h-64 w-full items-center space-x-8 rounded-16 p-20 shadow',
+				'relative flex min-h-64 w-full items-center cursor-pointer space-x-8 rounded-16 p-20 shadow',
 				variant === 'success' && 'bg-green-600 text-white',
 				variant === 'info' && 'bg-blue-700 text-white',
 				variant === 'error' && 'bg-red-600 text-white',

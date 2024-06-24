@@ -26,6 +26,15 @@ import {
     SizeColumnsToFitGridStrategy,
     SizeColumnsToFitProvidedWidthStrategy
 } from "@ag-grid-community/core";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormHelperText from '@mui/material/FormHelperText';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 /**
  * RecommendationPage Content
@@ -56,63 +65,78 @@ function RecommendationPageContent(props) {
     const [description, setDescription] = useState('')
     const [action, setAction] = useState(true)
     const [showChart,setShowChart] = useState(false)
+    const [openText,setOpenText] = useState(false)
     const [rowData, setRowData] = useState(
         [
-            {
-                "id": "1",
-                "root_cause": "Safety Stock",
-                "description": "The minimum quantity of a product that must be kept in stock to prevent stock outs.",
-                "root_cause_code": "SS001"
-            },
-            {
-                "id": "2",
-                "root_cause": "RM DFC",
-                "description": "The number of days the current stock level can satisfy customer demand.",
-                "root_cause_code": "RM002"
-            },
-            {
-                "id": "3",
-                "root_cause": "FG Description",
-                "description": "Information about the finished goods.",
-                "root_cause_code": "FG003"
-            },
-            {
-                "id": "4",
-                "root_cause": "FG Demand Variations",
-                "description": "Variations in the demand for the finished goods.",
-                "root_cause_code": "DV004"
-            },
-            {
-                "id": "5",
-                "root_cause": "FG BOM",
-                "description": "Raw materials required to produce the finished goods.",
-                "root_cause_code": "BOM005"
-            },
-            {
-                "id": "6",
-                "root_cause": "Production Version",
-                "description": "Production lines.",
-                "root_cause_code": "PV006"
-            }
         ]
     );
+    const [impactData, setImpactData] = useState()
+
+    const [reason, setReason] = React.useState('');
+
+    const handleChange = (event: SelectChangeEvent) => {
+        if(event.target.value == 'Others'){
+            setOpenText(true)
+            setReason(event.target.value);
+        }else{
+            setOpenText(false)
+            setReason(event.target.value);
+        }
+    };
+
+    // useEffect(() => {
+    //     if (openText){
+    //         setOpenText(true)
+    //     }else{
+    //         setOpenText(false)
+    //
+    //     }
+    // }, [openText]);
+
+
     const chartRef = useRef(null);
 
     const [selectedRow, setSelectedRow] = useState(null)
+
     let columns = [
         {
-            field: "root_cause_code",
-            headerName: "Root Cause Code",
+            field: "safety_stock",
+            headerName: "Safety",
             filter: false
         },
-        { field: "root_cause", headerName: "Root Cause", filter: true },
-        { field: "description", headerName: "Description", filter: true }
+        { field: "po_quantity_value", headerName: "PO Quantity Value", filter: true },
+        { field: "lead_time", headerName: "Lead Time", filter: true },
+        { field: "po_quantity_value", headerName: "Demand", filter: true },
+        { field: "available_inventory_value", headerName: "Available Inventory value", filter: true }
     ]
+
+    const columnData = [
+        {
+            field: "RPM Code",
+            width: 160,
+            headerName: "Material Code",
+            filter: true
+        },
+        { field: "APO Product", headerName: "APO Product", filter: true,width:160 },
+        { field: "Product Description", headerName: "Product Description", filter: true, width: 330 }
+    ]
+
     const [colDefs, setColDefs] = useState([]);
+
+    const fetchImpactData = async () => {
+        setRowData([recommendation])
+        let response = await axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/get_impactData?id=${recommendation.material_code}`);
+        // console.log(response.data.data)
+        setImpactData(response.data.data)
+    }
 
     useEffect(() => {
         setColDefs(columns)
     }, [showChart]);
+
+    useEffect(() => {
+        fetchImpactData()
+    }, [recommendation]);
 
     const navigate = useNavigate()
 
@@ -128,20 +152,18 @@ function RecommendationPageContent(props) {
     }
 
     const data = [
-        { category: "Safety Stock", value: 15, description: 'The minimum quantity of a product that must be kept in stock to prevent stock outs.' },
-        { category: "RM DFC", value: 15, description: 'The number of days the current stock level can satisfy customer demand.' },
-        { category: "FG Description", value: 15, description: 'Information about the finished goods.' },
-        { category: "FG Demand Variations", value: 15, description: 'Variations in the demand for the finished goods.' },
-        { category: "FG BOM", value: 15, description: 'Raw materials required to produce the finished goods.' },
-        { category: "Production Version", value: 15, description: 'Production lines.' },
-        { category: "Other", value: 10, description: 'Others' }
+        { category: "Lead Time", value: 16.6, description: recommendation.lead_time },
+        { category: "Safety", value: 16.6, description: recommendation.safety_stock },
+        { category: "Demand", value: 16.6, description: recommendation.po_quantity_value },
+        { category: "Inventory", value: 16.6, description: recommendation.available_inventory_value },
+        { category: "PO Quantity", value: 16.6, description:  recommendation.po_quantity_value}
     ];
 
     const cardData  = {
-        title: recommendation.description,
+        title: recommendation.description != null ? recommendation.description : "Amend the PO",
         date: formatDateString(recommendation.due_date ? recommendation.due_date : recommendation.createdAt),
-        description: `The Demand Forecast is predicting an ${recommendation.demand_type} in Demand of ${(recommendation.demand_value).toFixed(2)} for the Material Code ${recommendation.material_code}. Based on the available inventory of ${recommendation.available_inventory_value} and a Lead Time 
-            of ${recommendation.lead_time} days, you should ${recommendation.order_type} ${recommendation.po_number} with the Quantity ${recommendation.po_quantity_value}`
+        description: `The Demand Forecast is predicting an ${recommendation.demand_type} in Demand of ${(recommendation.po_quantity_value).toFixed(2)} for the Material Code ${recommendation.material_code}. Based on the available inventory of ${(recommendation.available_inventory_value).toFixed(2)} and a Lead Time 
+            of ${recommendation.lead_time} days, you should ${recommendation.order_type} ${parseInt(recommendation.po_number) ? parseInt(recommendation.po_number) : 'New PO'} with the Quantity ${recommendation.po_quantity_value} ${recommendation.uom}`
     }
 
     function handleCloseDialog() {
@@ -162,12 +184,15 @@ function RecommendationPageContent(props) {
             po_number: recommendation.po_number,
             best_alternative: recommendation.best_alternative,
             recommendation_action: 'Dismiss',
-            user_desc: description
+            user_desc: description == '' ? reason : description
         }
+        console.log(data)
         updateRecommendation(data)
         setOpenDialog(false)
         navigate(`/apps/landing/${recommendation.id}`)
     }
+
+
 
     // const chartRef = useRef<am4charts.XYChart | null>(null);
 
@@ -267,7 +292,7 @@ function RecommendationPageContent(props) {
         // Configure tooltip
         pieSeries.slices.template.tooltipText = "{description}";
 
-        pieSeries.labels.template.text = "{category}: {value}";
+        pieSeries.labels.template.text = "{category}";
         pieSeries.labels.template.adapter.add("text", function(text, target) {
             return text.replace("%", "");
         });
@@ -319,6 +344,7 @@ function RecommendationPageContent(props) {
             navigate(`/apps/recommendations/${data}`)
         }
         if(event.target.id == 'details'){
+            console.log(rowData)
             console.log(event.target.id);
             setShowChart(prevShowChart => !prevShowChart);
         }
@@ -351,40 +377,40 @@ function RecommendationPageContent(props) {
 
     return (
         <div className="flex-auto p-24 flex w-full gap-10 justify-between flex-row'">
-            <div className="w-2/5 flex justify-between">
-                <div className=" mt-20 w-full max-h-auto border relative flex lg:flex-col md:flex-row sm:flex-row shadow bg-white rounded-2xl overflow-x-scroll"
-                    style={{height: "60%"}}>
-                    <div className="flex w-full items-start flex-col  justify-start px-8 pt-32">
+            <div className="w-3/5 flex justify-between">
+                <div className=" mt-20 w-full h-[500px] max-h-auto border relative flex lg:flex-col md:flex-row sm:flex-row shadow bg-white rounded-2xl overflow-x-scroll"
+                    >
+                    <div className="flex w-full items-start flex-col gap-20 justify-center px-8 pt-32">
                         <Typography
-                            className="px-16 text-sm font-medium text-blue-500 tracking-tight leading-6 truncate"
+                            className="px-16 text-lg font-medium text-blue-500 tracking-tight leading-6 truncate"
                         >
                             {cardData.date}
                         </Typography>
                         <Typography
-                            className="px-16 text-lg font-medium tracking-tight leading-6"
+                            className="px-16 text-2xl font-medium tracking-tight leading-6"
                         >
                             {cardData.title}
                         </Typography>
                     </div>
-                    <div className="flex justify-between mt-20 w-full h-full flex-col">
+                    <div className="flex justify-between mt-10 w-full h-full flex-col">
                         <div
-                            className="text-md font-medium md:mr-24 text-grey-700  md:ml-24 ">{cardData.description}
+                            className="text-lg font-medium md:mr-24 text-grey-700  md:ml-24 ">{cardData.description}
                         </div>
                         {
                             recommendation.recommendation_action != null &&
                             <div
-                                className="text-md font-medium md:mr-24 text-grey-700  md:ml-24 ">
+                                className="text-2xl font-medium md:mr-24 text-grey-700  md:ml-24 ">
                                 <Typography
-                                    className=" flex flex-col text-black tracking-tight leading-6"
+                                    className=" flex flex-col gap-10 text-black tracking-tight leading-6"
                                 >
-                                    <span className='text-lg font-medium'>Action by: {recommendation.action_owner}</span>
-                                    <span>User Action: {recommendation.recommendation_action}</span>
-                                    <span>User Description: {recommendation.user_desc}</span>
+                                    <span className='text-2xl font-medium'>Action by: <span className='text-lg '>{recommendation.action_owner}</span></span>
+                                    <span  className='text-2xl font-medium'>User Action: <span className='text-lg '>{recommendation.recommendation_action}</span></span>
+                                    <span  className='text-2xl font-medium'>User Description: <span className='text-lg '>{recommendation.user_desc}</span></span>
                                 </Typography>
                             </div>
                         }
                         <div
-                            className="flex m-20 justify-center gap-32 items-center"
+                            className="flex m-20 justify-center gap-60 items-center"
                             color="text.secondary"
                         >
                             {recommendation.recommendation_action == null && (
@@ -394,16 +420,16 @@ function RecommendationPageContent(props) {
                                         variant="outlined"
                                         color='secondary'
                                         onClick={handleClick}
-                                        size="small"
+                                        size="medium"
                                     >
-                                        Dismiss
+                                        Reject
                                     </Button>
                                     <Button
                                         id='modify'
                                         variant="outlined"
                                         color='secondary'
                                         onClick={handleClick}
-                                        size="small"
+                                        size="medium"
                                     >
                                         Modify
                                     </Button>
@@ -412,7 +438,7 @@ function RecommendationPageContent(props) {
                                         variant="contained"
                                         color='secondary'
                                         onClick={handleClick}
-                                        size="small"
+                                        size="medium"
                                     >
                                         Accept
                                     </Button>
@@ -425,7 +451,7 @@ function RecommendationPageContent(props) {
                                         variant="outlined"
                                         color='secondary'
                                         onClick={handleClick}
-                                        size="small"
+                                        size="medium"
                                     >
                                         RCA
                                         <FuseSvgIcon size={16} className='text-blue-500 cursor-pointer'>
@@ -438,7 +464,7 @@ function RecommendationPageContent(props) {
                                         variant="outlined"
                                         color='secondary'
                                         onClick={handleClick}
-                                        size="small"
+                                        size="medium"
                                     >
                                         <FuseSvgIcon size={16} className='text-blue-500 cursor-pointer'>
                                             heroicons-outline:chevron-left
@@ -451,14 +477,116 @@ function RecommendationPageContent(props) {
                     </div>
                 </div>
             </div>
-            <div className='w-full mt-20 h-full flex flex-col gap-10 h-[500px]'>
+            <div className='w-2/4 h-[700px] mt-20 h-full flex flex-col gap-10 '>
                 {!showChart && (
-                    <Paper className='w-full border p-10 h-full flex flex-col' style={{height: 680}}>
+                    <div className='w-full h-full flex flex-col gap-20'>
+                    <Paper className='w-full p-10 gap-10 border h-full flex flex-col'>
+                        <Typography className="text-lg font-medium tracking-tight leading-6 truncate">Impact</Typography>
+                        {/*<Paper className="flex flex-col flex-auto p-24 shadow rounded-2xl overflow-hidden">*/}
+                        {/*    <Typography className="text-lg font-medium tracking-tight leading-6 truncate">Impact</Typography>*/}
+
+                        {/*    <div className="table-responsive">*/}
+                        {/*        <Table className="w-full min-w-full">*/}
+                        {/*            <TableHead>*/}
+                        {/*                <TableRow>*/}
+                        {/*                    {column.map((column, index) => (*/}
+                        {/*                        <TableCell key={index}>*/}
+                        {/*                            <Typography*/}
+                        {/*                                color="text.secondary"*/}
+                        {/*                                className="font-semibold text-12 whitespace-nowrap"*/}
+                        {/*                            >*/}
+                        {/*                                {column}*/}
+                        {/*                            </Typography>*/}
+                        {/*                        </TableCell>*/}
+                        {/*                    ))}*/}
+                        {/*                </TableRow>*/}
+                        {/*            </TableHead>*/}
+
+                        {/*            <TableBody>*/}
+                        {/*                {row.map((row, index) => (*/}
+                        {/*                    <TableRow key={index}>*/}
+                        {/*                        {Object.entries(row).map(([key, value]) => {*/}
+                        {/*                            switch (key) {*/}
+                        {/*                                case 'type': {*/}
+                        {/*                                    return (*/}
+                        {/*                                        <TableCell*/}
+                        {/*                                            key={key}*/}
+                        {/*                                            component="th"*/}
+                        {/*                                            scope="row"*/}
+                        {/*                                        >*/}
+                        {/*                                        </TableCell>*/}
+                        {/*                                    );*/}
+                        {/*                                }*/}
+                        {/*                                case 'total':*/}
+                        {/*                                case 'expensesAmount':*/}
+                        {/*                                case 'remainingAmount': {*/}
+                        {/*                                    return (*/}
+                        {/*                                        <TableCell*/}
+                        {/*                                            key={key}*/}
+                        {/*                                            component="th"*/}
+                        {/*                                            scope="row"*/}
+                        {/*                                        >*/}
+                        {/*                                            <Typography>*/}
+                        {/*                                                {value.toLocaleString('en-US', {*/}
+                        {/*                                                    style: 'currency',*/}
+                        {/*                                                    currency: 'USD'*/}
+                        {/*                                                })}*/}
+                        {/*                                            </Typography>*/}
+                        {/*                                        </TableCell>*/}
+                        {/*                                    );*/}
+                        {/*                                }*/}
+                        {/*                                case 'expensesPercentage':*/}
+                        {/*                                case 'remainingPercentage': {*/}
+                        {/*                                    return (*/}
+                        {/*                                        <TableCell*/}
+                        {/*                                            key={key}*/}
+                        {/*                                            component="th"*/}
+                        {/*                                            scope="row"*/}
+                        {/*                                        >*/}
+                        {/*                                            <Typography>{`${value}%`}</Typography>*/}
+                        {/*                                        </TableCell>*/}
+                        {/*                                    );*/}
+                        {/*                                }*/}
+                        {/*                                default: {*/}
+                        {/*                                    return (*/}
+                        {/*                                        <TableCell*/}
+                        {/*                                            key={key}*/}
+                        {/*                                            component="th"*/}
+                        {/*                                            scope="row"*/}
+                        {/*                                        >*/}
+                        {/*                                            <Typography>{value}</Typography>*/}
+                        {/*                                        </TableCell>*/}
+                        {/*                                    );*/}
+                        {/*                                }*/}
+                        {/*                            }*/}
+                        {/*                        })}*/}
+                        {/*                    </TableRow>*/}
+                        {/*                ))}*/}
+                        {/*            </TableBody>*/}
+                        {/*        </Table>*/}
+                        {/*    </div>*/}
+                        {/*</Paper>*/}
+
+                        <div className='w-full h-full ag-theme-quartz border-0 shadow-0' style={{height: 400}} color='secondary'>
+                            <AgGridReact
+                                rowData={impactData}
+                                pagination={true}
+                                suppressMenuHide={true}
+                                paginationPageSize={100}
+                                rowSelection={"single"}
+                                autoSizeStrategy={autoSizeStrategy}
+                                columnDefs={columnData}
+                                onSelectionChanged={handleRowSelection}
+                            />
+                        </div>
+                    </Paper>
+                    <Paper className='w-full border p-10 h-full flex flex-col'>
                         <div className='text-lg font-medium tracking-tight leading-6'>
-                            Root Cause Analysis
+                            Drivers
                         </div>
                         <div className=' h-full ' id="chartdiv" style={{width: "100%", height: "100%"}}/>
                     </Paper>
+                    </div>
                 )}
                 {showChart && (
                     <div className='w-full h-full ag-theme-quartz' style={{height: 680}} color='secondary'>
@@ -487,19 +615,38 @@ function RecommendationPageContent(props) {
                         </DialogTitle>
                         <form onSubmit={handleSaveSelection} className="flex flex-col">
                             <DialogContent classes={{root: 'p-16 pb-0 sm:p-32 sm:pb-0'}} dividers>
-                                    <div className="flex flex-col justify-center items-center gap-4">
-                                    <FormControl fullWidth sx={{width: '100%', height: "20vh", display: "flex" , justifyContent: "center", alignItems: 'center'}}>
-                                        <TextField
-                                            className='w-full h-full'
-                                            id="standard-multiline-static"
-                                            label="Description"
-                                            multiline
-                                            value={description}
-                                            onChange={(e) => setDescription(e.target.value)}
-                                            minRows={8}
-                                            placeholder='Please provide a valid description'
-                                        />
-                                    </FormControl>
+                                    <div className="flex flex-col justify-center gap-20 items-center">
+                                        <FormControl fullWidth sx={{minWidth: 170}} size="medium">
+                                            <InputLabel id="demo-simple-select-helper-label">Choose a reason</InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-helper-label"
+                                                id="demo-simple-select-helper"
+                                                value={reason}
+                                                label="Age"
+                                                onChange={handleChange}
+                                            >
+                                                <MenuItem value={'Reason 1'}>Reason 1</MenuItem>
+                                                <MenuItem value={'Reason 2'}>Reason 2</MenuItem>
+                                                <MenuItem value={'Reason 3'}>Reason 3</MenuItem>
+                                                <MenuItem value={'Others'}>Others</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                        {
+                                            openText && (
+                                                <FormControl fullWidth sx={{width: '100%', height: "20vh", display: "flex" , justifyContent: "center", alignItems: 'center'}}>
+                                                    <TextField
+                                                        className='w-full h-full'
+                                                        id="standard-multiline-static"
+                                                        label="Description"
+                                                        multiline
+                                                        value={description}
+                                                        onChange={(e) => setDescription(e.target.value)}
+                                                        minRows={8}
+                                                        placeholder='Please provide a valid description'
+                                                    />
+                                                </FormControl>
+                                            )
+                                        }
                                 </div>
                             </DialogContent>
                             <DialogActions className="flex sm:flex-row   sm:py-24 px-24">
