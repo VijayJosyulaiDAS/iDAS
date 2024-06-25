@@ -8,6 +8,7 @@ module.exports = {
   //   callbackURL: process.env.PING_CALLBACK_URL,
   //   userInfoURL: process.env.PING_USERINFO_URL
   // }
+
   'pingAuth': {
     authorizationURL: "https://fedauthtst.pg.com/as/authorization.oauth2",
     tokenURL:"https://fedauthtst.pg.com/as/token.oauth2",
