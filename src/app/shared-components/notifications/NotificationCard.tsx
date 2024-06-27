@@ -11,6 +11,7 @@ import { NotificationModelType } from './models/NotificationModel';
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import {toast} from "react-toastify";
+import {useAppDispatch} from "app/store/hooks";
 
 type NotificationCardProps = {
 	item: NotificationModelType;
@@ -26,6 +27,8 @@ function NotificationCard(props: NotificationCardProps) {
 	const [notification, setNotification] = useState([])
 	const variant = item?.variant || '';
 	const navigate = useNavigate()
+	const dispatch = useAppDispatch();
+
 
 	const fetchRecommendations = async () => {
 		try {
@@ -38,8 +41,8 @@ function NotificationCard(props: NotificationCardProps) {
 	};
 
 	useEffect(() => {
-		fetchRecommendations();
-	}, [location]);
+		// fetchRecommendations();
+	}, [location, dispatch]);
 
 	const handleClose = (ev: MouseEvent<HTMLButtonElement>) => {
 		ev.preventDefault();

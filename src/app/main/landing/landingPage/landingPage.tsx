@@ -1,6 +1,6 @@
 import { styled } from '@mui/material/styles';
 import FusePageCarded from '@fuse/core/FusePageCarded';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useThemeMediaQuery from '@fuse/hooks/useThemeMediaQuery';
 import LandingPageHeader from './landingPageHeader';
 import LandingPageContent from './landingPageContent';
@@ -59,7 +59,7 @@ function LandingPage() {
             leftSidebarOnClose={() => {
                 setLeftSidebarOpen(false);
             }}
-            leftSidebarContent={<LandingPageSideBar onItemClick={handleSidebarItemClick} />}
+            leftSidebarContent={<LandingPageSideBar data={selectedItem} onItemClick={handleSidebarItemClick} />}
             leftSidebarWidth={320}
             scroll="content"
         />

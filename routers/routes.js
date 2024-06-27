@@ -77,11 +77,17 @@ function verifyJWTToken(token) {
 module.exports = (app, passport) => {
     // route for signing in
     app.get('/api/ping/oauth2', passport.authenticate('oauth2', {
-      scope: ['openid', 'profile', 'email', 'pingid'],
-      pfidpadapterid: "Oauth"
-    }));
-  
-  
+        scope: ['openid', 'profile', 'email', 'pingid'],
+        pfidpadapterid: "Oauth"
+    }), (req, res) => {
+        if (req.isAuthenticated()) {
+            res.json({ message: 'Authentication successful', user: req.user });
+        } else {
+            res.status(401).json({ message: 'Authentication failed' });
+        }
+    });
+
+
     app.get('/callback', passport.authenticate('oauth2', {failureRedirect: '/sign-in'}), function (req, res) {
       console.log("user data", req.user);
       res.cookie("_ping_access_token", req.user.accessToken, { httpOnly: true });
@@ -92,7 +98,7 @@ module.exports = (app, passport) => {
     app.get('/api/logout', function (req, res) {
       console.log('###### logout route called ######')
       req.logout();
-      res.redirect('/');
+      res.redirect('/sign-in');
     });
 
     app.get('/api/is_logged_in', (req, res) => {

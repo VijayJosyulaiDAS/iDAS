@@ -6,13 +6,14 @@ import FuseLoading from "@fuse/core/FuseLoading";
 import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
 import Paper from "@mui/material/Paper";
 import Input from "@mui/material/Input";
+import {useParams} from "react-router-dom";
 
 /**
  * The LandingSidebar component.
  */
 function landingPageSideBar(props) {
-
 	const {data,onItemClick} = props
+	const {folderHandle} = useParams()
 	const [useCases, setUseCases] = useState([])
 	const [loading, setLoading] = useState<boolean>(false)
 	const [searchText, setSearchText] = useState('');
@@ -25,48 +26,64 @@ function landingPageSideBar(props) {
 	const fetchUseCases = async () => {
 		setLoading(true);
 		let response = await axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/get_useCases`)
-		// Define the order
 		const order = ["Supplier PO Amendments" ,"Firm Zone Production Adjustments", ];
-
-		// Separate the items based on the order
 		const orderedItems = response.data.data.filter(item => order.includes(item.title));
 		const remainingItems = response.data.data.filter(item => !order.includes(item.title));
-
-		// Combine them in the desired order
 		const result = [
 			...orderedItems.sort((a, b) => order.indexOf(a.title) - order.indexOf(b.title)),
 			...remainingItems
 		];
-		setUseCases(result)
-		onItemClick(result[0])
-		setLoading(false);
+		if(folderHandle != null || folderHandle != undefined){
+			let data = response.data.data.filter((item) => item.id === folderHandle)
+			onItemClick(data[0])
+			setUseCases(result)
+			setLoading(false);
+		}else{
+			onItemClick(result[0])
+			setUseCases(result)
+			setLoading(false);
+		}
 	}
 
 	useEffect(() => {
 		if(data != null || data != undefined){
 			setUseCases(data)
+			onItemClick(data)
 		}else{
 			fetchUseCases()
 		}
 	}, []);
 
 	const convertToNavigationData = (useCases) => {
-		return useCases.map((useCase, index) => ({
-			id: (useCase.id).toString(),
+		const totalItem = {
+			id: 'total',
+			title: `Total Recommendations`,
+			type: 'item',
+		};
+		const navigationData = useCases.map((useCase) => ({
+			id: useCase.id.toString(),
 			title: useCase.title,
 			type: 'item',
 		}));
+		return [totalItem, ...navigationData];
 	};
 
+
 	useEffect(() => {
-		// Convert useCases to navigation data whenever useCases or searchText changes
-		const convertToNavigationData = (cases) => {
-			return cases.map(useCase => ({
+		const convertToNavigationData = (useCases) => {
+			const totalItem = {
+				id: 'total',
+				title: `Total Recommendations`,
+				type: 'item',
+			};
+			const navigationData = useCases.map((useCase) => ({
 				id: useCase.id.toString(),
 				title: useCase.title,
 				type: 'item',
 			}));
+			return [totalItem, ...navigationData];
 		};
+
 
 		const filteredData = useCases.filter(useCase =>
 			useCase.title.toLowerCase().includes(searchText.toLowerCase())
@@ -85,10 +102,10 @@ function landingPageSideBar(props) {
 
 
 	return (
-		<div className="py-24 ">
-			<div className=" ml-24 p-5 text-3xl font-bold ">
+		<div className="py-24 flex flex-col justify-between gap-20">
+			<div className="flex flex-col gap-10 ml-24 p-4 text-3xl font-bold ">
 				Skills
-				<Paper className="flex p-4 items-center w-full px-16 py-4 border-1 h-40 rounded-full shadow-none">
+				<Paper className="flex p-4 items-center w-full py-4 border-1 h-40 rounded-full shadow-none">
 					<FuseSvgIcon
 						color="action"
 						size={20}
@@ -98,7 +115,7 @@ function landingPageSideBar(props) {
 
 					<Input
 						placeholder="Search for skills"
-						className="flex flex-1 px-8"
+						className="flex flex-1 px-0"
 						disableUnderline
 						fullWidth
 						value={searchText}
@@ -116,7 +133,7 @@ function landingPageSideBar(props) {
 					<FuseNavigation
 						navigation={filteredNavigationData}
 						onItemClick={handleItemClick}
-						className="px-0 mt-32"
+						className="px-0 "
 					/>
 				)
 			}

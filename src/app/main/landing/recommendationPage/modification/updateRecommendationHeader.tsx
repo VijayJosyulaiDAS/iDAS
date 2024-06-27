@@ -9,7 +9,6 @@ import {useNavigate} from "react-router-dom";
 
 function RecommendationPageHeader(props) {
     const {selectedData} = props
-    console.log(selectedData)
     const user = useAppSelector(selectUser);
     const navigate = useNavigate()
 

@@ -24,7 +24,7 @@ function NotificationPanelToggleButton(props: NotificationPanelToggleButtonProps
 			let data = response.data.data.map(item => ({
 				id: item.id.toString(),
 				title: item.description,
-				description: `The Demand Forecast is predicting an ${item.demand_type} in Demand of ${(item.demand_value).toFixed(2)} for the Material Code ${item.material_code}. Based on the available inventory of ${item.available_inventory_value} and a Lead Time 
+				description: `The Demand Forecast is predicting an ${item.demand_type} in Demand of ${(item.po_quantity_value).toFixed(2)} for the Material Code ${item.material_code}. Based on the available inventory of ${item.available_inventory_value} and a Lead Time 
             of ${item.lead_time} days, you should ${item.order_type} ${item.po_number} with the Quantity ${item.po_quantity_value}`,
 				time: item["createdAt"],
 				read: true,

@@ -14,12 +14,9 @@ const log4js = require('log4js')
     ,flash = require('connect-flash')
     , dir = './build'
     ,path = require('path')
-    , indexDir = '/build/index.html',
-    { config: c } = require('dotenv')
+    , indexDir = '/build/index.html'
+      require('dotenv').config()
 const morgan = require('morgan');
-
-
-
 
 // Use compression middleware
 app.use(compression());
@@ -59,12 +56,6 @@ app.use(flash());
 require('./routers/ping-auth')(passport);
 require('./routers/routes')(app, passport);
 require('./router/routes')(app);
-
-
-// // Define your router
-// app.get('/', (req, res) => {
-//   res.send('Hello, World!');
-// });
 
 app.use(express.static(path.join(__dirname, dir)));
 
