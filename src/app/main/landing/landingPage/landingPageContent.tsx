@@ -1,11 +1,11 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
-import { AgGridReact } from 'ag-grid-react';
+import {AgGridReact} from 'ag-grid-react';
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import {Box} from "@mui/system";
-import {Navigate, useLocation, useNavigate} from 'react-router-dom';
+import {Navigate, useNavigate} from 'react-router-dom';
 import Button from "@mui/material/Button";
 import axios from "axios";
 import FuseLoading from "@fuse/core/FuseLoading";
@@ -13,7 +13,7 @@ import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
-import {useAppDispatch, useAppSelector} from "app/store/hooks";
+import {useAppSelector} from "app/store/hooks";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select, {SelectChangeEvent} from "@mui/material/Select";
@@ -25,12 +25,11 @@ import {DialogContentText} from "@mui/material";
 import {selectUser} from "../../../auth/user/store/userSlice";
 
 
-
 /**
  * LandingPage Content
  */
 
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+const BootstrapDialog = styled(Dialog)(({theme}) => ({
     '& .MuiDialogContent-root': {
         padding: theme.spacing(2),
     },
@@ -40,9 +39,9 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 function LandingPageContent(props) {
-    const {selectedData} = props
-    const[openCount, setOpenCount] = useState<number>(0);
-    const[closeCount, setCloseCount] = useState<number>(0);
+    const {selectedData, useCasesData} = props
+    const [openCount, setOpenCount] = useState<number>(0);
+    const [closeCount, setCloseCount] = useState<number>(0);
     const [rowData, setRowData] = useState(null);
     const [filteredData, setFilterData] = useState(null);
     const [loading, setLoading] = useState(false); // State for loading
@@ -54,14 +53,10 @@ function LandingPageContent(props) {
     const [selectedRows, setSelectedRows] = useState([])
     const user = useAppSelector(selectUser);
     const [openDialog, setOpenDialog] = useState(false);
-    const [openText,setOpenText] = useState(false)
+    const [openText, setOpenText] = useState(false)
     const [reason, setReason] = React.useState('');
     const [openReason, setOpenReason] = useState(false)
     const [description, setDescription] = useState('')
-
-
-
-
 
 
     const fetchRecommendations = async () => {
@@ -92,15 +87,15 @@ function LandingPageContent(props) {
     }
 
     useEffect(() => {
-        fetchUseCases()
+        setUseCases(useCasesData)
     }, []);
 
     useEffect(() => {
         if (selectedData != null) {
             const columnDefinitions = {
                 "Firm Zone Production Adjustments": [
-                    { field: "priority", headerName: "Priority", filter: true },
-                    { field: "due_date", headerName: "Due Date", filter: true },
+                    {field: "priority", headerName: "Priority", filter: true},
+                    {field: "due_date", headerName: "Due Date", filter: true},
                     {
                         field: "",
                         headerCheckboxSelection: true,
@@ -109,14 +104,14 @@ function LandingPageContent(props) {
                         showDisabledCheckboxes: true,
                         width: 60
                     },
-                    { field: "description", headerName: "Description", filter: true },
-                    { field: "plant_code", headerName: "Plant Code", filter: true },
-                    { field: "firm_zone_time", headerName: "Firm Zone Time", filter: true },
-                    { field: "total_adjustment", headerName: "Total Adjustment", filter: true },
-                    { field: "created_at", headerName: "Recommendation Date", filter: true }
+                    {field: "description", headerName: "Description", filter: true},
+                    {field: "plant_code", headerName: "Plant Code", filter: true},
+                    {field: "firm_zone_time", headerName: "Firm Zone Time", filter: true},
+                    {field: "total_adjustment", headerName: "Total Adjustment", filter: true},
+                    {field: "created_at", headerName: "Recommendation Date", filter: true}
                 ],
                 "Supplier PO Amendments": [
-                    { field: "material_code", headerName: "Material Code", filter: true },
+                    {field: "material_code", headerName: "Material Code", filter: true},
                     {
                         field: "",
                         headerCheckboxSelection: true,
@@ -149,10 +144,10 @@ function LandingPageContent(props) {
                         filter: true,
                         cellRenderer: params => params.value?.split('T')[0]
                     },
-                    { field: "order_type", headerName: "Order Type", filter: true },
-                    { field: "po_quantity_value", headerName: "Quantity", filter: true },
-                    { field: "supplier_code", headerName: "Supplier Code", filter: true, hide: true },
-                    { field: "lead_time", headerName: "Lead Time", filter: true }
+                    {field: "order_type", headerName: "Order Type", filter: true},
+                    {field: "po_quantity_value", headerName: "Quantity", filter: true},
+                    {field: "supplier_code", headerName: "Supplier Code", filter: true, hide: true},
+                    {field: "lead_time", headerName: "Lead Time", filter: true}
                 ],
                 "Realtime Supply Confirmation for Upsides": [
                     {
@@ -169,12 +164,12 @@ function LandingPageContent(props) {
                         filter: true,
                         cellRenderer: params => params.value || 'High'
                     },
-                    { field: "due_date", headerName: "Due Date", filter: true },
-                    { field: "description", headerName: "Description", filter: true },
-                    { field: "change_in_demand", headerName: "Change In Demand", filter: true },
-                    { field: "open_orders", headerName: "Open Orders", filter: true },
-                    { field: "in_transit_orders", headerName: "In Transit Orders", filter: true },
-                    { field: "created_at", headerName: "Recommendation Date", filter: true }
+                    {field: "due_date", headerName: "Due Date", filter: true},
+                    {field: "description", headerName: "Description", filter: true},
+                    {field: "change_in_demand", headerName: "Change In Demand", filter: true},
+                    {field: "open_orders", headerName: "Open Orders", filter: true},
+                    {field: "in_transit_orders", headerName: "In Transit Orders", filter: true},
+                    {field: "created_at", headerName: "Recommendation Date", filter: true}
                 ],
                 "Total Recommendations": [
                     {
@@ -184,7 +179,7 @@ function LandingPageContent(props) {
                         width: 350,
                         cellRenderer: params => params.value || 'High'
                     },
-                    { field: "due_date", headerName: "Due Date", filter: true, width: 350 },
+                    {field: "due_date", headerName: "Due Date", filter: true, width: 350},
                     {
                         field: "use_case_id",
                         headerName: "Use Case Name",
@@ -195,7 +190,7 @@ function LandingPageContent(props) {
                             return matchingUseCase ? matchingUseCase.title : '';
                         }
                     },
-                    { field: "created_at", headerName: "Recommendation Date", filter: true, width: 350 }
+                    {field: "created_at", headerName: "Recommendation Date", filter: true, width: 350}
                 ]
             };
             const selectedColumns = columnDefinitions[selectedData.title] || [];
@@ -222,7 +217,6 @@ function LandingPageContent(props) {
     const onGridReady = (params) => {
         params.api.sizeColumnsToFit();
         gridRef.current = params.api;
-        console.log(gridRef.current.getSelectedRows())
     };
 
     const handleRowClick = (params) => {
@@ -240,34 +234,6 @@ function LandingPageContent(props) {
 
     const handleSaveSelection = async (e) => {
         e.preventDefault();
-    }
-
-    const handleChange = (event: SelectChangeEvent) => {
-        if(event.target.value == 'Others'){
-            setOpenText(true)
-            setReason(event.target.value);
-        }else{
-            setOpenText(false)
-            setReason(event.target.value);
-        }
-    };
-
-    const getSelectedRows = () => {
-        setOpenDialog(true)
-        console.log('Selected Rows:', selectedRows);
-    };
-
-    const onSelectionChanged = () => {
-        const selectedRows = gridRef.current.getSelectedRows();
-        setSelectedRows(selectedRows);
-    };
-
-    const updateRecommendation = async (data,id) => {
-        let response = await axios.put(`${import.meta.env.VITE_LOCAL_BASE_URL}/update_recommendations?id=${id}`, data);
-        console.log(response)
-    }
-
-    const handleReject = () => {
         selectedRows.forEach(row => {
             let data = {
                 use_case_id: row.use_case_id,
@@ -278,9 +244,35 @@ function LandingPageContent(props) {
                 recommendation_action: 'Dismiss',
                 user_desc: description == '' ? reason : description
             }
-            console.log(data)
             updateRecommendation(data, row.id)
         })
+        setOpenReason(false);
+    }
+
+    const handleChange = (event: SelectChangeEvent) => {
+        if (event.target.value == 'Others') {
+            setOpenText(true)
+            setReason(event.target.value);
+        } else {
+            setOpenText(false)
+            setReason(event.target.value);
+        }
+    };
+
+    const getSelectedRows = () => {
+        setOpenDialog(true)
+    };
+
+    const onSelectionChanged = () => {
+        const selectedRows = gridRef.current.getSelectedRows();
+        setSelectedRows(selectedRows);
+    };
+
+    const updateRecommendation = async (data, id) => {
+        let response = await axios.put(`${import.meta.env.VITE_LOCAL_BASE_URL}/update_recommendations?id=${id}`, data);
+    }
+
+    const handleReject = () => {
         setOpenDialog(false);
         setOpenReason(true);
     }
@@ -448,16 +440,18 @@ function LandingPageContent(props) {
                         <FuseSvgIcon className='rounded-full'>heroicons-outline:question-mark-circle</FuseSvgIcon>
                         <span>Confirm Your Decision</span>
                     </div>
-                    <FuseSvgIcon onClick={handleClose} className='rounded-full cursor-pointer'>heroicons-outline:x</FuseSvgIcon>
+                    <FuseSvgIcon onClick={handleClose}
+                                 className='rounded-full cursor-pointer'>heroicons-outline:x</FuseSvgIcon>
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Please confirm whether you want to accept or reject the suggestions. This decision is final and cannot be reversed.
+                        Please confirm whether you want to accept or reject the suggestions. This decision is final and
+                        cannot be reversed.
                     </DialogContentText>
                 </DialogContent>
-                <DialogActions style={{ justifyContent: 'end', padding: '16px 24px' }}>
+                <DialogActions style={{justifyContent: 'end', padding: '16px 24px'}}>
                     <div>
-                        <Button onClick={handleReject} variant="outlined" color="secondary" style={{ marginRight: 8 }}>
+                        <Button onClick={handleReject} variant="outlined" color="secondary" style={{marginRight: 8}}>
                             Reject
                         </Button>
                         <Button onClick={handleSubmit} variant="contained" color="secondary" autoFocus>
@@ -470,6 +464,6 @@ function LandingPageContent(props) {
 
 
     );
-};
+}
 
 export default LandingPageContent;

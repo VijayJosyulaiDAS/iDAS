@@ -4,46 +4,6 @@ const {where} = require("sequelize");
 
 let getRecommendations = async (req, res) => {
     try {
-
-        const query = `SELECT 
-        [Material] AS material_code, 
-        [id] AS id, 
-        [Quantity] AS quantity, 
-        [month_end_inv], 
-        [priority], 
-        [Quantity] AS po_quantity_value,
-        [Safety] AS safety, 
-        [LeadTime] AS lead_time, 
-        [description] AS description, 
-        [material_needed] AS demand_value, 
-        [inv_after_production], 
-        CASE 
-            WHEN [inv_after_production] < 0 THEN 'increase'
-            ELSE NULL
-        END AS demand_type,
-        [amendment],
-        CASE 
-            WHEN [amendment] = 'yes' THEN 'Amend' 
-            ELSE NULL 
-        END AS order_type,
-        [Maximum stock level] AS maximum_stock_level, 
-        [Rounding value] AS rounding_value, 
-        [Minimum Lot Size] AS minimum_lot_size, 
-        [Maximum Lot Size] AS maximum_lot_size, 
-        [su-factor] AS su_factor, 
-        [active],
-        [user_desc],
-        [recommendation_action],
-        [action_owner],
-        [status],
-        [use_case_id],
-        [best_alternative],
-        [createdAt],
-        [minimum_qty_order], 
-        [maximum_qty_order]
-    FROM 
-        [dbo].[orders_amendment] WHERE active = 1`;
-
         let query1 = `SELECT  [po_date],[material_code],[po_number]
       ,[due_date]
       ,[qty] AS quantity
@@ -61,11 +21,11 @@ let getRecommendations = async (req, res) => {
       ,[detail_desc]
       ,[active]
       ,[status]
+      ,[suggested_on]
       ,[recommendation_action]
       ,[action_owner]
       ,[created_at]
-   FROM [dbo].[tbl_final_suggestions] WHERE active = 1`
-
+   FROM [dbo].[tbl_final_suggestions] WHERE active = 1 and suggested_on = '2024-06-28'`
         const data = await sequelize.query(query1, {
             type: sequelize.QueryTypes.SELECT,
         });
@@ -109,21 +69,21 @@ const getRecommendationByUseCases = async (req, res) => {
                 SELECT [po_date], [material_code], [po_number], [due_date], [qty] AS quantity,
                        [uom], [safety_stock], [transist_time] AS lead_time, [adjusted_order] AS quantity,
                        [unrestricted] AS available_inventory_value, [ordered_qty] AS po_quantity_value,
-                       [rounding_value], [order_type], [id], [demand_type], [use_case_id], [user_desc],
+                       [rounding_value], [order_type], [id], [demand_type], [use_case_id], [user_desc],[suggested_on]
                        [description], [detail_desc], [active], [status], [recommendation_action],
                        [action_owner], [created_at]
                 FROM [dbo].[tbl_final_suggestions]
-                WHERE use_case_id = '${useCaseId}' AND best_alternative = 1
+                WHERE use_case_id = '${useCaseId}' AND best_alternative = 1 AND suggested_on = '2024-06-28'
             `;
             queryOpenCount = `
                 SELECT COUNT(*) as openCount 
                 FROM [dbo].[tbl_final_suggestions] 
-                WHERE active = 1 AND use_case_id = '${useCaseId}' AND best_alternative = 1
+                WHERE active = 1 AND use_case_id = '${useCaseId}' AND best_alternative = 1 AND suggested_on = '2024-06-28'
             `;
             queryCloseCount = `
                 SELECT COUNT(*) as closeCount 
                 FROM [dbo].[tbl_final_suggestions] 
-                WHERE active = 0 AND use_case_id = '${useCaseId}' AND best_alternative = 1
+                WHERE active = 0 AND use_case_id = '${useCaseId}' AND best_alternative = 1 AND suggested_on = '2024-06-28'
             `;
         }
 
@@ -150,7 +110,6 @@ const getRecommendationByUseCases = async (req, res) => {
     }
 };
 
-
 let get_impactData = async (req, res) => {
     try {
         let rpm_code = (req.query.id).toString();
@@ -173,6 +132,22 @@ WHERE
     }
 };
 
+let get_systemData = async (req, res) => {
+    try {
+        let rpm_code = (req.query.id).toString();
+        const query = `SELECT *
+                FROM [dbo].[tbl_final_suggestions]
+                WHERE material_code = '${rpm_code}' AND best_alternative = 1`
+
+        const data = await sequelize.query(query, {
+            type: sequelize.QueryTypes.SELECT,
+        });
+        res.status(200).send({ successful: true, data: data });
+    } catch (e) {
+        res.status(500).send({successful: false, error: e});
+    }
+};
+
 let createRecommendations = async (req, res) => {
     try {
         let data = req.body
@@ -182,7 +157,6 @@ let createRecommendations = async (req, res) => {
         res.status(500).send({ successful: false, error: e });
     }
 };
-
 
 let updateRecommendation = async (req, res) => {
     try {
@@ -244,6 +218,7 @@ module.exports = {
     getRecommendations,
     getRecommendationByUseCases,
     updateRecommendation,
+    get_systemData,
     get_impactData,
     createRecommendations
 };

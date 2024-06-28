@@ -2,8 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
-import axios from "axios";
-import {toast, ToastContainer} from "react-toastify";
+import {ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
 /**
@@ -36,7 +35,6 @@ function BomContent({jsonData}) {
 
     return (
         <div className="flex-auto w-full h-full p-24 sm:p-40">
-            <ToastContainer style={{marginTop: '50px'}}/>
                 <div className="ag-theme-quartz" style={{ height: 680 }}>
                     <AgGridReact
                         rowData={rowData}

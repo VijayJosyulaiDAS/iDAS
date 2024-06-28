@@ -1,4 +1,4 @@
-import { styled } from '@mui/material/styles';
+import {styled} from '@mui/material/styles';
 import {useEffect, useRef, useState} from "react";
 import BomContent from "./bomContent";
 import BomHeader from "./bomHeader";
@@ -6,7 +6,7 @@ import FusePageSimple from "@fuse/core/FusePageSimple";
 import axios from "axios";
 import {toast} from "react-toastify";
 
-const Root = styled(FusePageSimple)(({ theme }) => ({
+const Root = styled(FusePageSimple)(({theme}) => ({
     '& .FusePageSimple-header': {
         backgroundColor: theme.palette.background.paper,
     },
@@ -21,7 +21,7 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 function BomPage() {
     const pageLayout = useRef(null);
     const [uploaded, setUpload] = useState(false)
-    const [jsonData, setJsonData] = useState(null);    console.log(uploaded)
+    const [jsonData, setJsonData] = useState(null);
 
     const handleUpload = (item) => {
         setUpload(true)

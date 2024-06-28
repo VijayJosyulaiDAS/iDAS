@@ -1,8 +1,7 @@
-import { styled } from '@mui/material/styles';
+import {styled} from '@mui/material/styles';
 import FusePageCarded from '@fuse/core/FusePageCarded';
 import RecommendationPageHeader from './recommendationHeader';
 import RecommendationPageContent from './recommendationContent';
-import {useEffect, useState} from "react";
 
 const Root = styled(FusePageCarded)(() => ({
     '& .FusePageCarded-header': {},
@@ -22,7 +21,7 @@ function RecommendationDetail() {
             header={
                 <RecommendationPageHeader/>
             }
-            content={<RecommendationPageContent />}
+            content={<RecommendationPageContent/>}
             scroll="content"
         />
     );

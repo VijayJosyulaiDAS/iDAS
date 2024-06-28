@@ -15,7 +15,6 @@ function StockSummaryContent({jsonData}) {
         { field: "plant", headerName: "Plant", filter: true },
         { field: "criticality", headerName: "Criticality", filter: true },
         { field: "unrestricted", headerName: "Unrestricted", filter: true, cellRenderer: params => {
-                console.log(params.value)
                 return params.value ? parseInt(params.value).toFixed(2) : 0;
             } },
         { field: "qi", headerName: "QI", filter: true },

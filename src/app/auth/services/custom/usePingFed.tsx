@@ -176,7 +176,6 @@ const usePingAuth = <User, SignInPayload, SignUpPayload>(
 	useEffect(() => {
 		const attemptAutoLogin = async () => {
 			const accessToken = getAccessToken();
-            console.log('accesToken', accessToken)
 			if (isTokenValid(accessToken)) {
 				try {
 					setIsLoading(true);

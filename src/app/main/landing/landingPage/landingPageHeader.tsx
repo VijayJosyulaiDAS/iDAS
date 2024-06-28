@@ -11,9 +11,7 @@ type LandingPageHeaderProps = {
 
 function landingPageHeader(props: LandingPageHeaderProps) {
 
-    const { leftSidebarToggle, rightSidebarToggle } = props;
-
-    function handleClick() {}
+    const {leftSidebarToggle, rightSidebarToggle} = props;
 
     return (
         <div className="flex flex-col p-24 w-full sm:py-32 sm:px-40">

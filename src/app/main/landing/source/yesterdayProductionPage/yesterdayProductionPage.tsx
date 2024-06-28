@@ -24,7 +24,6 @@ function YesterdayProductionPage() {
     const pageLayout = useRef(null);
     const [uploaded, setUpload] = useState(false)
     const [jsonData, setJsonData] = useState(null);
-    console.log(uploaded)
 
     const handleUpload = (item) => {
         setUpload(true)

@@ -3,20 +3,16 @@ import { styled } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Typography from '@mui/material/Typography';
-import { useSnackbar } from 'notistack';
 import {useEffect, useState} from 'react';
 import { useAppDispatch, useAppSelector } from 'app/store/hooks';
 import { useLocation } from 'react-router-dom';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
-import Button from '@mui/material/Button';
 import NotificationCard from './NotificationCard';
 import {
 	closeNotificationPanel,
 	selectNotificationPanelState,
 	toggleNotificationPanel
 } from './notificationPanelSlice';
-import NotificationModel from './models/NotificationModel';
-import NotificationTemplate from './NotificationTemplate';
 import axios from "axios";
 import {toast} from "react-toastify";
 
@@ -34,8 +30,6 @@ function NotificationPanel() {
 	const location = useLocation();
 	const dispatch = useAppDispatch();
 	const state = useAppSelector(selectNotificationPanelState);
-
-	const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 	const [notifications, setRowData] = useState([]);
 
 
@@ -60,7 +54,9 @@ function NotificationPanel() {
 	};
 
 	useEffect(() => {
-		fetchRecommendations();
+		if (location.pathname === '/home') {
+			fetchRecommendations();
+		}
 	}, [location, dispatch]);
 
 	useEffect(() => {
@@ -74,33 +70,9 @@ function NotificationPanel() {
 	}
 
 	function handleDismiss(id: string) {
-		console.log('close')
 	}
 
 	function handleDismissAll() {
-	}
-
-	 const handleClick = (tab) => {
-		console.log(tab)
-	};
-
-	function demoNotification() {
-		const item = NotificationModel({ title: 'Great Job! this is awesome.' });
-
-
-		enqueueSnackbar(item.title, {
-			key: item.id,
-
-			// autoHideDuration: 3000,
-			content: (
-				<NotificationTemplate
-					item={item}
-					onClose={() => {
-						closeSnackbar(item.id);
-					}}
-				/>
-			)
-		});
 	}
 
 

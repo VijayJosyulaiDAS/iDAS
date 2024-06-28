@@ -69,10 +69,6 @@ function UserContent() {
 
     const handleCellValueChanged = (event) => {
         const { oldValue, newValue, data, colDef, column } = event;
-        console.log('Old Value:', oldValue);
-        console.log('New Value:', newValue);
-        console.log('Data:', data);
-        console.log('Column:', colDef.field);
         let obj = {
             email: data.email,
             business_unit_name: data.business_unit_name,

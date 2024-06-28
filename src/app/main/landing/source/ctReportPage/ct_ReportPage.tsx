@@ -1,4 +1,4 @@
-import { styled } from '@mui/material/styles';
+import {styled} from '@mui/material/styles';
 import {useEffect, useRef, useState} from "react";
 import Ct_ReportContent from "./ct_ReportContent";
 import Ct_ReportHeader from "./ct_ReportHeader";
@@ -7,7 +7,7 @@ import axios from "axios";
 import {toast} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
-const Root = styled(FusePageSimple)(({ theme }) => ({
+const Root = styled(FusePageSimple)(({theme}) => ({
     '& .FusePageSimple-header': {
         backgroundColor: theme.palette.background.paper,
     },
@@ -22,7 +22,7 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 function Ct_ReportPage() {
     const pageLayout = useRef(null);
     const [uploaded, setUpload] = useState(false)
-    const [jsonData, setJsonData] = useState(null);    console.log(uploaded)
+    const [jsonData, setJsonData] = useState(null);
 
     const handleUpload = (item) => {
         setUpload(true)

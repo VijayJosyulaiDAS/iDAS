@@ -22,7 +22,7 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 function MrpPage() {
     const pageLayout = useRef(null);
     const [uploaded, setUpload] = useState(false)
-    const [jsonData, setJsonData] = useState(null);    console.log(uploaded)
+    const [jsonData, setJsonData] = useState(null);
 
     const handleUpload = (item) => {
         setUpload(true)

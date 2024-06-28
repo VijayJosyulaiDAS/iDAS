@@ -14,7 +14,8 @@ function RecommendationPageHeader() {
     return (
         <div className="flex flex-col p-24 w-full sm:py-32 sm:px-40">
             <div className="flex items-center w-full mt-8 -mx-10">
-                <FuseSvgIcon onClick={handleClick} size={28} className='text-blue-500 cursor-pointer'>heroicons-outline:arrow-narrow-left</FuseSvgIcon>
+                <FuseSvgIcon onClick={handleClick} size={28}
+                             className='text-blue-500 cursor-pointer'>heroicons-outline:arrow-narrow-left</FuseSvgIcon>
                 <Typography
                     component="h2"
                     className="flex-1 text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate mx-10"

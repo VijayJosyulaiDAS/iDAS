@@ -57,35 +57,35 @@ const navigationConfig: FuseNavItemType[] = [
 						url: '/apps/source/bom'
 					},
 					{
-						id: 'source.m_1',
+						id: 'source.masterData.m_1',
 						title: 'M-1 Data',
 						type: 'item',
 						icon: 'heroicons-outline:table',
 						url: '/apps/source/m-1'
 					},
 					{
-						id: 'source.production',
+						id: 'source.masterData.production',
 						title: 'Production Data',
 						type: 'item',
 						icon: 'heroicons-outline:table',
 						url: '/apps/source/production'
 					},
 					{
-						id: 'source.mrp',
+						id: 'source.masterData.mrp',
 						title: 'Raw Material MRP',
 						type: 'item',
 						icon: 'heroicons-outline:table',
 						url: '/apps/source/mrp'
 					},
 					{
-						id: 'source.pm_mrp',
+						id: 'source.masterData.pm_mrp',
 						title: 'Packed Material MRP',
 						type: 'item',
 						icon: 'heroicons-outline:table',
 						url: '/apps/source/packed_mrp'
 					},
 					{
-						id: 'source.p3m',
+						id: 'source.masterData.p3m',
 						title: 'P3M',
 						type: 'item',
 						icon: 'heroicons-outline:table',
@@ -99,28 +99,28 @@ const navigationConfig: FuseNavItemType[] = [
 					// 	url: '/apps/source/pos'
 					// },
 					{
-						id: 'source.upcoming_production',
+						id: 'source.masterData.upcoming_production',
 						title: "Upcoming Production",
 						type: 'item',
 						icon: 'heroicons-outline:table',
 						url: '/apps/source/upcoming_production'
 					},
 					{
-						id: 'source.stock _summary',
+						id: 'source.masterData.stock _summary',
 						title: "Inventory Data",
 						type: 'item',
 						icon: 'heroicons-outline:table',
 						url: '/apps/source/stock_summary'
 					},
 					{
-						id: 'source.yesterday_production',
+						id: 'source.masterData.yesterday_production',
 						title: "Yesterday Production",
 						type: 'item',
 						icon: 'heroicons-outline:table',
 						url: '/apps/source/yesterday_production'
 					},
 					{
-						id: 'source.ct_report',
+						id: 'source.masterData.ct_report',
 						title: "CT Report",
 						type: 'item',
 						icon: 'heroicons-outline:table',

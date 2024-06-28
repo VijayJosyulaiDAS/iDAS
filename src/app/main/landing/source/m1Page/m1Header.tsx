@@ -121,7 +121,6 @@ function M1Header({onUpload, jsonData}) {
 
         const worksheet = XLSX.utils.json_to_sheet(worksheetData);
         const workbook = XLSX.utils.book_new();
-        console.log(loading)
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
         const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });

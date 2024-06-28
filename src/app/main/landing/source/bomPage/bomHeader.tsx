@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import Typography from "@mui/material/Typography";
-import { motion } from 'framer-motion';
+import {motion} from 'framer-motion';
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
@@ -21,14 +21,11 @@ function BomHeader({onUpload, jsonData}) {
     const [open3, setOpen3] = React.useState(false);
     const [updated, setUpdated] = React.useState(false);
     const [file, setFile] = useState<any>();
-    const [selectedFile,setSelectedFile] = useState({name:''})
+    const [selectedFile, setSelectedFile] = useState({name: ''})
 
-    const handleOpen3 = () => {
-        setOpen3(true);
-    };
 
     const handleClose3 = () => {
-        setSelectedFile({name:''})
+        setSelectedFile({name: ''})
         setFile(null)
         setOpen3(false);
     };
@@ -62,8 +59,7 @@ function BomHeader({onUpload, jsonData}) {
         formData.append('file', file);
         try {
             setLoading(true)
-            await axios.post(`${import.meta.env.VITE_LOCAL_BASE_URL}/create_mrp`, formData, {
-            }).then((response) =>{
+            await axios.post(`${import.meta.env.VITE_LOCAL_BASE_URL}/create_mrp`, formData, {}).then((response) => {
                 setUpdated(!updated)
                 if (response.status === 200) {
                     onUpload(true)
@@ -98,11 +94,10 @@ function BomHeader({onUpload, jsonData}) {
     };
 
     const handleFileChange = (e) => {
-        if(e.target.files[0] === undefined){
-            setSelectedFile({name:''});
-        }
-        else{
-            setSelectedFile({name:e.target.files[0]?.name});
+        if (e.target.files[0] === undefined) {
+            setSelectedFile({name: ''});
+        } else {
+            setSelectedFile({name: e.target.files[0]?.name});
         }
         setFile(e.target.files[0]);
     };
@@ -133,8 +128,8 @@ function BomHeader({onUpload, jsonData}) {
         const worksheet = XLSX.utils.json_to_sheet(worksheetData);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-        const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
+        const excelBuffer = XLSX.write(workbook, {bookType: 'xlsx', type: 'array'});
+        const blob = new Blob([excelBuffer], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'});
         saveAs(blob, "BOM.xlsx");
         setIsDownloading(false)
     };

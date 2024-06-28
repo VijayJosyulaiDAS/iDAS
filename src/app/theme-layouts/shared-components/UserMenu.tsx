@@ -36,7 +36,6 @@ function UserMenu() {
 
 	const handlePingLogOut = async () => {
 		const response = await axios.post('/api/auth/sign-out');
-		console.log(response.statusText)
 		if (response.statusText === 'OK') {
 			signOut();
 		} else {

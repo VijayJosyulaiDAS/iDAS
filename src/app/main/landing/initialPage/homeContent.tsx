@@ -19,7 +19,7 @@ function homeContent() {
 
     const user = useAppSelector(selectUser);
     const [useCases, setUseCases] = useState([]);
-    const[openCount, setOpenCount] = useState<number>(0);
+    const [openCount, setOpenCount] = useState<number>(0);
     const [greet, setGreet] = useState('');
     const [loading, setLoading] = useState(false);
     const [selectedTab, setSelectedTab] = useState('recents');
@@ -33,10 +33,8 @@ function homeContent() {
     }, [selectedTab]);
 
     const handleTabClick = (tab) => {
-        console.log(tab)
         setSelectedTab(tab);
     };
-
 
 
     const getGreet = () => {
@@ -54,7 +52,7 @@ function homeContent() {
         setLoading(true);
         let response = await axios.get(`${import.meta.env.VITE_LOCAL_BASE_URL}/get_useCases`)
         // Define the order
-        const order = ["Supplier PO Amendments" ,"Firm Zone Production Adjustments"];
+        const order = ["Supplier PO Amendments", "Firm Zone Production Adjustments"];
         // Separate the items based on the order
         const orderedItems = response.data.data.filter(item => order.includes(item.title));
         const remainingItems = response.data.data.filter(item => !order.includes(item.title));
@@ -79,7 +77,7 @@ function homeContent() {
         fetchUseCases()
     }, []);
 
-    const handleClick = (event) =>{
+    const handleClick = (event) => {
         navigate('/apps/landing')
     }
     const handleChange = async (data) => {
@@ -91,8 +89,8 @@ function homeContent() {
         fetchUseCases()
     }
 
-    const handleCardClick = (event) =>{
-        navigate(`/apps/landing/${event.id}`, { state: useCases })
+    const handleCardClick = (event) => {
+        navigate(`/apps/landing/${event.id}`, {state: useCases})
     }
 
 
@@ -124,11 +122,13 @@ function homeContent() {
                         className="font-semibold m-96 tracking-tight leading-7 flex flex-col justify-between gap-10 md:leading-snug truncate">
                         <span className='text-2xl md:text-5xl '>{`${greet},`}</span>
                         <span className='flex flex-col justify-between gap-10 md:leading-snug truncate'>
-                            <span className='text-4xl md:text-5xl font-bold tracking-tight leading-7'>{`${user.data.displayName}!`}</span>
+                            <span
+                                className='text-4xl md:text-5xl font-bold tracking-tight leading-7'>{`${user.data.displayName}!`}</span>
                             <span className='text-2xl'>{user.data.business_unit_name}</span>
                         </span>
                     </Typography>
-                    <div className="m-12 w-1/4 flex lg:flex-col justify-center items-center md:flex-row sm:flex-row  overflow-x-scroll">
+                    <div
+                        className="m-12 w-1/4 flex lg:flex-col justify-center items-center md:flex-row sm:flex-row  overflow-x-scroll">
                         <div className="relative flex w-full items-start justify-center gap-20 pt-32">
                             <div
                                 className={`px-16 cursor-pointer rounded-2xl flex text-sm p-5 gap-10 font-medium text-blue-500 tracking-tight leading-6 truncate ${selectedTab === 'recents' ? 'bg-white' : ''}`}
@@ -145,7 +145,8 @@ function homeContent() {
                                 <span>Favorites</span>
                             </div>
                         </div>
-                        <Paper className="m-20 w-3/4 max-h-auto relative flex justify-start items-center lg:flex-col md:flex-row sm:flex-row"
+                        <Paper
+                            className="m-20 w-3/4 max-h-auto relative flex justify-start items-center lg:flex-col md:flex-row sm:flex-row"
                             style={{height: "70%"}}>
                             <List className="py-0 mt-8 divide-y w-full">
                                 {
@@ -155,11 +156,13 @@ function homeContent() {
                                         selectedTab === 'recents' ? (
                                             recent.length > 0 ? (
                                                 recent.map((item, index) => (
-                                                    <ListItem key={index} className="px-0 w-full cursor-pointer" onClick={() => handleCardClick(item)}>
+                                                    <ListItem key={index} className="px-0 w-full cursor-pointer"
+                                                              onClick={() => handleCardClick(item)}>
                                                         <ListItemText className='flex'
                                                                       classes={{root: 'px-8', primary: 'font-medium'}}
                                                                       primary={
-                                                                          <span className="flex items-center flex-auto ">
+                                                                          <span
+                                                                              className="flex items-center flex-auto ">
                                               <FuseSvgIcon size={20}>
                                                   material-twotone:history
                                               </FuseSvgIcon>
@@ -170,7 +173,8 @@ function homeContent() {
                                                                       }
                                                         />
                                                         <ListItemSecondaryAction>
-                                                            <IconButton aria-label="more" size="large" onClick={() => handleCardClick(item)}>
+                                                            <IconButton aria-label="more" size="large"
+                                                                        onClick={() => handleCardClick(item)}>
                                                                 <FuseSvgIcon>heroicons-solid:chevron-right</FuseSvgIcon>
                                                             </IconButton>
                                                         </ListItemSecondaryAction>
@@ -184,11 +188,14 @@ function homeContent() {
                                         ) : (
                                             favorite.length > 0 ? (
                                                 favorite.map((item, index) => (
-                                                    <ListItem key={index} className="px-0 w-full flex items-start justify-start" onClick={() => handleCardClick(item)}>
+                                                    <ListItem key={index}
+                                                              className="px-0 w-full flex items-start justify-start"
+                                                              onClick={() => handleCardClick(item)}>
                                                         <ListItemText className='flex'
                                                                       classes={{root: 'px-8', primary: 'font-medium'}}
                                                                       primary={
-                                                                          <span className="flex items-start flex-auto justify-start">
+                                                                          <span
+                                                                              className="flex items-start flex-auto justify-start">
                                               <FuseSvgIcon size={20}>
                                                   heroicons-solid:star
                                               </FuseSvgIcon>
@@ -199,14 +206,16 @@ function homeContent() {
                                                                       }
                                                         />
                                                         <ListItemSecondaryAction>
-                                                            <IconButton aria-label="more" size="large" onClick={() => handleCardClick(item)}>
+                                                            <IconButton aria-label="more" size="large"
+                                                                        onClick={() => handleCardClick(item)}>
                                                                 <FuseSvgIcon>heroicons-solid:chevron-right</FuseSvgIcon>
                                                             </IconButton>
                                                         </ListItemSecondaryAction>
                                                     </ListItem>
                                                 ))
                                             ) : (
-                                                <div className="flex w-full h-full items-center justify-center text-gray-500">
+                                                <div
+                                                    className="flex w-full h-full items-center justify-center text-gray-500">
                                                     <div>No data found</div>
                                                 </div>
                                             )
@@ -238,9 +247,11 @@ function homeContent() {
                                         index === 0 ? 'bg-white shadow-2xl' : 'bg-[#DAECFE]'
                                     } gap-10 lg:w-1/4 sm:w-2/4 md:w-2/4 rounded-2xl mb-32 m-6 overflow-hidden`}
                                 >
-                                    <div onClick={() => handleCardClick(useCase)} className="flex cursor-pointer flex-col gap-10">
+                                    <div onClick={() => handleCardClick(useCase)}
+                                         className="flex cursor-pointer flex-col gap-10">
                                         <div className="flex items-center text-blue-500 justify-between px-8 pt-12">
-                                            <Typography className="px-16 text-lg font-medium tracking-tight leading-6 truncate">
+                                            <Typography
+                                                className="px-16 text-lg font-medium tracking-tight leading-6 truncate">
                                                 {useCase.title}
                                             </Typography>
                                         </div>
